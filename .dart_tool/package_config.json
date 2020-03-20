@@ -50,12 +50,6 @@
       "languageVersion": "2.1"
     },
     {
-      "name": "cupertino_icons",
-      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/cupertino_icons-0.1.3",
-      "packageUri": "lib/",
-      "languageVersion": "2.0"
-    },
-    {
       "name": "flutter",
       "rootUri": "file:///Users/andy/Documents/flutter/packages/flutter",
       "packageUri": "lib/",
@@ -86,6 +80,12 @@
       "languageVersion": "1.12"
     },
     {
+      "name": "nested",
+      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/nested-0.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.2"
+    },
+    {
       "name": "path",
       "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.6.4",
       "packageUri": "lib/",
@@ -104,10 +104,22 @@
       "languageVersion": "2.4"
     },
     {
+      "name": "provider",
+      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/provider-4.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.2"
+    },
+    {
       "name": "quiver",
       "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-2.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.0"
+    },
+    {
+      "name": "rxdart",
+      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/rxdart-0.23.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
     },
     {
       "name": "sky_engine",
@@ -176,7 +188,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-03-20T03:28:03.701423Z",
+  "generated": "2020-03-20T03:45:50.657912Z",
   "generator": "pub",
   "generatorVersion": "2.7.0"
 }
