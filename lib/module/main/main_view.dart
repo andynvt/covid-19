@@ -1,5 +1,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:covid/model/model.dart';
 import 'package:covid/resource/resource.dart';
+import 'package:covid/util/util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +24,7 @@ class _MainViewState extends State<_MainView> {
 
   void _menuItemClick() {}
 
-  void _statisticClick(typeEnum type) {}
+  void _statisticClick(TypeEnum type) {}
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +81,11 @@ class _MainViewState extends State<_MainView> {
           Row(
             children: <Widget>[
               SizedBox(width: 4),
-              _renderBoxInfo(typeEnum.CONFIRMED, 244553, variability: 15062),
+              _renderBoxInfo(TypeEnum.CASES, 244553, variability: 15062),
               SizedBox(width: 4),
-              _renderBoxInfo(typeEnum.RECOVERED, 244553, variability: -15),
+              _renderBoxInfo(TypeEnum.RECOVERED, 244553, variability: -15),
               SizedBox(width: 4),
-              _renderBoxInfo(typeEnum.DEATH, 244553, variability: 150),
+              _renderBoxInfo(TypeEnum.DEATH, 244553, variability: 150),
               SizedBox(width: 4),
             ],
           ),
@@ -91,11 +93,11 @@ class _MainViewState extends State<_MainView> {
           Row(
             children: <Widget>[
               SizedBox(width: 4),
-              _renderBoxInfo(typeEnum.CASE_TODAY, 244553),
+              _renderBoxInfo(TypeEnum.CASE_TODAY, 244553),
               SizedBox(width: 4),
-              _renderBoxInfo(typeEnum.CRITICAL, 244553),
+              _renderBoxInfo(TypeEnum.CRITICAL, 244553),
               SizedBox(width: 4),
-              _renderBoxInfo(typeEnum.DEATH_TODAY, 244553),
+              _renderBoxInfo(TypeEnum.DEATH_TODAY, 244553),
               SizedBox(width: 4),
             ],
           ),
@@ -113,50 +115,21 @@ class _MainViewState extends State<_MainView> {
     );
   }
 
-  Widget _renderBoxInfo(typeEnum type, int number, {int variability = 0}) {
-    var color = Cl.white;
-    var text = '';
-    switch (type) {
-      case typeEnum.CONFIRMED:
-        color = Cl.mBlue;
-        text = 'Confirmed';
-        break;
-      case typeEnum.RECOVERED:
-        color = Cl.mGreen;
-        text = 'Recovered';
-        break;
-      case typeEnum.DEATH:
-        color = Cl.mRed;
-        text = 'Deaths';
-        break;
-      case typeEnum.CRITICAL:
-        color = Cl.mBlueGrey;
-        text = 'Critical';
-        break;
-      case typeEnum.CASE_TODAY:
-        color = Cl.mBlueGrey;
-        text = 'Case today';
-        break;
-      case typeEnum.DEATH_TODAY:
-        color = Cl.mBlueGrey;
-        text = 'Death today';
-        break;
-    }
-
+  Widget _renderBoxInfo(TypeEnum type, int number, {int variability = 0}) {
     return Expanded(
       child: InkWell(
         onTap: () => _statisticClick(type),
         child: Card(
-          color: color,
+          color: typeEnumToColor(type),
           elevation: 3,
           margin: EdgeInsets.zero,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: <Widget>[
-                Text(text, style: Style.s_03),
+                Text(typeEnumToStr(type), style: Style.s_03),
                 SizedBox(height: 8),
-                Text('$number', style: Style.s_02),
+                Text('${TTString.shared().format(number)}', style: Style.s_02),
                 SizedBox(height: variability != 0 ? 8 : 0),
                 variability != 0
                     ? Row(
@@ -167,7 +140,10 @@ class _MainViewState extends State<_MainView> {
                             size: 15,
                             color: Cl.white,
                           ),
-                          Text('${variability.abs()}', style: Style.s_03),
+                          Text(
+                            '${TTString.shared().format(variability.abs())}',
+                            style: Style.s_03,
+                          ),
                         ],
                       )
                     : Container(),
