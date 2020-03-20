@@ -12,9 +12,11 @@ class _AppView extends StatelessWidget {
   Widget build(BuildContext context) {
     return createRoot((context) {
       final root = Provider.of<RootModel>(context);
-
       return MaterialApp(
-        home: createSplash(),
+        theme: ThemeData(
+          fontFamily: 'Roboto'
+        ),
+        home: createMain(),
       );
     });
   }

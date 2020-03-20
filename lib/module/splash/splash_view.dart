@@ -27,13 +27,13 @@ class _SplashViewState extends State<_SplashView> {
   @override
   Widget build(BuildContext context) {
 //    final model = Provider.of<SplashModel>(context);
-    Future.delayed(Duration(milliseconds: 500), () {
+    Future.delayed(Duration(milliseconds: 1), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => createMain()),
       );
     });
     return Container(
-      color: Cl.pinkRed,
+      color: Colors.amberAccent,
 //      child: Image.asset(Id.bg_girl, fit: BoxFit.cover),
     );
   }
