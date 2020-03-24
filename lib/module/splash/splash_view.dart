@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:covid/module/main/main_view.dart';
-import 'package:covid/resource/resource.dart';
 import 'splash_model.dart';
 
 ChangeNotifierProvider<SplashModel> createSplash() {
@@ -18,16 +16,11 @@ class _SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<_SplashView> {
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setEnabledSystemUIOverlays([]);
-  }
 
   @override
   Widget build(BuildContext context) {
 //    final model = Provider.of<SplashModel>(context);
-    Future.delayed(Duration(milliseconds: 1), () {
+    Future.delayed(Duration(milliseconds: 100), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => createMain()),
       );

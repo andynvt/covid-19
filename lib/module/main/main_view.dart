@@ -2,6 +2,7 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:covid/model/model.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/util/util.dart';
+import 'package:covid/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -77,7 +78,22 @@ class _MainViewState extends State<_MainView> {
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(height: 4),
+          SizedBox(height: 8),
+          TTSwitch(
+            value: model.isWorld,
+            width: 150,
+            textOn: 'St. Vincent Grenadines',
+            textOff: 'World',
+            colorOn: Cl.mIndigo,
+            colorOff: Cl.mBlueGrey,
+            iconOn: Image.asset(CS.COUNTRY == null
+                ? Id.unknown
+                : Id.getIdByCountry(CS.COUNTRY)),
+            iconOff: Image.asset(Id.ic_world),
+            textSize: 15,
+            onChanged: (value) => model.logic.updateCountry(value),
+          ),
+          SizedBox(height: 8),
           Row(
             children: <Widget>[
               SizedBox(width: 4),
@@ -109,7 +125,7 @@ class _MainViewState extends State<_MainView> {
 
   Widget _renderDrawerItem(IconData icon, String text) {
     return ListTile(
-      onTap: _menuItemClick,
+      onTap: () => _menuItemClick,
       leading: Icon(icon, color: Cl.white),
       title: Text(text, style: Style.s_07),
     );
