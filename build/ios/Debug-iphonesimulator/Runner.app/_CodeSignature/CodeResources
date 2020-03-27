@@ -126,7 +126,7 @@
 		</data>
 		<key>Frameworks/App.framework/App</key>
 		<data>
-		JCmzeHjfgnScq5DeFEmXxRWvQBc=
+		mSTb8+ZSidk0EN4uzbN+YmMdPRM=
 		</data>
 		<key>Frameworks/App.framework/Info.plist</key>
 		<data>
@@ -134,11 +134,11 @@
 		</data>
 		<key>Frameworks/App.framework/_CodeSignature/CodeResources</key>
 		<data>
-		mtLpFbxIOOLRDBlO4A8wworJmoc=
+		M9aHeUzasxP9IhzBBv0ApTtRVzw=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<data>
-		csEaPUTQxg8ImQCQI+vGfRZ0pQM=
+		d9riB80wMPjlKL+YQul5pdeMG7s=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
 		<data>
@@ -167,6 +167,10 @@
 		<key>Frameworks/App.framework/flutter_assets/assets/fonts/Roboto-Regular.ttf</key>
 		<data>
 		CWySRbahktFAOoKEjhBKZfV4qOw=
+		</data>
+		<key>Frameworks/App.framework/flutter_assets/assets/images/arrow_proceed.png</key>
+		<data>
+		ivIzN2QVT3yUAq3+2eoaGgMMRCk=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/assets/images/flag/Abkhazia.png</key>
 		<data>
@@ -1370,7 +1374,7 @@
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/kernel_blob.bin</key>
 		<data>
-		emWkqM2L+zCKnYzKYcS1XNHYpAc=
+		3M1HXA7KOKHdh4/ilWDmf4upx+M=
 		</data>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -1769,11 +1773,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			JCmzeHjfgnScq5DeFEmXxRWvQBc=
+			mSTb8+ZSidk0EN4uzbN+YmMdPRM=
 			</data>
 			<key>hash2</key>
 			<data>
-			+RQ8XINxlm6hsDFB3DVJgCmJGcGx6taraRqa6KfXWqo=
+			pgC28YZgMEA9eAOSxBqu9j679OOo1AurOAG8EmUV6kA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/Info.plist</key>
@@ -1791,22 +1795,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			mtLpFbxIOOLRDBlO4A8wworJmoc=
+			M9aHeUzasxP9IhzBBv0ApTtRVzw=
 			</data>
 			<key>hash2</key>
 			<data>
-			bg9zgDgvYBySALVOJZQmsfN3ALdre+HT72k3GkyDJP4=
+			rKHMI92wUYooYUa9I+e/mAIPvXdu2P7SaEcApico+9k=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/AssetManifest.json</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			csEaPUTQxg8ImQCQI+vGfRZ0pQM=
+			d9riB80wMPjlKL+YQul5pdeMG7s=
 			</data>
 			<key>hash2</key>
 			<data>
-			00hiflr4tbPcWxlLe+AuA7zZEapko9g70zVGIpF4hkc=
+			RJzUXDltcdlzP/Hj2JCx3LXXg9DVZLxZXnBaiY+ArpA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/FontManifest.json</key>
@@ -1884,6 +1888,17 @@
 			<key>hash2</key>
 			<data>
 			AXwL6aqm0DWXN+H6dirTBMDgEHkn+v9abB9BXH9SRO0=
+			</data>
+		</dict>
+		<key>Frameworks/App.framework/flutter_assets/assets/images/arrow_proceed.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ivIzN2QVT3yUAq3+2eoaGgMMRCk=
+			</data>
+			<key>hash2</key>
+			<data>
+			3Q1Er6o+YmvOlp2T/j2CgVgDb80hF6BZzFmNOXjn/M4=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/assets/images/flag/Abkhazia.png</key>
@@ -5190,11 +5205,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			emWkqM2L+zCKnYzKYcS1XNHYpAc=
+			3M1HXA7KOKHdh4/ilWDmf4upx+M=
 			</data>
 			<key>hash2</key>
 			<data>
-			lxErpG6yZ6J8CT7ISBNziiys+9C0FePPJllxTWgMi2g=
+			C4Av6O+zy1QHyF1YMlvSVlClozGpZOmUtEIO1JtAFKA=
 			</data>
 		</dict>
 		<key>Frameworks/App.framework/flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

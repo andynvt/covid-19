@@ -3,6 +3,7 @@ import 'package:covid/model/model.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/util/util.dart';
 import 'package:covid/widget/widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,7 +35,7 @@ class _MainViewState extends State<_MainView> {
       key: _scaffoldKey,
       drawer: Drawer(
         child: Container(
-          color: Cl.mIndigo,
+          color: Cl.white,
           child: SafeArea(
             child: Column(
               children: <Widget>[
@@ -43,7 +44,7 @@ class _MainViewState extends State<_MainView> {
                   height: 56,
                   child: Text(
                     'COVID-19',
-                    style: Style.s_01,
+                    style: Style.ts_0,
                   ),
                 ),
                 Divider(color: Cl.white),
@@ -61,60 +62,92 @@ class _MainViewState extends State<_MainView> {
         ),
       ),
       appBar: AppBar(
-        backgroundColor: Cl.mIndigo,
+        brightness: Brightness.light,
+        backgroundColor: Cl.white,
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: Icon(Icons.menu, color: Cl.black),
           onPressed: () {
             _scaffoldKey.currentState.openDrawer();
           },
         ),
-        title: Text('HOME', style: Style.s_02),
+        centerTitle: false,
+        title: Text('Today report', style: Style.ts_1),
         actions: <Widget>[
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.refresh),
+            icon: Icon(Icons.refresh, color: Cl.black),
           )
         ],
       ),
       body: Column(
+//        physics: ClampingScrollPhysics(),
         children: <Widget>[
-          SizedBox(height: 8),
-          TTSwitch(
-            value: model.isWorld,
-            width: 150,
-            textOn: 'St. Vincent Grenadines',
-            textOff: 'World',
-            colorOn: Cl.mIndigo,
-            colorOff: Cl.mBlueGrey,
-            iconOn: Image.asset(CS.COUNTRY == null
-                ? Id.unknown
-                : Id.getIdByCountry(CS.COUNTRY)),
-            iconOff: Image.asset(Id.ic_world),
-            textSize: 15,
-            onChanged: (value) => model.logic.updateCountry(value),
-          ),
-          SizedBox(height: 8),
+          SizedBox(height: 12),
           Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(width: 4),
-              _renderBoxInfo(TypeEnum.CASES, 244553, variability: 15062),
-              SizedBox(width: 4),
-              _renderBoxInfo(TypeEnum.RECOVERED, 244553, variability: -15),
-              SizedBox(width: 4),
-              _renderBoxInfo(TypeEnum.DEATH, 244553, variability: 150),
-              SizedBox(width: 4),
+              Column(
+                children: <Widget>[
+                  Text(
+                    'Covid-19 in ',
+                    style: Style.ts_5,
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    'March 25',
+                    style: Style.ts_6,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              SizedBox(width: 8),
+              TTSwitch(
+                value: model.isWorld,
+                width: 150,
+                textOn: 'St. Vincent Grenadines',
+                textOff: 'World',
+                colorOn: Cl.rustyRedTwo,
+                colorOff: Cl.brownGrey,
+                iconOn: Image.asset(CS.COUNTRY == null
+                    ? Id.unknown
+                    : Id.getIdByCountry(CS.COUNTRY)),
+                iconOff: Image.asset(Id.ic_world),
+                textSize: 15,
+                onChanged: (value) => model.logic.updateCountry(value),
+              ),
             ],
           ),
-          SizedBox(height: 4),
+          SizedBox(height: 8),
+          Card(
+            elevation: 2,
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    height: 240,
+                    child: _renderPieChart(),
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Column(
+                    children: <Widget>[
+                      _renderStatisticItem(TypeEnum.CONFIRMED, 244553, 4455),
+                      _renderStatisticItem(TypeEnum.RECOVERED, 244553, 4455),
+                      _renderStatisticItem(TypeEnum.DEATH, 244553, 4455),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          SizedBox(height: 8),
           Row(
             children: <Widget>[
-              SizedBox(width: 4),
               _renderBoxInfo(TypeEnum.CASE_TODAY, 244553),
-              SizedBox(width: 4),
-              _renderBoxInfo(TypeEnum.CRITICAL, 244553),
-              SizedBox(width: 4),
               _renderBoxInfo(TypeEnum.DEATH_TODAY, 244553),
-              SizedBox(width: 4),
+              _renderBoxInfo(TypeEnum.CRITICAL, 244553),
             ],
           ),
           _renderChart(),
@@ -123,48 +156,83 @@ class _MainViewState extends State<_MainView> {
     );
   }
 
+  Widget _renderStatisticItem(TypeEnum type, int number, int variability) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, bottom: 4, right: 8),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(15),
+        onTap: () {},
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          decoration: BoxDecoration(
+            border: Border.all(color: typeEnumToColor(type)),
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Row(
+            children: <Widget>[
+              SizedBox(width: 12),
+              Container(
+                width: 10,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: typeEnumToColor(type),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Text(typeEnumToStr(type), style: Style.ts_9),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Text(
+                        '${TTString.shared().format(number)}',
+                        style: typeEnumToStyle(type),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Image.asset(
+                  Id.arrow_proceed,
+                  height: 10,
+                  color: Cl.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _renderDrawerItem(IconData icon, String text) {
     return ListTile(
       onTap: () => _menuItemClick,
       leading: Icon(icon, color: Cl.white),
-      title: Text(text, style: Style.s_07),
+      title: Text(text, style: Style.ts_3),
     );
   }
 
-  Widget _renderBoxInfo(TypeEnum type, int number, {int variability = 0}) {
+  Widget _renderBoxInfo(TypeEnum type, int number) {
     return Expanded(
-      child: InkWell(
-        onTap: () => _statisticClick(type),
-        child: Card(
-          color: typeEnumToColor(type),
-          elevation: 3,
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                Text(typeEnumToStr(type), style: Style.s_03),
-                SizedBox(height: 8),
-                Text('${TTString.shared().format(number)}', style: Style.s_02),
-                SizedBox(height: variability != 0 ? 8 : 0),
-                variability != 0
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            Icons.arrow_upward,
-                            size: 15,
-                            color: Cl.white,
-                          ),
-                          Text(
-                            '${TTString.shared().format(variability.abs())}',
-                            style: Style.s_03,
-                          ),
-                        ],
-                      )
-                    : Container(),
-              ],
-            ),
+      child: Card(
+        elevation: 2,
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              Text(typeEnumToStr(type), style: Style.ts_9),
+              SizedBox(height: 8),
+              Text(
+                '${TTString.shared().format(number)}',
+                style: typeEnumToStyle(type),
+              ),
+            ],
           ),
         ),
       ),
@@ -235,6 +303,35 @@ class _MainViewState extends State<_MainView> {
       ),
     );
   }
+
+  Widget _renderPieChart() {
+    final data = [
+      GaugeSegment(100, Cl.lightBlue),
+      GaugeSegment(75, Cl.shamrockGreen),
+      GaugeSegment(50, Cl.rustyRed),
+    ];
+
+    final series = [
+      charts.Series<GaugeSegment, String>(
+        id: 'Segments',
+        domainFn: (GaugeSegment segment, _) => segment.size.toString(),
+        measureFn: (GaugeSegment segment, _) => segment.size,
+        colorFn: (GaugeSegment segment, _) => segment.color,
+        data: data,
+      )
+    ];
+    return charts.PieChart(
+      series,
+      animate: true,
+      defaultRenderer: charts.ArcRendererConfig(
+        arcRendererDecorators: [
+          charts.ArcLabelDecorator(
+            labelPosition: charts.ArcLabelPosition.inside,
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class LinearSales {
@@ -242,4 +339,13 @@ class LinearSales {
   final int sales;
 
   LinearSales(this.year, this.sales);
+}
+
+class GaugeSegment {
+  final int size;
+  final charts.Color color;
+
+  GaugeSegment(this.size, Color color)
+      : this.color = new charts.Color(
+            r: color.red, g: color.green, b: color.blue, a: color.alpha);
 }

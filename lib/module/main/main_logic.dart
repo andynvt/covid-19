@@ -9,7 +9,7 @@ class MainLogic {
   }
 
   void _loadData() {
-    CountryService.shared().getListCountry();
+//    CountryService.shared().getListCountry();
   }
 
   void updateCountry(bool value) {

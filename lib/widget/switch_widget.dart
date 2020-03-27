@@ -145,17 +145,17 @@ class _RollingSwitchState extends State<TTSwitch>
                   alignment: Alignment.center,
                   height: 40,
                   width: widget.width - 55,
-//                  child: AutoSizeText(
-//                    widget.textOn,
-//                    style: TextStyle(
-//                      fontSize: widget.textSize,
-//                      fontWeight: FontWeight.bold,
-//                      color: Colors.white,
-//                    ),
-//                    maxLines: 3,
-//                    minFontSize: 13,
-//                    overflow: TextOverflow.ellipsis,
-//                  ),
+                  child: AutoSizeText(
+                    widget.textOn,
+                    style: TextStyle(
+                      fontSize: widget.textSize,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    maxLines: 3,
+                    minFontSize: 13,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
             ),
