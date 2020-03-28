@@ -1,8 +1,8 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:covid/model/model.dart';
+import 'package:covid/module/module.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/util/util.dart';
-import 'package:covid/widget/widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +23,17 @@ class _MainView extends StatefulWidget {
 
 class _MainViewState extends State<_MainView> {
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  void _selectCountryClick() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => createSelectCountry()))
+        .then((info) {
+      if (info is CountryInfo) {
+        final model = Provider.of<MainModel>(context, listen: false);
+        model.logic.updateCountry(info);
+      }
+    });
+  }
 
   void _menuItemClick() {}
 
@@ -62,6 +73,7 @@ class _MainViewState extends State<_MainView> {
         ),
       ),
       appBar: AppBar(
+        elevation: 0,
         brightness: Brightness.light,
         backgroundColor: Cl.white,
         leading: IconButton(
@@ -70,8 +82,7 @@ class _MainViewState extends State<_MainView> {
             _scaffoldKey.currentState.openDrawer();
           },
         ),
-        centerTitle: false,
-        title: Text('Today report', style: Style.ts_1),
+        title: Text('Covid-19', style: Style.ts_1),
         actions: <Widget>[
           IconButton(
             onPressed: () {},
@@ -80,45 +91,74 @@ class _MainViewState extends State<_MainView> {
         ],
       ),
       body: Column(
-//        physics: ClampingScrollPhysics(),
         children: <Widget>[
-          SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Text(
-                    'Covid-19 in ',
-                    style: Style.ts_5,
-                    textAlign: TextAlign.center,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 1, 16, 16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () => model.logic.selectGlobal(),
+                  child: Image.asset(
+                    Id.ic_world,
+                    width: 45,
+                    color: model.isGlobal ? Cl.lightBlue : Cl.brownGrey,
                   ),
-                  Text(
-                    'March 25',
-                    style: Style.ts_6,
-                    textAlign: TextAlign.center,
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: SizedBox(
+                    height: 50,
+                    child: OutlineButton(
+                      padding: const EdgeInsets.all(4),
+                      onPressed: _selectCountryClick,
+                      borderSide: BorderSide(color: Cl.brownGrey),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          !model.isGlobal
+                              ? Hero(
+                                  tag: 'flag-${model.myCountry.id}',
+                                  child: Image.asset(
+                                    Id.getIdByCountry(model.myCountry),
+                                    width: 40,
+                                  ),
+                                )
+                              : Container(),
+                          SizedBox(width: 16),
+                          !model.isGlobal
+                              ? Hero(
+                                  tag: 'name-${model.myCountry.id}',
+                                  child: Material(
+                                    child: Text(
+                                      model.myCountry.name,
+                                      style: Style.ts_16_black,
+                                    ),
+                                  ),
+                                )
+                              : Text('Global', style: Style.ts_16_black),
+                          Spacer(),
+                          Container(width: 1, color: Cl.brownGrey, height: 30),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: Icon(
+                              Icons.chevron_right,
+                              size: 40,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ],
-              ),
-              SizedBox(width: 8),
-              TTSwitch(
-                value: model.isWorld,
-                width: 150,
-                textOn: 'St. Vincent Grenadines',
-                textOff: 'World',
-                colorOn: Cl.rustyRedTwo,
-                colorOff: Cl.brownGrey,
-                iconOn: Image.asset(CS.COUNTRY == null
-                    ? Id.unknown
-                    : Id.getIdByCountry(CS.COUNTRY)),
-                iconOff: Image.asset(Id.ic_world),
-                textSize: 15,
-                onChanged: (value) => model.logic.updateCountry(value),
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 8),
           Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
             elevation: 2,
             child: Row(
               children: <Widget>[
@@ -197,7 +237,7 @@ class _MainViewState extends State<_MainView> {
               Padding(
                 padding: const EdgeInsets.only(right: 12),
                 child: Image.asset(
-                  Id.arrow_proceed,
+                  Id.ic_arrow_right,
                   height: 10,
                   color: Cl.black,
                 ),

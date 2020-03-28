@@ -1,4 +1,4 @@
-import 'package:covid/model/country_info.dart';
+import 'package:covid/model/model.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../service.dart';
@@ -7,7 +7,7 @@ class CountryService extends ChangeNotifier implements BaseService {
   static CountryService _sInstance;
 
   List<CountryInfo> countries = [];
-  CountryInfo myCountry;
+  GlobalInfo globalInfo;
 
   @override
   // ignore: non_constant_identifier_names
@@ -22,18 +22,45 @@ class CountryService extends ChangeNotifier implements BaseService {
     return _sInstance;
   }
 
-  void getListCountry() {
+  void getData(Function() callback) {
+    if (globalInfo != null || countries.isNotEmpty) {
+      return;
+    }
+    _getGlobal(() {
+      _getListCountry(() {
+        callback();
+        _refresh();
+      });
+    });
+  }
+
+  void _getGlobal(Function() callback) {
+    NetworkService.shared().sendGETRequest(
+      url: NetworkAPI.GET_GLOBAL,
+      parser: NetworkParser.getGlobal,
+      callback: (rs) {
+        if(rs.isOK && rs.data.containsKey('info')) {
+          globalInfo = rs.data['info'];
+        } else if (d___) {
+          print('---> getGlobal error: ${rs.msgError}');
+        }
+        callback();
+      }
+    );
+  }
+
+  void _getListCountry(Function() callback) {
     NetworkService.shared().sendGETRequest(
       url: NetworkAPI.GET_COUNTRIES,
       parser: NetworkParser.getListCountry,
       callback: (rs) {
         if (rs.isOK && rs.data.containsKey('list')) {
-          countries.addAll(rs.data['list']);
-          myCountry = rs.data['myCountry'];
-          _refresh();
+          final ls = rs.data['list'];
+          countries.addAll(ls);
         } else if (d___) {
           print('---> getListCountry error: ${rs.msgError}');
         }
+        callback();
       },
     );
   }

@@ -16,7 +16,7 @@ class _AppView extends StatelessWidget {
         theme: ThemeData(
           fontFamily: 'Roboto'
         ),
-        home: createSplash(),
+        home: createMain(),
       );
     });
   }

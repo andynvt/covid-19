@@ -122,7 +122,7 @@ class _RollingSwitchState extends State<TTSwitch>
               child: Opacity(
                 opacity: (1 - value).clamp(0.0, 1.0),
                 child: Container(
-                  padding: EdgeInsets.only(right: 8),
+                  padding: EdgeInsets.only(right: 12),
                   alignment: Alignment.centerRight,
                   height: 40,
                   child: Text(
@@ -141,7 +141,7 @@ class _RollingSwitchState extends State<TTSwitch>
               child: Opacity(
                 opacity: value.clamp(0.0, 1.0),
                 child: Container(
-                  padding: EdgeInsets.only(left: 8),
+                  padding: EdgeInsets.only(left: 12),
                   alignment: Alignment.center,
                   height: 40,
                   width: widget.width - 55,

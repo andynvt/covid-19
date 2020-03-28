@@ -1,5 +1,7 @@
 import 'package:covid/model/model.dart';
 import 'package:covid/resource/resource.dart';
+import 'package:covid/service/cache/cache_config.dart';
+import 'package:covid/service/cache/cache_service.dart';
 
 typedef ParseCallback = Map<String, dynamic> Function(dynamic);
 
@@ -16,14 +18,18 @@ class NetworkParser {
 
   static Map<String, dynamic> getListCountry(dynamic json) {
     if (json is List<dynamic>) {
-      CountryInfo myCountry;
       final ls = json.map((e) {
-        if (e['country'] == CS.COUNTRY) {
-          myCountry = CountryInfo.fromJson(e);
-        }
         return CountryInfo.fromJson(e);
       }).toList();
-      return {'list': ls, 'myCountry': myCountry};
+      return {'list': ls};
+    }
+    return {};
+  }
+
+  static Map<String, dynamic> getGlobal(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      final info = GlobalInfo.fromJson(json);
+      return {'info': info};
     }
     return {};
   }

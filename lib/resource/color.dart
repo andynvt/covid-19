@@ -17,4 +17,5 @@ class Cl {
   static const black9 = const Color(0x17000000);
   static const pinkRed = const Color(0xffff004d);
   static const lightBlue = const Color(0xff4376f3);
+  static Color grey300 = Colors.grey[300];
 }

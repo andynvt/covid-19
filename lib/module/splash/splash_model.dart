@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'splash_logic.dart';
 
 class SplashModel extends ChangeNotifier {
@@ -9,4 +8,5 @@ class SplashModel extends ChangeNotifier {
   SplashModel() {
     _logic = SplashLogic(this);
   }
+
 }

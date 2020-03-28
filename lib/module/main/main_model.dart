@@ -1,3 +1,4 @@
+import 'package:covid/model/model.dart';
 import 'package:flutter/material.dart';
 import 'main_logic.dart';
 
@@ -8,7 +9,8 @@ class MainModel extends ChangeNotifier {
 
   MainLogic get logic => _logic;
 
-  bool isWorld = false;
+  bool isGlobal = true;
+  CountryInfo myCountry = CountryInfo(id: -1);
 
   MainModel() {
     _logic = MainLogic(this);

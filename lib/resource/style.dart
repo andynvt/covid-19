@@ -125,6 +125,11 @@ class Style {
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
+  static const TextStyle ts_16_black = const TextStyle(
+    color: Cl.black,
+    fontSize: 16,
+    fontStyle: FontStyle.normal,
+  );
   static const TextStyle ts_15 = const TextStyle(
     color: Cl.brownishGrey,
     fontSize: 16,

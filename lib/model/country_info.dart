@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CountryInfo extends ChangeNotifier {
+  final int id;
   final String name;
   final String code;
   String flag;
@@ -15,7 +16,8 @@ class CountryInfo extends ChangeNotifier {
   double longitude;
 
   CountryInfo(
-      {this.name,
+      {this.id,
+      this.name,
       this.code,
       this.flag,
       this.cases,
@@ -30,6 +32,7 @@ class CountryInfo extends ChangeNotifier {
 
   factory CountryInfo.fromJson(Map<String, dynamic> json) {
     return CountryInfo(
+      id: json['countryInfo']['_id'],
       name: json['country'],
       code: json['countryInfo']['iso2'],
       flag: json['countryInfo']['flag'],
