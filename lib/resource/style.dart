@@ -90,27 +90,23 @@ class Style {
   );
   static const TextStyle ts_13_blue = const TextStyle(
     color: Cl.lightBlue,
-    fontSize: 16.5,
-    fontWeight: FontWeight.w700,
-    fontStyle: FontStyle.normal,
+    fontSize: 14,
   );
   static const TextStyle ts_13_green = const TextStyle(
     color: Cl.shamrockGreen,
-    fontSize: 16.5,
-    fontWeight: FontWeight.w700,
-    fontStyle: FontStyle.normal,
+    fontSize: 14,
   );
   static const TextStyle ts_13_red = const TextStyle(
     color: Cl.rustyRed,
-    fontSize: 16.5,
-    fontWeight: FontWeight.w700,
-    fontStyle: FontStyle.normal,
+    fontSize: 14,
   );
   static const TextStyle ts_13_pink = const TextStyle(
     color: Cl.pinkRed,
-    fontSize: 16.5,
-    fontWeight: FontWeight.w700,
-    fontStyle: FontStyle.normal,
+    fontSize: 14,
+  );
+  static const TextStyle ts_13_black = const TextStyle(
+    color: Cl.black,
+    fontSize: 14,
   );
 
   static const TextStyle ts_14 = const TextStyle(

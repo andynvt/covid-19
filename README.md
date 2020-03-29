@@ -1,6 +1,6 @@
 # covid
 
-mobile project covid-19 virus statistic 
+A new Flutter application.
 
 ## Getting Started
 

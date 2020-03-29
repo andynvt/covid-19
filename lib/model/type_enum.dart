@@ -50,12 +50,12 @@ TextStyle typeEnumToStyle(TypeEnum type) {
     case TypeEnum.DEATH:
       return Style.ts_13_red;
     case TypeEnum.CRITICAL:
-      return Style.ts_13_pink;
+      return Style.ts_13_black;
     case TypeEnum.CASE_TODAY:
-      return Style.ts_13_blue;
+      return Style.ts_13_black;
     case TypeEnum.DEATH_TODAY:
-      return Style.ts_13_red;
+      return Style.ts_13_black;
     default:
-      return Style.ts_13;
+      return Style.ts_13_black;
   }
 }

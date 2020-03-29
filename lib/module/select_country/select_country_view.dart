@@ -82,9 +82,9 @@ class _SelectCountryViewState extends State<_SelectCountryView> {
           ),
           Expanded(
             child: ListView.separated(
-              itemCount: model.countries.length,
+              itemCount: model.listSearch.length,
               itemBuilder: (_, index) {
-                return _renderCountryItem(model.countries[index]);
+                return _renderCountryItem(model.listSearch[index]);
               },
               separatorBuilder: (_, __) {
                 return Container(height: 1, color: Cl.grey300);

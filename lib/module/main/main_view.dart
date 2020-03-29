@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:covid/model/model.dart';
 import 'package:covid/module/module.dart';
@@ -5,8 +7,9 @@ import 'package:covid/resource/resource.dart';
 import 'package:covid/util/util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:provider/provider.dart';
-
+import 'custom.dart';
 import 'main_model.dart';
 
 ChangeNotifierProvider<MainModel> createMain() {
@@ -42,36 +45,13 @@ class _MainViewState extends State<_MainView> {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<MainModel>(context);
+    final isGlobal = model.isGlobal;
+    final globalInfo = model.globalInfo;
+
     return Scaffold(
+      backgroundColor: Cl.white,
       key: _scaffoldKey,
-      drawer: Drawer(
-        child: Container(
-          color: Cl.white,
-          child: SafeArea(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  height: 56,
-                  child: Text(
-                    'COVID-19',
-                    style: Style.ts_0,
-                  ),
-                ),
-                Divider(color: Cl.white),
-                _renderDrawerItem(Icons.library_books, 'NEWS'),
-                _renderDrawerItem(Icons.info, 'INFO'),
-                _renderDrawerItem(Icons.help, 'SUPPORT'),
-                _renderDrawerItem(Icons.phone, 'EMERGENCY CALL'),
-                _renderDrawerItem(Icons.local_hospital, 'FIND HOSPITAL'),
-                Divider(color: Cl.white),
-                _renderDrawerItem(Icons.live_help, 'FAQ'),
-                _renderDrawerItem(Icons.tag_faces, 'FUNNY MEME'),
-              ],
-            ),
-          ),
-        ),
-      ),
+      drawer: _renderDrawer(),
       appBar: AppBar(
         elevation: 0,
         brightness: Brightness.light,
@@ -103,7 +83,7 @@ class _MainViewState extends State<_MainView> {
                   child: Image.asset(
                     Id.ic_world,
                     width: 45,
-                    color: model.isGlobal ? Cl.lightBlue : Cl.brownGrey,
+                    color: isGlobal ? Cl.lightBlue : Cl.brownGrey,
                   ),
                 ),
                 SizedBox(width: 16),
@@ -119,7 +99,7 @@ class _MainViewState extends State<_MainView> {
                       ),
                       child: Row(
                         children: <Widget>[
-                          !model.isGlobal
+                          !isGlobal
                               ? Hero(
                                   tag: 'flag-${model.myCountry.id}',
                                   child: Image.asset(
@@ -129,7 +109,7 @@ class _MainViewState extends State<_MainView> {
                                 )
                               : Container(),
                           SizedBox(width: 16),
-                          !model.isGlobal
+                          !isGlobal
                               ? Hero(
                                   tag: 'name-${model.myCountry.id}',
                                   child: Material(
@@ -173,30 +153,56 @@ class _MainViewState extends State<_MainView> {
                   flex: 4,
                   child: Column(
                     children: <Widget>[
-                      _renderStatisticItem(TypeEnum.CONFIRMED, 244553, 4455),
-                      _renderStatisticItem(TypeEnum.RECOVERED, 244553, 4455),
-                      _renderStatisticItem(TypeEnum.DEATH, 244553, 4455),
+                      _renderStatisticItem(
+                        TypeEnum.CONFIRMED,
+                        isGlobal ? globalInfo.cases : model.myCountry.cases,
+                      ),
+                      _renderStatisticItem(
+                        TypeEnum.RECOVERED,
+                        isGlobal
+                            ? globalInfo.recovered
+                            : model.myCountry.recovered,
+                      ),
+                      _renderStatisticItem(
+                        TypeEnum.DEATH,
+                        isGlobal ? globalInfo.deaths : model.myCountry.deaths,
+                      ),
                     ],
                   ),
                 )
               ],
             ),
           ),
-          SizedBox(height: 8),
-          Row(
-            children: <Widget>[
-              _renderBoxInfo(TypeEnum.CASE_TODAY, 244553),
-              _renderBoxInfo(TypeEnum.DEATH_TODAY, 244553),
-              _renderBoxInfo(TypeEnum.CRITICAL, 244553),
-            ],
-          ),
+          SizedBox(height: 12),
+          !isGlobal
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 11),
+                  child: Row(
+                    children: <Widget>[
+                      _renderBoxInfo(
+                        TypeEnum.CASE_TODAY,
+                        model.myCountry.todayCases,
+                      ),
+                      _renderBoxInfo(
+                        TypeEnum.DEATH_TODAY,
+                        model.myCountry.todayDeaths,
+                      ),
+                      _renderBoxInfo(
+                        TypeEnum.CRITICAL,
+                        model.myCountry.critical,
+                      ),
+                    ],
+                  ),
+                )
+              : Container(),
+//          _renderAreaChart(),
           _renderChart(),
         ],
       ),
     );
   }
 
-  Widget _renderStatisticItem(TypeEnum type, int number, int variability) {
+  Widget _renderStatisticItem(TypeEnum type, int number) {
     return Padding(
       padding: const EdgeInsets.only(top: 4, bottom: 4, right: 8),
       child: InkWell(
@@ -223,12 +229,12 @@ class _MainViewState extends State<_MainView> {
               Expanded(
                 child: Column(
                   children: <Widget>[
-                    Text(typeEnumToStr(type), style: Style.ts_9),
+                    Text(typeEnumToStr(type), style: typeEnumToStyle(type)),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Text(
-                        '${TTString.shared().format(number)}',
-                        style: typeEnumToStyle(type),
+                        '${TTString.shared().format(number ?? 0)}',
+                        style: Style.ts_13,
                       ),
                     ),
                   ],
@@ -249,14 +255,6 @@ class _MainViewState extends State<_MainView> {
     );
   }
 
-  Widget _renderDrawerItem(IconData icon, String text) {
-    return ListTile(
-      onTap: () => _menuItemClick,
-      leading: Icon(icon, color: Cl.white),
-      title: Text(text, style: Style.ts_3),
-    );
-  }
-
   Widget _renderBoxInfo(TypeEnum type, int number) {
     return Expanded(
       child: Card(
@@ -266,11 +264,11 @@ class _MainViewState extends State<_MainView> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              Text(typeEnumToStr(type), style: Style.ts_9),
+              Text(typeEnumToStr(type), style: typeEnumToStyle(type)),
               SizedBox(height: 8),
               Text(
                 '${TTString.shared().format(number)}',
-                style: typeEnumToStyle(type),
+                style: Style.ts_9,
               ),
             ],
           ),
@@ -279,65 +277,236 @@ class _MainViewState extends State<_MainView> {
     );
   }
 
-  Widget _renderChart() {
-    final myFakeDesktopData = [
-      new LinearSales(0, 5),
-      new LinearSales(1, 25),
-      new LinearSales(2, 100),
-      new LinearSales(3, 75),
+  Widget _renderAreaChart() {
+    final desktopSalesData = [
+      new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), 75),
     ];
 
-    var myFakeTabletData = [
-      new LinearSales(0, 10),
-      new LinearSales(1, 50),
-      new LinearSales(2, 200),
-      new LinearSales(3, 150),
+    final tableSalesData = [
+      new TimeSeriesSales(new DateTime(2017, 9, 19), 10),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), 50),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 200),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), 150),
     ];
 
-    var myFakeMobileData = [
-      new LinearSales(0, 15),
-      new LinearSales(1, 75),
-      new LinearSales(2, 80),
-      new LinearSales(3, 225),
+    final mobileSalesData = [
+      new TimeSeriesSales(new DateTime(2017, 9, 19), 10),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), 50),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 200),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), 150),
     ];
-
+    final mobileSalesData2 = [
+      new TimeSeriesSales(new DateTime(2017, 9, 19), 25),
+      new TimeSeriesSales(new DateTime(2017, 9, 26), 125),
+      new TimeSeriesSales(new DateTime(2017, 10, 3), 500),
+      new TimeSeriesSales(new DateTime(2017, 10, 10), 375),
+    ];
     final series = [
-      new charts.Series<LinearSales, int>(
+      new charts.Series<TimeSeriesSales, DateTime>(
         id: 'Desktop',
-        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        data: myFakeDesktopData,
-      ),
-      new charts.Series<LinearSales, int>(
-        id: 'Tablet',
-        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        data: myFakeTabletData,
-      ),
-      new charts.Series<LinearSales, int>(
-        id: 'Mobile',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        data: myFakeMobileData,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: desktopSalesData,
       ),
+      new charts.Series<TimeSeriesSales, DateTime>(
+        id: 'Tablet',
+        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: tableSalesData,
+      ),
+      new charts.Series<TimeSeriesSales, DateTime>(
+          id: 'Mobile',
+          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+          domainFn: (TimeSeriesSales sales, _) => sales.time,
+          measureFn: (TimeSeriesSales sales, _) => sales.sales,
+          data: mobileSalesData),
+      new charts.Series<TimeSeriesSales, DateTime>(
+          id: 'Mobile',
+          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+          domainFn: (TimeSeriesSales sales, _) => sales.time,
+          measureFn: (TimeSeriesSales sales, _) => sales.sales,
+          data: mobileSalesData2)
+        ..setAttribute(charts.rendererIdKey, 'customPoint'),
     ];
+
+    void _onSelectionChanged(charts.SelectionModel model) {
+      final selectedDatum = model.selectedDatum;
+      DateTime time;
+      final measures = <String, num>{};
+      if (selectedDatum.isNotEmpty) {
+        time = selectedDatum.first.datum.time;
+        selectedDatum.forEach((charts.SeriesDatum datumPair) {
+          measures[datumPair.series.displayName] = datumPair.datum.sales;
+        });
+      }
+      //TODO: show to user
+
+      print(time);
+      print(measures);
+    }
 
     return Expanded(
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 8, top: 8),
-          child: charts.LineChart(
-            series,
-            defaultRenderer:
-                charts.LineRendererConfig(includeArea: true, stacked: true),
-            animate: true,
-            behaviors: [
-              charts.ChartTitle('Day',
-                  behaviorPosition: charts.BehaviorPosition.bottom),
-            ],
+        child: Stack(
+          children: <Widget>[
+            Positioned(
+              left: 50,
+              top: 45,
+              child: Container(
+                decoration: ShapeDecoration(
+                  color: Colors.lightBlue,
+                  shape: TooltipShapeBorder(arrowArc: 0.1, radius: 20),
+                  shadows: [
+                    BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 4.0,
+                        offset: Offset(2, 2))
+                  ],
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Text('Text 22', style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: charts.TimeSeriesChart(
+                series,
+                animate: true,
+                defaultRenderer: charts.LineRendererConfig(
+                  includeArea: true,
+                  stacked: true,
+                ),
+                dateTimeFactory: const charts.LocalDateTimeFactory(),
+//                domainAxis: new charts.DateTimeAxisSpec(
+//                  tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
+//                    day: new charts.TimeFormatterSpec(
+//                      format: 'dd',
+//                      transitionFormat: 'dd',
+//                    ),
+//                  ),
+//                ),
+                behaviors: [charts.SeriesLegend()],
+                customSeriesRenderers: [
+                  charts.PointRendererConfig(customRendererId: 'customPoint'),
+                ],
+                selectionModels: [
+                  charts.SelectionModelConfig(
+                    type: charts.SelectionModelType.info,
+                    changedListener: _onSelectionChanged,
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _renderChart() {
+    return Expanded(
+      child: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Echarts(
+            option: '''
+        {
+    title: {
+        text: 'Title of chart'
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        }
+    },
+    legend: {
+        data: ['name 1', 'name 2', 'name 3', 'name 4', 'name 5'],
+        top: 30,
+    },
+    
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        y: 80,
+        containLabel: true
+    },
+    xAxis: [
+        {
+            type: 'category',
+            boundaryGap: false,
+            data: ['1 oct', '2 oct', '3 oct', '4 oct', '5 oct', '6 oct', '7 oct']
+        }
+    ],
+    yAxis: [
+        {
+            type: 'value'
+        }
+    ],
+    series: [
+        {
+            name: 'name 1',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [120, 132, 101, 134, 90, 230, 210]
+        },
+        {
+            name: 'name 2',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [220, 182, 191, 234, 290, 330, 310]
+        },
+        {
+            name: 'name 3',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [150, 232, 201, 154, 190, 330, 410]
+        },
+        {
+            name: 'name 4',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [320, 332, 301, 334, 390, 330, 320]
+        },
+        {
+            name: 'name 5',
+            type: 'line',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'top'
+                }
+            },
+            areaStyle: {},
+            data: [820, 932, 901, 934, 1290, 1330, 1320]
+        }
+    ]
+}
+
+  ''',
+            extraScript: '''
+  chart.on('click', (params) => {
+    if(params.componentType === 'series') {
+  	  Messager.postMessage('anything');
+    }
+  });
+''',
           ),
         ),
       ),
@@ -372,13 +541,45 @@ class _MainViewState extends State<_MainView> {
       ),
     );
   }
-}
 
-class LinearSales {
-  final int year;
-  final int sales;
+  Widget _renderDrawer() {
+    return Drawer(
+      child: Container(
+        color: Cl.white,
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Container(
+                alignment: Alignment.center,
+                height: 56,
+                child: Text(
+                  'COVID-19',
+                  style: Style.ts_0,
+                ),
+              ),
+              Divider(color: Cl.white),
+              _renderDrawerItem(Icons.library_books, 'NEWS'),
+              _renderDrawerItem(Icons.info, 'INFO'),
+              _renderDrawerItem(Icons.help, 'SUPPORT'),
+              _renderDrawerItem(Icons.phone, 'EMERGENCY CALL'),
+              _renderDrawerItem(Icons.local_hospital, 'FIND HOSPITAL'),
+              Divider(color: Cl.white),
+              _renderDrawerItem(Icons.live_help, 'FAQ'),
+              _renderDrawerItem(Icons.tag_faces, 'FUNNY MEME'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-  LinearSales(this.year, this.sales);
+  Widget _renderDrawerItem(IconData icon, String text) {
+    return ListTile(
+      onTap: () => _menuItemClick,
+      leading: Icon(icon, color: Cl.white),
+      title: Text(text, style: Style.ts_3),
+    );
+  }
 }
 
 class GaugeSegment {
@@ -388,4 +589,11 @@ class GaugeSegment {
   GaugeSegment(this.size, Color color)
       : this.color = new charts.Color(
             r: color.red, g: color.green, b: color.blue, a: color.alpha);
+}
+
+class TimeSeriesSales {
+  final DateTime time;
+  final int sales;
+
+  TimeSeriesSales(this.time, this.sales);
 }

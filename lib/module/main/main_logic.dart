@@ -12,6 +12,7 @@ class MainLogic {
   void _loadGlobal() {
     CountryService.shared().getData(() {
       _model.myCountry = CountryService.shared().countries.first;
+      _model.globalInfo = CountryService.shared().globalInfo;
       _model.refresh();
     });
   }

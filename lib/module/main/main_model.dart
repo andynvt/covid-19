@@ -11,6 +11,7 @@ class MainModel extends ChangeNotifier {
 
   bool isGlobal = true;
   CountryInfo myCountry = CountryInfo(id: -1);
+  GlobalInfo globalInfo = GlobalInfo();
 
   MainModel() {
     _logic = MainLogic(this);
