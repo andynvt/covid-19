@@ -64,7 +64,9 @@ class _MainViewState extends State<_MainView> {
         title: Text('Covid-19', style: Style.ts_1),
         actions: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              model.logic.loadData();
+            },
             icon: Icon(Icons.refresh, color: Cl.black),
           )
         ],

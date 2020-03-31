@@ -55,7 +55,10 @@ class CountryService extends ChangeNotifier implements BaseService {
       parser: NetworkParser.getListCountry,
       callback: (rs) {
         if (rs.isOK && rs.data.containsKey('list')) {
-          final ls = rs.data['list'];
+          final List<CountryInfo> ls = rs.data['list'];
+          ls.sort((a,b) {
+            return b.cases.compareTo(a.cases);
+          });
           countries.addAll(ls);
         } else if (d___) {
           print('---> getListCountry error: ${rs.msgError}');

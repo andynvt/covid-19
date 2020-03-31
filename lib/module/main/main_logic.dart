@@ -6,10 +6,10 @@ class MainLogic {
   final MainModel _model;
 
   MainLogic(this._model) {
-    _loadGlobal();
+    loadData();
   }
 
-  void _loadGlobal() {
+  void loadData() {
     CountryService.shared().getData(() {
       _model.myCountry = CountryService.shared().countries.first;
       _model.globalInfo = CountryService.shared().globalInfo;

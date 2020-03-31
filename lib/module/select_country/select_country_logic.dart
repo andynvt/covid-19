@@ -13,11 +13,11 @@ class SelectCountryLogic {
 
   void search(String text) {
     _model.listSearch.clear();
-    if(text.isEmpty) {
+    if (text.isEmpty) {
       _model.listSearch.addAll(_model.countries);
     } else {
       List<CountryInfo> ls = _model.countries.where((info) {
-        return info.name.contains('text') || info.code.contains('text');
+        return info.name.toLowerCase().contains(text);
       }).toList();
       _model.listSearch.addAll(ls);
     }
