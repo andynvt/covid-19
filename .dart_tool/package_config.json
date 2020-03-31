@@ -38,18 +38,6 @@
       "languageVersion": "1.0"
     },
     {
-      "name": "charts_common",
-      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/charts_common-0.9.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.3"
-    },
-    {
-      "name": "charts_flutter",
-      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/charts_flutter-0.9.0",
-      "packageUri": "lib/",
-      "languageVersion": "1.23"
-    },
-    {
       "name": "collection",
       "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.14.11",
       "packageUri": "lib/",
@@ -120,12 +108,6 @@
       "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.16.1",
       "packageUri": "lib/",
       "languageVersion": "2.5"
-    },
-    {
-      "name": "logging",
-      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/logging-0.11.4",
-      "packageUri": "lib/",
-      "languageVersion": "2.0"
     },
     {
       "name": "matcher",
@@ -243,9 +225,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.2.11",
+      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.2.15",
       "packageUri": "lib/",
-      "languageVersion": "2.2"
+      "languageVersion": "2.4"
     },
     {
       "name": "typed_data",
@@ -278,7 +260,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-03-29T16:59:49.867845Z",
+  "generated": "2020-03-30T08:36:20.439856Z",
   "generator": "pub",
-  "generatorVersion": "2.7.0"
+  "generatorVersion": "2.8.0-dev.12.0.flutter-9983424a3c"
 }

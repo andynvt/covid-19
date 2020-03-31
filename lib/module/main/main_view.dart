@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:covid/model/model.dart';
 import 'package:covid/module/module.dart';
 import 'package:covid/resource/resource.dart';
@@ -9,7 +7,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:provider/provider.dart';
-import 'custom.dart';
 import 'main_model.dart';
 
 ChangeNotifierProvider<MainModel> createMain() {
@@ -101,24 +98,24 @@ class _MainViewState extends State<_MainView> {
                         children: <Widget>[
                           !isGlobal
                               ? Hero(
-                                  tag: 'flag-${model.myCountry.id}',
-                                  child: Image.asset(
-                                    Id.getIdByCountry(model.myCountry),
-                                    width: 40,
-                                  ),
-                                )
+                            tag: 'flag-${model.myCountry.id}',
+                            child: Image.asset(
+                              Id.getIdByCountry(model.myCountry),
+                              width: 40,
+                            ),
+                          )
                               : Container(),
                           SizedBox(width: 16),
                           !isGlobal
                               ? Hero(
-                                  tag: 'name-${model.myCountry.id}',
-                                  child: Material(
-                                    child: Text(
-                                      model.myCountry.name,
-                                      style: Style.ts_16_black,
-                                    ),
-                                  ),
-                                )
+                            tag: 'name-${model.myCountry.id}',
+                            child: Material(
+                              child: Text(
+                                model.myCountry.name,
+                                style: Style.ts_16_black,
+                              ),
+                            ),
+                          )
                               : Text('Global', style: Style.ts_16_black),
                           Spacer(),
                           Container(width: 1, color: Cl.brownGrey, height: 30),
@@ -176,29 +173,69 @@ class _MainViewState extends State<_MainView> {
           SizedBox(height: 12),
           !isGlobal
               ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 11),
-                  child: Row(
-                    children: <Widget>[
-                      _renderBoxInfo(
-                        TypeEnum.CASE_TODAY,
-                        model.myCountry.todayCases,
-                      ),
-                      _renderBoxInfo(
-                        TypeEnum.DEATH_TODAY,
-                        model.myCountry.todayDeaths,
-                      ),
-                      _renderBoxInfo(
-                        TypeEnum.CRITICAL,
-                        model.myCountry.critical,
-                      ),
-                    ],
-                  ),
-                )
+            padding: const EdgeInsets.symmetric(horizontal: 11),
+            child: Row(
+              children: <Widget>[
+                _renderBoxInfo(
+                  TypeEnum.CASE_TODAY,
+                  model.myCountry.todayCases,
+                ),
+                _renderBoxInfo(
+                  TypeEnum.DEATH_TODAY,
+                  model.myCountry.todayDeaths,
+                ),
+                _renderBoxInfo(
+                  TypeEnum.CRITICAL,
+                  model.myCountry.critical,
+                ),
+              ],
+            ),
+          )
               : Container(),
-//          _renderAreaChart(),
-          _renderChart(),
+          _renderAreaChart(),
         ],
       ),
+    );
+  }
+
+  Widget _renderPieChart() {
+    return Echarts(
+        option: '''
+        {
+          tooltip: {
+              trigger: 'item',
+              formatter: '{d}%'
+          },
+          color: ['#9fdcba','#fd5047', '#17C5FA'],
+          series: [
+              {
+                  type: 'pie',
+                  selectedMode: 'single',
+                  labelLine: {
+                      show: false
+                  },
+                  label: {
+                      show: false
+                  },
+                  data: [
+                      {value: 335, name: 'item 0'},
+                      {value: 310, name: 'item 1'},
+                      {value: 234, name: 'ietm 2'},
+                  ],
+                  emphasis: {
+                      itemStyle: {
+                          shadowBlur: 10,
+                          shadowOffsetX: 0,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                      }
+                  }
+              }
+          ]
+        }
+        ''',
+        extraScript: '''
+        document.getElementsByTagName("body")[0].style = 'position: fixed';
+        ''',
     );
   }
 
@@ -278,266 +315,93 @@ class _MainViewState extends State<_MainView> {
   }
 
   Widget _renderAreaChart() {
-    final desktopSalesData = [
-      new TimeSeriesSales(new DateTime(2017, 9, 19), 5),
-      new TimeSeriesSales(new DateTime(2017, 9, 26), 25),
-      new TimeSeriesSales(new DateTime(2017, 10, 3), 100),
-      new TimeSeriesSales(new DateTime(2017, 10, 10), 75),
-    ];
-
-    final tableSalesData = [
-      new TimeSeriesSales(new DateTime(2017, 9, 19), 10),
-      new TimeSeriesSales(new DateTime(2017, 9, 26), 50),
-      new TimeSeriesSales(new DateTime(2017, 10, 3), 200),
-      new TimeSeriesSales(new DateTime(2017, 10, 10), 150),
-    ];
-
-    final mobileSalesData = [
-      new TimeSeriesSales(new DateTime(2017, 9, 19), 10),
-      new TimeSeriesSales(new DateTime(2017, 9, 26), 50),
-      new TimeSeriesSales(new DateTime(2017, 10, 3), 200),
-      new TimeSeriesSales(new DateTime(2017, 10, 10), 150),
-    ];
-    final mobileSalesData2 = [
-      new TimeSeriesSales(new DateTime(2017, 9, 19), 25),
-      new TimeSeriesSales(new DateTime(2017, 9, 26), 125),
-      new TimeSeriesSales(new DateTime(2017, 10, 3), 500),
-      new TimeSeriesSales(new DateTime(2017, 10, 10), 375),
-    ];
-    final series = [
-      new charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Desktop',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: desktopSalesData,
-      ),
-      new charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Tablet',
-        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: tableSalesData,
-      ),
-      new charts.Series<TimeSeriesSales, DateTime>(
-          id: 'Mobile',
-          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-          domainFn: (TimeSeriesSales sales, _) => sales.time,
-          measureFn: (TimeSeriesSales sales, _) => sales.sales,
-          data: mobileSalesData),
-      new charts.Series<TimeSeriesSales, DateTime>(
-          id: 'Mobile',
-          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-          domainFn: (TimeSeriesSales sales, _) => sales.time,
-          measureFn: (TimeSeriesSales sales, _) => sales.sales,
-          data: mobileSalesData2)
-        ..setAttribute(charts.rendererIdKey, 'customPoint'),
-    ];
-
-    void _onSelectionChanged(charts.SelectionModel model) {
-      final selectedDatum = model.selectedDatum;
-      DateTime time;
-      final measures = <String, num>{};
-      if (selectedDatum.isNotEmpty) {
-        time = selectedDatum.first.datum.time;
-        selectedDatum.forEach((charts.SeriesDatum datumPair) {
-          measures[datumPair.series.displayName] = datumPair.datum.sales;
-        });
-      }
-      //TODO: show to user
-
-      print(time);
-      print(measures);
-    }
-
-    return Expanded(
-      child: SafeArea(
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              left: 50,
-              top: 45,
-              child: Container(
-                decoration: ShapeDecoration(
-                  color: Colors.lightBlue,
-                  shape: TooltipShapeBorder(arrowArc: 0.1, radius: 20),
-                  shadows: [
-                    BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 4.0,
-                        offset: Offset(2, 2))
-                  ],
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(16.0),
-                  child: Text('Text 22', style: TextStyle(color: Colors.white)),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
-              child: charts.TimeSeriesChart(
-                series,
-                animate: true,
-                defaultRenderer: charts.LineRendererConfig(
-                  includeArea: true,
-                  stacked: true,
-                ),
-                dateTimeFactory: const charts.LocalDateTimeFactory(),
-//                domainAxis: new charts.DateTimeAxisSpec(
-//                  tickFormatterSpec: new charts.AutoDateTimeTickFormatterSpec(
-//                    day: new charts.TimeFormatterSpec(
-//                      format: 'dd',
-//                      transitionFormat: 'dd',
-//                    ),
-//                  ),
-//                ),
-                behaviors: [charts.SeriesLegend()],
-                customSeriesRenderers: [
-                  charts.PointRendererConfig(customRendererId: 'customPoint'),
-                ],
-                selectionModels: [
-                  charts.SelectionModelConfig(
-                    type: charts.SelectionModelType.info,
-                    changedListener: _onSelectionChanged,
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _renderChart() {
     return Expanded(
       child: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Echarts(
             option: '''
-        {
-    title: {
-        text: 'Title of chart'
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            label: {
-                backgroundColor: '#6a7985'
+              {
+                title: {
+                    text: 'Case in week'
+                },
+                color: ['#9fdcba','#fd5047', '#17C5FA','#003ab2',],
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data: ['name 1', 'name 2', 'name 3', 'name 4'],
+                    top: 30,
+                },
+                
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    y: 80,
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: ['1 oct', '2 oct', '3 oct', '4 oct', '5 oct', '6 oct']
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value'
+                    }
+                ],
+                series: [
+                    {
+                        name: 'name 1',
+                        type: 'line',
+                        stack: '1',
+                        areaStyle: {},
+                        data: [120, 132, 101, 134, 230, 210]
+                    },
+                    {
+                        name: 'name 2',
+                        type: 'line',
+                        stack: '1',
+                        areaStyle: {},
+                        data: [220, 182, 191, 234, 330, 310]
+                    },
+                     {
+                        name: 'name 3',
+                        type: 'line',
+                        stack: '1',
+                        areaStyle: {},
+                        data: [330, 100, 200, 300, 400, 500]
+                    },
+                    {
+                        name: 'name 4',
+                        type: 'line',
+                        stack: '2',
+                        label: {
+                            normal: {
+                                show: true,
+                                position: 'top'
+                            }
+                        },
+                        // areaStyle: {},
+                        data: [670, 414, 492, 668, 960, 1020]
+                    }
+                ]
             }
-        }
-    },
-    legend: {
-        data: ['name 1', 'name 2', 'name 3', 'name 4', 'name 5'],
-        top: 30,
-    },
-    
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        y: 80,
-        containLabel: true
-    },
-    xAxis: [
-        {
-            type: 'category',
-            boundaryGap: false,
-            data: ['1 oct', '2 oct', '3 oct', '4 oct', '5 oct', '6 oct', '7 oct']
-        }
-    ],
-    yAxis: [
-        {
-            type: 'value'
-        }
-    ],
-    series: [
-        {
-            name: 'name 1',
-            type: 'line',
-            stack: '总量',
-            areaStyle: {},
-            data: [120, 132, 101, 134, 90, 230, 210]
-        },
-        {
-            name: 'name 2',
-            type: 'line',
-            stack: '总量',
-            areaStyle: {},
-            data: [220, 182, 191, 234, 290, 330, 310]
-        },
-        {
-            name: 'name 3',
-            type: 'line',
-            stack: '总量',
-            areaStyle: {},
-            data: [150, 232, 201, 154, 190, 330, 410]
-        },
-        {
-            name: 'name 4',
-            type: 'line',
-            stack: '总量',
-            areaStyle: {},
-            data: [320, 332, 301, 334, 390, 330, 320]
-        },
-        {
-            name: 'name 5',
-            type: 'line',
-            stack: '总量',
-            label: {
-                normal: {
-                    show: true,
-                    position: 'top'
-                }
-            },
-            areaStyle: {},
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
-        }
-    ]
-}
-
-  ''',
+            ''',
             extraScript: '''
-  chart.on('click', (params) => {
-    if(params.componentType === 'series') {
-  	  Messager.postMessage('anything');
-    }
-  });
-''',
+            document.getElementsByTagName("body")[0].style = 'position: fixed;';
+            ''',
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _renderPieChart() {
-    final data = [
-      GaugeSegment(100, Cl.lightBlue),
-      GaugeSegment(75, Cl.shamrockGreen),
-      GaugeSegment(50, Cl.rustyRed),
-    ];
-
-    final series = [
-      charts.Series<GaugeSegment, String>(
-        id: 'Segments',
-        domainFn: (GaugeSegment segment, _) => segment.size.toString(),
-        measureFn: (GaugeSegment segment, _) => segment.size,
-        colorFn: (GaugeSegment segment, _) => segment.color,
-        data: data,
-      )
-    ];
-    return charts.PieChart(
-      series,
-      animate: true,
-      defaultRenderer: charts.ArcRendererConfig(
-        arcRendererDecorators: [
-          charts.ArcLabelDecorator(
-            labelPosition: charts.ArcLabelPosition.inside,
-          ),
-        ],
       ),
     );
   }
@@ -580,20 +444,4 @@ class _MainViewState extends State<_MainView> {
       title: Text(text, style: Style.ts_3),
     );
   }
-}
-
-class GaugeSegment {
-  final int size;
-  final charts.Color color;
-
-  GaugeSegment(this.size, Color color)
-      : this.color = new charts.Color(
-            r: color.red, g: color.green, b: color.blue, a: color.alpha);
-}
-
-class TimeSeriesSales {
-  final DateTime time;
-  final int sales;
-
-  TimeSeriesSales(this.time, this.sales);
 }
