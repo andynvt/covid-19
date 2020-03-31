@@ -3,7 +3,6 @@ import 'package:covid/model/model.dart';
 import 'package:covid/module/module.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/util/util.dart';
-import 'package:covid/widget/switch_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
@@ -293,7 +292,6 @@ class _MainViewState extends State<_MainView> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: typeEnumToColor(type).withOpacity(0.15),
-//            border: Border.all(color: typeEnumToColor(type)),
             borderRadius: BorderRadius.circular(5),
           ),
           child: Column(
@@ -337,15 +335,19 @@ class _MainViewState extends State<_MainView> {
   }
 
   Widget _renderAreaChart() {
+    final model = Provider.of<MainModel>(context);
+    final info = model.isGlobal ? model.globalHistorical : model.myHistorical;
+
     return Expanded(
       child: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Echarts(
-            option: '''
+          child: info.cases != null
+              ? Echarts(
+                  option: '''
               {
                 title: {
-                    text: 'Weekly chart'
+                    text: 'Montly chart'
                 },
                 color: ['#FA7B74','#17C5FA','#9fdcba','#003ab2'],
                 tooltip: {
@@ -373,7 +375,7 @@ class _MainViewState extends State<_MainView> {
                     {
                         type: 'category',
                         boundaryGap: false,
-                        data: ['1 oct', '2 oct', '3 oct', '4 oct', '5 oct', '6 oct']
+                        data: ${info.toDateList(count: 30)}
                     }
                 ],
                 yAxis: [
@@ -387,42 +389,42 @@ class _MainViewState extends State<_MainView> {
                         type: 'line',
                         stack: '1',
                         areaStyle: {},
-                        data: [120, 132, 101, 134, 230, 210]
+                        data: ${info.toDataList(info.deaths, count: 30)}
                     },
                     {
                         name: 'Recovered',
                         type: 'line',
                         stack: '1',
                         areaStyle: {},
-                        data: [220, 182, 191, 234, 330, 310]
+                        data: ${info.toDataList(info.recovered, count: 30)}
                     },
                      {
                         name: 'Active',
                         type: 'line',
                         stack: '1',
                         areaStyle: {},
-                        data: [330, 100, 200, 300, 400, 500]
+                        data: ${info.toDataList(info.active, count: 30)}
                     },
                     {
                         name: 'Cases',
                         type: 'line',
                         stack: '2',
-                        label: {
-                            normal: {
-                                show: true,
-                                position: 'top'
-                            }
-                        },
-                        // areaStyle: {},
-                        data: [670, 414, 492, 668, 960, 1020]
+//                        label: {
+//                            normal: {
+//                                show: true,
+//                                position: 'top'
+//                            }
+//                        },
+                        data: ${info.toDataList(info.cases, count: 30)}
                     }
                 ]
             }
             ''',
-            extraScript: '''
+                  extraScript: '''
             document.getElementsByTagName("body")[0].style = 'position: fixed;';
             ''',
-          ),
+                )
+              : Container(),
         ),
       ),
     );

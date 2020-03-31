@@ -5,6 +5,7 @@ class TTString {
   final _number = new NumberFormat("#,###");
   final _dateYMD = DateFormat("yyyy.MM.dd");
   final _date = DateFormat("HH:mm - dd MMM yyyy");
+  final _dateMonth = DateFormat("dd MMM");
 
   TTString._();
 
@@ -25,5 +26,8 @@ class TTString {
 
   String formatDate(DateTime date) {
     return _date.format(date);
+  }
+  String formatDateMonth(DateTime date) {
+    return _dateMonth.format(date);
   }
 }

@@ -24,6 +24,44 @@ class NetworkParser {
     return {};
   }
 
+  static Map<String, dynamic> getHistorical(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      final info = HistoricalInfo.fromJson(json);
+      final cases = info.cases;
+
+      final List<TimelineInfo> activeList = [];
+      for (int i = 0; i < cases.length; i++) {
+        final quantity = cases[i].quantity -
+            info.recovered[i].quantity -
+            info.deaths[i].quantity;
+        final timeline = TimelineInfo(date: cases[i].date, quantity: quantity);
+        activeList.add(timeline);
+      }
+      info.active = activeList;
+      return {'info': info};
+    }
+    return {};
+  }
+
+  static Map<String, dynamic> getMyHistorical(dynamic json) {
+    if (json is Map<String, dynamic> && json.containsKey('timeline')) {
+      final info = HistoricalInfo.fromJson(json['timeline']);
+      final cases = info.cases;
+
+      final List<TimelineInfo> activeList = [];
+      for (int i = 0; i < cases.length; i++) {
+        final quantity = cases[i].quantity -
+            info.recovered[i].quantity -
+            info.deaths[i].quantity;
+        final timeline = TimelineInfo(date: cases[i].date, quantity: quantity);
+        activeList.add(timeline);
+      }
+      info.active = activeList;
+      return {'info': info};
+    }
+    return {};
+  }
+  
   static Map<String, dynamic> getListCountry(dynamic json) {
     if (json is List<dynamic>) {
       final ls = json.map((e) {

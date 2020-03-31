@@ -13,7 +13,17 @@ class MainLogic {
     CountryService.shared().getData(() {
       _model.myCountry = CountryService.shared().countries.first;
       _model.globalInfo = CountryService.shared().globalInfo;
-      _model.refresh();
+      _model.globalHistorical = CountryService.shared().globalHistorical;
+      getMyHistorical(() {
+        _model.refresh();
+      });
+    });
+  }
+  
+  void getMyHistorical(Function() callback) {
+    CountryService.shared().getMyHistorical(_model.myCountry.name, () {
+      _model.myHistorical = CountryService.shared().myHistorical;
+      callback();
     });
   }
 

@@ -12,6 +12,8 @@ class MainModel extends ChangeNotifier {
   bool isGlobal = true;
   CountryInfo myCountry = CountryInfo(id: -1);
   GlobalInfo globalInfo = GlobalInfo();
+  HistoricalInfo globalHistorical = HistoricalInfo();
+  HistoricalInfo myHistorical = HistoricalInfo();
 
   MainModel() {
     _logic = MainLogic(this);
