@@ -3,6 +3,7 @@ import 'package:covid/model/model.dart';
 import 'package:covid/module/module.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/util/util.dart';
+import 'package:covid/widget/switch_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
@@ -30,6 +31,7 @@ class _MainViewState extends State<_MainView> {
         .then((info) {
       if (info is CountryInfo) {
         final model = Provider.of<MainModel>(context, listen: false);
+        model.logic.selectGlobal(false);
         model.logic.updateCountry(info);
       }
     });
@@ -70,23 +72,23 @@ class _MainViewState extends State<_MainView> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 1, 16, 16),
+            padding: const EdgeInsets.fromLTRB(16, 1, 16, 0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 InkWell(
                   borderRadius: BorderRadius.circular(20),
-                  onTap: () => model.logic.selectGlobal(),
+                  onTap: () => model.logic.selectGlobal(!model.isGlobal),
                   child: Image.asset(
                     Id.ic_world,
-                    width: 45,
+                    height: 35,
                     color: isGlobal ? Cl.lightBlue : Cl.brownGrey,
                   ),
                 ),
                 SizedBox(width: 16),
                 Expanded(
                   child: SizedBox(
-                    height: 50,
+                    height: 35,
                     child: OutlineButton(
                       padding: const EdgeInsets.all(4),
                       onPressed: _selectCountryClick,
@@ -97,33 +99,28 @@ class _MainViewState extends State<_MainView> {
                       child: Row(
                         children: <Widget>[
                           !isGlobal
-                              ? Hero(
-                            tag: 'flag-${model.myCountry.id}',
-                            child: Image.asset(
-                              Id.getIdByCountry(model.myCountry),
-                              width: 40,
-                            ),
-                          )
+                              ? Image.asset(
+                                  Id.getIdByCountry(model.myCountry),
+                                  width: 30,
+                                )
                               : Container(),
                           SizedBox(width: 16),
                           !isGlobal
-                              ? Hero(
-                            tag: 'name-${model.myCountry.id}',
-                            child: Material(
-                              child: Text(
-                                model.myCountry.name,
-                                style: Style.ts_16_black,
-                              ),
-                            ),
-                          )
+                              ? Material(
+                                  color: Colors.transparent,
+                                  child: Text(
+                                    model.myCountry.name,
+                                    style: Style.ts_16_black,
+                                  ),
+                                )
                               : Text('Global', style: Style.ts_16_black),
                           Spacer(),
-                          Container(width: 1, color: Cl.brownGrey, height: 30),
+                          Container(width: 1, color: Cl.brownGrey, height: 20),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: Icon(
                               Icons.chevron_right,
-                              size: 40,
+                              size: 25,
                             ),
                           ),
                         ],
@@ -134,157 +131,177 @@ class _MainViewState extends State<_MainView> {
               ],
             ),
           ),
-          Card(
-            margin: const EdgeInsets.symmetric(horizontal: 16),
-            elevation: 2,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 5,
-                  child: Container(
-                    height: 240,
-                    child: _renderPieChart(),
-                  ),
+          SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                flex: 2,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.only(left: 16),
+                      alignment: Alignment.centerLeft,
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(text: 'Update: ', style: Style.ts_19),
+                            globalInfo.updated != null
+                                ? TextSpan(
+                                    text: TTString.shared()
+                                        .formatDate(globalInfo.updated),
+                                    style: Style.ts_19_bold,
+                                  )
+                                : TextSpan(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 250,
+                      alignment: Alignment.center,
+                      child: isGlobal
+                          ? _renderPieChart(
+                              globalInfo.deaths,
+                              globalInfo.recovered,
+                              globalInfo.active,
+                            )
+                          : _renderPieChart(
+                              model.myCountry.deaths,
+                              model.myCountry.recovered,
+                              model.myCountry.active,
+                            ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  flex: 4,
-                  child: Column(
-                    children: <Widget>[
-                      _renderStatisticItem(
-                        TypeEnum.CONFIRMED,
-                        isGlobal ? globalInfo.cases : model.myCountry.cases,
-                      ),
-                      _renderStatisticItem(
-                        TypeEnum.RECOVERED,
-                        isGlobal
-                            ? globalInfo.recovered
-                            : model.myCountry.recovered,
-                      ),
-                      _renderStatisticItem(
-                        TypeEnum.DEATH,
-                        isGlobal ? globalInfo.deaths : model.myCountry.deaths,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _renderStatisticItem(
+                      TypeEnum.TOTAL,
+                      isGlobal ? globalInfo.cases : model.myCountry.cases,
+                    ),
+                    _renderStatisticItem(
+                      TypeEnum.ACTIVE,
+                      isGlobal ? globalInfo.active : model.myCountry.active,
+                    ),
+                    _renderStatisticItem(
+                      TypeEnum.RECOVERED,
+                      isGlobal
+                          ? globalInfo.recovered
+                          : model.myCountry.recovered,
+                    ),
+                    _renderStatisticItem(
+                      TypeEnum.DEATH,
+                      isGlobal ? globalInfo.deaths : model.myCountry.deaths,
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
-          SizedBox(height: 12),
-          !isGlobal
-              ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 11),
+          Padding(
+            padding: const EdgeInsets.all(12),
             child: Row(
               children: <Widget>[
                 _renderBoxInfo(
                   TypeEnum.CASE_TODAY,
-                  model.myCountry.todayCases,
+                  isGlobal ? -1 : model.myCountry.todayCases,
                 ),
                 _renderBoxInfo(
                   TypeEnum.DEATH_TODAY,
-                  model.myCountry.todayDeaths,
+                  isGlobal ? -1 : model.myCountry.todayDeaths,
                 ),
                 _renderBoxInfo(
                   TypeEnum.CRITICAL,
-                  model.myCountry.critical,
+                  isGlobal ? -1 : model.myCountry.critical,
                 ),
               ],
             ),
-          )
-              : Container(),
+          ),
           _renderAreaChart(),
         ],
       ),
     );
   }
 
-  Widget _renderPieChart() {
+  Widget _renderPieChart(int a, int b, int c) {
     return Echarts(
-        option: '''
-        {
-          tooltip: {
-              trigger: 'item',
-              formatter: '{d}%'
-          },
-          color: ['#9fdcba','#fd5047', '#17C5FA'],
-          series: [
-              {
-                  type: 'pie',
-                  selectedMode: 'single',
-                  labelLine: {
-                      show: false
-                  },
-                  label: {
-                      show: false
-                  },
-                  data: [
-                      {value: 335, name: 'item 0'},
-                      {value: 310, name: 'item 1'},
-                      {value: 234, name: 'ietm 2'},
-                  ],
-                  emphasis: {
-                      itemStyle: {
-                          shadowBlur: 10,
-                          shadowOffsetX: 0,
-                          shadowColor: 'rgba(0, 0, 0, 0.5)'
-                      }
-                  }
-              }
-          ]
-        }
+      option: '''
+      {
+        tooltip: {
+            trigger: 'item',
+            formatter: '{b}<br/>{c}<br/>{d}%'
+        },
+        color: ['#FA7B74','#9fdcba', '#17C5FA'],
+        legend: {
+            data: ['Death', 'Recovered', 'Active'],
+            top: 10,
+        },
+        series: [
+            {
+                type: 'pie',
+                radius: '93%',
+                top: 40,
+                selectedOffset : 5,
+                hoverOffset: 0,
+                selectedMode: 'single',
+                label: {
+                   show: false,
+                },
+                labelLine: {
+                    show: false,
+                },
+                data: [
+                    {value: $a, name: 'Death'},
+                    {value: $b, name: 'Recovered'},
+                    {value: $c, name: 'Active'},
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 3,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+      }
         ''',
-        extraScript: '''
+      extraScript: '''
         document.getElementsByTagName("body")[0].style = 'position: fixed';
         ''',
     );
   }
 
   Widget _renderStatisticItem(TypeEnum type, int number) {
+    final text =
+        number == -1 ? '-' : TTString.shared().formatNumber(number ?? 0);
     return Padding(
-      padding: const EdgeInsets.only(top: 4, bottom: 4, right: 8),
+      padding: const EdgeInsets.only(right: 16, bottom: 8),
       child: InkWell(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(5),
         onTap: () {},
         child: Container(
+          width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
-            border: Border.all(color: typeEnumToColor(type)),
-            borderRadius: BorderRadius.circular(15),
+            color: typeEnumToColor(type).withOpacity(0.15),
+//            border: Border.all(color: typeEnumToColor(type)),
+            borderRadius: BorderRadius.circular(5),
           ),
-          child: Row(
+          child: Column(
             children: <Widget>[
-              SizedBox(width: 12),
-              Container(
-                width: 10,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: typeEnumToColor(type),
-                  borderRadius: BorderRadius.circular(20),
-                ),
+              Text(
+                text,
+                style: typeEnumToStyle(type),
               ),
-              SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  children: <Widget>[
-                    Text(typeEnumToStr(type), style: typeEnumToStyle(type)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Text(
-                        '${TTString.shared().format(number ?? 0)}',
-                        style: Style.ts_13,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 12),
-                child: Image.asset(
-                  Id.ic_arrow_right,
-                  height: 10,
-                  color: Cl.black,
-                ),
-              ),
+              SizedBox(height: 4),
+              Text(typeEnumToStr(type).toUpperCase(), style: Style.ts_20),
             ],
           ),
         ),
@@ -293,22 +310,25 @@ class _MainViewState extends State<_MainView> {
   }
 
   Widget _renderBoxInfo(TypeEnum type, int number) {
+    final text =
+        number == -1 ? '-' : TTString.shared().formatNumber(number ?? 0);
     return Expanded(
-      child: Card(
-        elevation: 2,
-        margin: const EdgeInsets.symmetric(horizontal: 5),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Text(typeEnumToStr(type), style: typeEnumToStyle(type)),
-              SizedBox(height: 8),
-              Text(
-                '${TTString.shared().format(number)}',
-                style: Style.ts_9,
-              ),
-            ],
-          ),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Cl.grey300),
+          borderRadius: BorderRadius.circular(5),
+        ),
+        padding: const EdgeInsets.all(8.0),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        child: Column(
+          children: <Widget>[
+            Text(
+              text,
+              style: typeEnumToStyle(type),
+            ),
+            SizedBox(height: 4),
+            Text(typeEnumToStr(type).toUpperCase(), style: Style.ts_20),
+          ],
         ),
       ),
     );
@@ -318,14 +338,14 @@ class _MainViewState extends State<_MainView> {
     return Expanded(
       child: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: Echarts(
             option: '''
               {
                 title: {
-                    text: 'Case in week'
+                    text: 'Weekly chart'
                 },
-                color: ['#9fdcba','#fd5047', '#17C5FA','#003ab2',],
+                color: ['#FA7B74','#17C5FA','#9fdcba','#003ab2'],
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -336,15 +356,15 @@ class _MainViewState extends State<_MainView> {
                     }
                 },
                 legend: {
-                    data: ['name 1', 'name 2', 'name 3', 'name 4'],
+                    data: ['Death', 'Recovered', 'Active', 'Cases'],
                     top: 30,
                 },
                 
                 grid: {
-                    left: '3%',
-                    right: '4%',
+                    left: '2%',
+                    right: '5%',
                     bottom: '3%',
-                    y: 80,
+                    y: 60,
                     containLabel: true
                 },
                 xAxis: [
@@ -361,28 +381,28 @@ class _MainViewState extends State<_MainView> {
                 ],
                 series: [
                     {
-                        name: 'name 1',
+                        name: 'Death',
                         type: 'line',
                         stack: '1',
                         areaStyle: {},
                         data: [120, 132, 101, 134, 230, 210]
                     },
                     {
-                        name: 'name 2',
+                        name: 'Recovered',
                         type: 'line',
                         stack: '1',
                         areaStyle: {},
                         data: [220, 182, 191, 234, 330, 310]
                     },
                      {
-                        name: 'name 3',
+                        name: 'Active',
                         type: 'line',
                         stack: '1',
                         areaStyle: {},
                         data: [330, 100, 200, 300, 400, 500]
                     },
                     {
-                        name: 'name 4',
+                        name: 'Cases',
                         type: 'line',
                         stack: '2',
                         label: {

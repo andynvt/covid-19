@@ -88,17 +88,25 @@ class Style {
     fontWeight: FontWeight.w700,
     fontStyle: FontStyle.normal,
   );
-  static const TextStyle ts_13_blue = const TextStyle(
-    color: Cl.lightBlue,
-    fontSize: 14,
+  static const TextStyle ts_total = const TextStyle(
+    color: Cl.mBlue,
+    fontWeight: FontWeight.w700,
+    fontSize: 22,
   );
-  static const TextStyle ts_13_green = const TextStyle(
+  static const TextStyle ts_active = const TextStyle(
+    color: Cl.mCyan,
+    fontWeight: FontWeight.w700,
+    fontSize: 22,
+  );
+  static const TextStyle ts_recovered = const TextStyle(
     color: Cl.shamrockGreen,
-    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    fontSize: 22,
   );
-  static const TextStyle ts_13_red = const TextStyle(
-    color: Cl.rustyRed,
-    fontSize: 14,
+  static const TextStyle ts_death = const TextStyle(
+    color: Cl.mRed,
+    fontWeight: FontWeight.w700,
+    fontSize: 22,
   );
   static const TextStyle ts_13_pink = const TextStyle(
     color: Cl.pinkRed,
@@ -106,7 +114,8 @@ class Style {
   );
   static const TextStyle ts_13_black = const TextStyle(
     color: Cl.black,
-    fontSize: 14,
+    fontWeight: FontWeight.w700,
+    fontSize: 20,
   );
 
   static const TextStyle ts_14 = const TextStyle(
@@ -134,6 +143,17 @@ class Style {
   );
   static const TextStyle ts_19 = const TextStyle(
     color: Cl.brownishGrey,
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+  );
+  static const TextStyle ts_20 = const TextStyle(
+    color: Cl.brownishGrey,
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+  );
+  static const TextStyle ts_19_bold = const TextStyle(
+    color: Cl.mBlue,
     fontSize: 14,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,

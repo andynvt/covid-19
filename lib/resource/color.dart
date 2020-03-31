@@ -12,7 +12,6 @@ class Cl {
   static const mCyan = const Color(0xff17C5FA);
   static const mRed = const Color(0xffFD5047);
   static const mLighterRed = const Color(0xffFA7B74);
-  static const mLightRed = const Color(0xffFD5047);
   static const mYellow = const Color(0xffFFD43E);
   static const mAmber = const Color(0xffE7A83C);
   static const mLightGreen = const Color(0xff9FDCBA);
@@ -29,5 +28,6 @@ class Cl {
   static const black9 = const Color(0x17000000);
   static const pinkRed = const Color(0xffff004d);
   static const lightBlue = const Color(0xff4376f3);
+  static const grey = const Color(0xFF9E9E9E);
   static Color grey300 = Colors.grey[300];
 }

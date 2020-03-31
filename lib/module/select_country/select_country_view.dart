@@ -101,21 +101,13 @@ class _SelectCountryViewState extends State<_SelectCountryView> {
       onTap: () {
         Navigator.of(context).pop(info);
       },
-      leading: Hero(
-        tag: 'flag-${info.id}',
-        child: Image.asset(
-          Id.getIdByCountry(info),
-          width: 50,
-        ),
+      leading: Image.asset(
+        Id.getIdByCountry(info),
+        width: 50,
       ),
-      title: Hero(
-        tag: 'name-${info.id}',
-        child: Material(
-          child: Text(info.name, style: Style.ts_6),
-        ),
-      ),
+      title: Text(info.name, style: Style.ts_6),
       subtitle: Text(info.code ?? ''),
-      trailing: Text(TTString.shared().format(info.cases), style: Style.ts_15),
+      trailing: Text(TTString.shared().formatNumber(info.cases), style: Style.ts_15),
     );
   }
 }

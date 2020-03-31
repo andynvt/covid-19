@@ -16,20 +16,20 @@ class NetworkParser {
     return {'list': []};
   }
 
+  static Map<String, dynamic> getGlobal(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      final info = GlobalInfo.fromJson(json);
+      return {'info': info};
+    }
+    return {};
+  }
+
   static Map<String, dynamic> getListCountry(dynamic json) {
     if (json is List<dynamic>) {
       final ls = json.map((e) {
         return CountryInfo.fromJson(e);
       }).toList();
       return {'list': ls};
-    }
-    return {};
-  }
-
-  static Map<String, dynamic> getGlobal(dynamic json) {
-    if (json is Map<String, dynamic>) {
-      final info = GlobalInfo.fromJson(json);
-      return {'info': info};
     }
     return {};
   }

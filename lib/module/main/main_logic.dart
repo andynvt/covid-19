@@ -17,8 +17,8 @@ class MainLogic {
     });
   }
 
-  void selectGlobal() {
-    _model.isGlobal = !_model.isGlobal;
+  void selectGlobal(bool value) {
+    _model.isGlobal = value;
     _model.refresh();
   }
 

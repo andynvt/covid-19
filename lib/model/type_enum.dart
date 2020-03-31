@@ -1,12 +1,14 @@
 import 'package:covid/resource/resource.dart';
 import 'package:flutter/material.dart';
 
-enum TypeEnum { CONFIRMED, RECOVERED, DEATH, CRITICAL, CASE_TODAY, DEATH_TODAY }
+enum TypeEnum { TOTAL, ACTIVE, RECOVERED, DEATH, CRITICAL, CASE_TODAY, DEATH_TODAY }
 
 String typeEnumToStr(TypeEnum type) {
   switch (type) {
-    case TypeEnum.CONFIRMED:
-      return 'Confirmed';
+    case TypeEnum.TOTAL:
+      return 'Total';
+    case TypeEnum.ACTIVE:
+      return 'Active';
     case TypeEnum.RECOVERED:
       return 'Recovered';
     case TypeEnum.DEATH:
@@ -24,18 +26,14 @@ String typeEnumToStr(TypeEnum type) {
 
 Color typeEnumToColor(TypeEnum type) {
   switch (type) {
-    case TypeEnum.CONFIRMED:
-      return Cl.lightBlue;
+    case TypeEnum.TOTAL:
+      return Cl.mBlue;
+    case TypeEnum.ACTIVE:
+      return Cl.mCyan;
     case TypeEnum.RECOVERED:
       return Cl.shamrockGreen;
     case TypeEnum.DEATH:
-      return Cl.rustyRed;
-    case TypeEnum.CRITICAL:
-      return Cl.pinkRed;
-    case TypeEnum.CASE_TODAY:
-      return Cl.lightBlue;
-    case TypeEnum.DEATH_TODAY:
-      return Cl.rustyRed;
+      return Cl.mRed;
     default:
       return Cl.black;
   }
@@ -43,18 +41,14 @@ Color typeEnumToColor(TypeEnum type) {
 
 TextStyle typeEnumToStyle(TypeEnum type) {
   switch (type) {
-    case TypeEnum.CONFIRMED:
-      return Style.ts_13_blue;
+    case TypeEnum.TOTAL:
+      return Style.ts_total;
+    case TypeEnum.ACTIVE:
+      return Style.ts_active;
     case TypeEnum.RECOVERED:
-      return Style.ts_13_green;
+      return Style.ts_recovered;
     case TypeEnum.DEATH:
-      return Style.ts_13_red;
-    case TypeEnum.CRITICAL:
-      return Style.ts_13_black;
-    case TypeEnum.CASE_TODAY:
-      return Style.ts_13_black;
-    case TypeEnum.DEATH_TODAY:
-      return Style.ts_13_black;
+      return Style.ts_death;
     default:
       return Style.ts_13_black;
   }

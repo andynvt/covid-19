@@ -2,7 +2,7 @@ class GlobalInfo {
   int cases;
   int deaths;
   int recovered;
-  int updated;
+  DateTime updated;
   int active;
 
   GlobalInfo(
@@ -13,7 +13,7 @@ class GlobalInfo {
       cases: json['cases'],
       deaths: json['deaths'],
       recovered: json['recovered'],
-      updated: json['updated'],
+      updated: DateTime.fromMillisecondsSinceEpoch(json['updated']),
       active: json['active'],
     );
   }
