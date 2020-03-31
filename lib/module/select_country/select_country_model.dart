@@ -9,7 +9,7 @@ class SelectCountryModel extends ChangeNotifier {
   SelectCountryLogic get logic => _logic;
 
   final text = BehaviorSubject.seeded('');
-  final List<CountryInfo> countries = [];
+  final Map<String, CountryInfo> countries = {};
   final List<CountryInfo> listSearch = [];
 
   SelectCountryModel() {

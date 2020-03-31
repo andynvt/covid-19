@@ -1,10 +1,10 @@
+import 'package:covid/model/historical_info.dart';
 import 'package:flutter/material.dart';
 
 class CountryInfo extends ChangeNotifier {
   final int id;
   final String name;
   final String code;
-  String flag;
   int cases;
   int todayCases;
   int deaths;
@@ -14,12 +14,12 @@ class CountryInfo extends ChangeNotifier {
   int critical;
   double latitude;
   double longitude;
+  HistoricalInfo historical;
 
   CountryInfo(
       {this.id,
       this.name,
       this.code,
-      this.flag,
       this.cases,
       this.todayCases,
       this.deaths,
@@ -28,14 +28,14 @@ class CountryInfo extends ChangeNotifier {
       this.active,
       this.critical,
       this.latitude,
-      this.longitude});
+      this.longitude,
+      this.historical});
 
   factory CountryInfo.fromJson(Map<String, dynamic> json) {
     return CountryInfo(
       id: json['countryInfo']['_id'],
       name: json['country'],
       code: json['countryInfo']['iso2'],
-      flag: json['countryInfo']['flag'],
       cases: json['cases'],
       todayCases: json['todayCases'],
       deaths: json['deaths'],

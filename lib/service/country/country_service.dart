@@ -6,10 +6,10 @@ import '../service.dart';
 class CountryService extends ChangeNotifier implements BaseService {
   static CountryService _sInstance;
 
-  List<CountryInfo> countries = [];
+  Map<String, CountryInfo> countries = {};
   GlobalInfo globalInfo;
   HistoricalInfo globalHistorical;
-  HistoricalInfo myHistorical;
+//  HistoricalInfo myHistorical;
 
   @override
   // ignore: non_constant_identifier_names
@@ -45,7 +45,8 @@ class CountryService extends ChangeNotifier implements BaseService {
       parser: NetworkParser.getMyHistorical,
       callback: (rs) {
         if (rs.isOK && rs.data.containsKey('info')) {
-          myHistorical = rs.data['info'];
+          HistoricalInfo info = rs.data['info'];
+          countries[country].historical = info;
         } else if (d___) {
           print('---> getMyHistorical error: ${rs.msgError}');
         }
@@ -94,7 +95,9 @@ class CountryService extends ChangeNotifier implements BaseService {
           ls.sort((a, b) {
             return b.cases.compareTo(a.cases);
           });
-          countries.addAll(ls);
+          ls.forEach((element) {
+            countries[element.name] = element;
+          });
         } else if (d___) {
           print('---> getListCountry error: ${rs.msgError}');
         }

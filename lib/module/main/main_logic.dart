@@ -11,18 +11,23 @@ class MainLogic {
 
   void loadData() {
     CountryService.shared().getData(() {
-      _model.myCountry = CountryService.shared().countries.first;
+      _model.myCountry = CountryService.shared().countries.entries.first.value;
       _model.globalInfo = CountryService.shared().globalInfo;
       _model.globalHistorical = CountryService.shared().globalHistorical;
-      getMyHistorical(() {
+      getMyHistorical(_model.myCountry.name, () {
         _model.refresh();
       });
     });
   }
   
-  void getMyHistorical(Function() callback) {
-    CountryService.shared().getMyHistorical(_model.myCountry.name, () {
-      _model.myHistorical = CountryService.shared().myHistorical;
+  void getMyHistorical(String name, Function() callback) {
+    final his = CountryService.shared().countries[name].historical;
+    if(his != null) {
+      _model.myHistorical = his;
+      return;
+    }
+    CountryService.shared().getMyHistorical(name, () {
+      _model.myHistorical = CountryService.shared().countries[name].historical;
       callback();
     });
   }
@@ -35,6 +40,8 @@ class MainLogic {
   void updateCountry(CountryInfo info) {
     //TODO: save country to cache
     _model.myCountry = info;
-    _model.refresh();
+    getMyHistorical(_model.myCountry.name, () {
+      _model.refresh();
+    });
   }
 }
