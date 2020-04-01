@@ -3,6 +3,7 @@ import 'package:covid/model/model.dart';
 import 'package:covid/module/module.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/util/util.dart';
+import 'package:covid/widget/widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
@@ -23,6 +24,7 @@ class _MainView extends StatefulWidget {
 
 class _MainViewState extends State<_MainView> {
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
+  PageController _pageController;
 
   void _selectCountryClick() {
     Navigator.of(context)
@@ -41,10 +43,20 @@ class _MainViewState extends State<_MainView> {
   void _statisticClick(TypeEnum type) {}
 
   @override
+  void initState() {
+    _pageController = PageController(keepPage: true, initialPage: 0);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final model = Provider.of<MainModel>(context);
-    final isGlobal = model.isGlobal;
-    final globalInfo = model.globalInfo;
 
     return Scaffold(
       backgroundColor: Cl.white,
@@ -70,163 +82,216 @@ class _MainViewState extends State<_MainView> {
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 1, 16, 0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                InkWell(
-                  borderRadius: BorderRadius.circular(20),
-                  onTap: () => model.logic.selectGlobal(!model.isGlobal),
-                  child: Image.asset(
-                    Id.ic_world,
-                    height: 35,
-                    color: isGlobal ? Cl.lightBlue : Cl.brownGrey,
+      bottomNavigationBar: TTBottomBar(
+        selectedIndex: model.pageIndex,
+        showElevation: true,
+        onItemSelected: (index) {
+          model.pageIndex = index;
+          model.refresh();
+          _pageController.jumpToPage(index);
+        },
+        items: [
+          TTBottomBarItem(
+            icon: Icon(Icons.apps),
+            title: Text('Home'),
+            activeColor: Cl.mBlue,
+          ),
+          TTBottomBarItem(
+            icon: Icon(Icons.map),
+            title: Text('Map'),
+            activeColor: Cl.mCyan,
+          ),
+          TTBottomBarItem(
+            icon: Icon(Icons.insert_chart),
+            title: Text('Top'),
+            activeColor: Cl.shamrockGreen,
+          ),
+          TTBottomBarItem(
+            icon: Icon(Icons.library_books),
+            title: Text('News'),
+            textAlign: TextAlign.center,
+            activeColor: Cl.mRed,
+          ),
+        ],
+      ),
+      body: _renderBody(),
+    );
+  }
+
+  Widget _renderBody() {
+    final model = Provider.of<MainModel>(context);
+    return PageView(
+      physics: NeverScrollableScrollPhysics(),
+      controller: _pageController,
+      onPageChanged: (index) => model.pageIndex,
+      children: <Widget>[
+        _renderHomeTab(),
+        Container(color: Colors.blue),
+        Container(color: Colors.green),
+        Container(color: Colors.red),
+      ],
+    );
+  }
+
+  Widget _renderHomeTab() {
+    final model = Provider.of<MainModel>(context);
+    final isGlobal = model.isGlobal;
+    final globalInfo = model.globalInfo;
+
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 1, 16, 0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              InkWell(
+                borderRadius: BorderRadius.circular(20),
+                onTap: () => model.logic.selectGlobal(!model.isGlobal),
+                child: Image.asset(
+                  Id.ic_world,
+                  height: 35,
+                  color: isGlobal ? Cl.lightBlue : Cl.brownGrey,
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: SizedBox(
+                  height: 35,
+                  child: OutlineButton(
+                    padding: const EdgeInsets.all(4),
+                    onPressed: _selectCountryClick,
+                    borderSide: BorderSide(color: Cl.brownGrey),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        !isGlobal
+                            ? Image.asset(
+                                Id.getIdByCountry(model.myCountry),
+                                width: 30,
+                              )
+                            : Container(),
+                        SizedBox(width: 16),
+                        !isGlobal
+                            ? Material(
+                                color: Colors.transparent,
+                                child: Text(
+                                  model.myCountry.name,
+                                  style: Style.ts_16_black,
+                                ),
+                              )
+                            : Text('Global', style: Style.ts_16_black),
+                        Spacer(),
+                        Container(width: 1, color: Cl.brownGrey, height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Icon(
+                            Icons.chevron_right,
+                            size: 25,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: SizedBox(
-                    height: 35,
-                    child: OutlineButton(
-                      padding: const EdgeInsets.all(4),
-                      onPressed: _selectCountryClick,
-                      borderSide: BorderSide(color: Cl.brownGrey),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          !isGlobal
-                              ? Image.asset(
-                                  Id.getIdByCountry(model.myCountry),
-                                  width: 30,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 16),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              flex: 2,
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.only(left: 16),
+                    alignment: Alignment.centerLeft,
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(text: 'Update: ', style: Style.ts_19),
+                          globalInfo.updated != null
+                              ? TextSpan(
+                                  text: TTString.shared()
+                                      .formatDate(globalInfo.updated),
+                                  style: Style.ts_19_bold,
                                 )
-                              : Container(),
-                          SizedBox(width: 16),
-                          !isGlobal
-                              ? Material(
-                                  color: Colors.transparent,
-                                  child: Text(
-                                    model.myCountry.name,
-                                    style: Style.ts_16_black,
-                                  ),
-                                )
-                              : Text('Global', style: Style.ts_16_black),
-                          Spacer(),
-                          Container(width: 1, color: Cl.brownGrey, height: 20),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Icon(
-                              Icons.chevron_right,
-                              size: 25,
-                            ),
-                          ),
+                              : TextSpan(),
                         ],
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 16),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(left: 16),
-                      alignment: Alignment.centerLeft,
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(text: 'Update: ', style: Style.ts_19),
-                            globalInfo.updated != null
-                                ? TextSpan(
-                                    text: TTString.shared()
-                                        .formatDate(globalInfo.updated),
-                                    style: Style.ts_19_bold,
-                                  )
-                                : TextSpan(),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 250,
-                      alignment: Alignment.center,
-                      child: isGlobal
-                          ? _renderPieChart(
-                              globalInfo.deaths,
-                              globalInfo.recovered,
-                              globalInfo.active,
-                            )
-                          : _renderPieChart(
-                              model.myCountry.deaths,
-                              model.myCountry.recovered,
-                              model.myCountry.active,
-                            ),
-                    ),
-                  ],
-                ),
+                  Container(
+                    height: 250,
+                    alignment: Alignment.center,
+                    child: isGlobal
+                        ? _renderPieChart(
+                            globalInfo.deaths,
+                            globalInfo.recovered,
+                            globalInfo.active,
+                          )
+                        : _renderPieChart(
+                            model.myCountry.deaths,
+                            model.myCountry.recovered,
+                            model.myCountry.active,
+                          ),
+                  ),
+                ],
               ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _renderStatisticItem(
-                      TypeEnum.TOTAL,
-                      isGlobal ? globalInfo.cases : model.myCountry.cases,
-                    ),
-                    _renderStatisticItem(
-                      TypeEnum.ACTIVE,
-                      isGlobal ? globalInfo.active : model.myCountry.active,
-                    ),
-                    _renderStatisticItem(
-                      TypeEnum.RECOVERED,
-                      isGlobal
-                          ? globalInfo.recovered
-                          : model.myCountry.recovered,
-                    ),
-                    _renderStatisticItem(
-                      TypeEnum.DEATH,
-                      isGlobal ? globalInfo.deaths : model.myCountry.deaths,
-                    ),
-                  ],
-                ),
-              )
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  _renderStatisticItem(
+                    TypeEnum.TOTAL,
+                    isGlobal ? globalInfo.cases : model.myCountry.cases,
+                  ),
+                  _renderStatisticItem(
+                    TypeEnum.ACTIVE,
+                    isGlobal ? globalInfo.active : model.myCountry.active,
+                  ),
+                  _renderStatisticItem(
+                    TypeEnum.RECOVERED,
+                    isGlobal ? globalInfo.recovered : model.myCountry.recovered,
+                  ),
+                  _renderStatisticItem(
+                    TypeEnum.DEATH,
+                    isGlobal ? globalInfo.deaths : model.myCountry.deaths,
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: <Widget>[
+              _renderBoxInfo(
+                TypeEnum.CASE_TODAY,
+                isGlobal ? -1 : model.myCountry.todayCases,
+              ),
+              _renderBoxInfo(
+                TypeEnum.DEATH_TODAY,
+                isGlobal ? -1 : model.myCountry.todayDeaths,
+              ),
+              _renderBoxInfo(
+                TypeEnum.CRITICAL,
+                isGlobal ? -1 : model.myCountry.critical,
+              ),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Row(
-              children: <Widget>[
-                _renderBoxInfo(
-                  TypeEnum.CASE_TODAY,
-                  isGlobal ? -1 : model.myCountry.todayCases,
-                ),
-                _renderBoxInfo(
-                  TypeEnum.DEATH_TODAY,
-                  isGlobal ? -1 : model.myCountry.todayDeaths,
-                ),
-                _renderBoxInfo(
-                  TypeEnum.CRITICAL,
-                  isGlobal ? -1 : model.myCountry.critical,
-                ),
-              ],
-            ),
-          ),
-          _renderAreaChart(),
-        ],
-      ),
+        ),
+        _renderAreaChart(),
+      ],
     );
   }
 
@@ -338,13 +403,15 @@ class _MainViewState extends State<_MainView> {
     final model = Provider.of<MainModel>(context);
     final info = model.isGlobal ? model.globalHistorical : model.myHistorical;
 
+    if (info == null || info.cases == null) {
+      return Container();
+    }
     return Expanded(
       child: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: info.cases != null
-              ? Echarts(
-                  option: '''
+          child: Echarts(
+            option: '''
               {
                 title: {
                     text: 'Montly chart'
@@ -420,11 +487,10 @@ class _MainViewState extends State<_MainView> {
                 ]
             }
             ''',
-                  extraScript: '''
+            extraScript: '''
             document.getElementsByTagName("body")[0].style = 'position: fixed;';
             ''',
-                )
-              : Container(),
+          ),
         ),
       ),
     );

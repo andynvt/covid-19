@@ -9,6 +9,7 @@ class MainModel extends ChangeNotifier {
 
   MainLogic get logic => _logic;
 
+  int pageIndex = 0;
   bool isGlobal = true;
   CountryInfo myCountry = CountryInfo(id: -1);
   GlobalInfo globalInfo = GlobalInfo();
