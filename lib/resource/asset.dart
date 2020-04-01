@@ -1,4 +1,3 @@
-
 import 'package:covid/model/model.dart';
 
 class Id {
@@ -16,11 +15,11 @@ class Id {
 
   static const String unknown = "assets/images/flag/Unknown.png";
   static const String ic_vn = "assets/images/flag/VN.png";
-
   static const String ic_arrow_down = "assets/images/ic_arrow_down.png";
   static const String ic_arrow_right = "assets/images/ic_arrow_right.png";
   static const String ic_death = "assets/images/ic_death.png";
   static const String ic_gps = "assets/images/ic_gps.png";
+  static const String ic_sort = "assets/images/ic_sort.png";
   static const String ic_virus = "assets/images/ic_virus.png";
   static const String ic_world = "assets/images/ic_world.png";
 }

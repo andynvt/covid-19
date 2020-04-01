@@ -9,6 +9,8 @@ class NetworkAPI {
 
   static const GET_MAP = '$NOVEL/jhucsse';
 
+  static const GET_NEWS = 'https://thevirustracker.com/free-api';
+
   static String getHistoricalByName(String country) {
     return '$NOVEL/v2/historical/$country';
   }

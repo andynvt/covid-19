@@ -55,6 +55,23 @@ class CountryService extends ChangeNotifier implements BaseService {
     );
   }
 
+  void getNewsByCountyCode(String name, String code, Function() callback) {
+    NetworkService.shared().sendGETRequest(
+      url: NetworkAPI.GET_NEWS,
+      params: {'countryNewsTotal': code},
+      parser: NetworkParser.getListNews,
+      callback: (rs) {
+        if (rs.isOK && rs.data.containsKey('news')) {
+          countries[name].news.addAll(rs.data['news']);
+        } else if (d___) {
+          print('---> getNewsByCountyCode error: ${rs.msgError}');
+        }
+        callback();
+      },
+    );
+  }
+
+  /// PRIVATE FUNCTION
   void _getGlobal(Function() callback) {
     NetworkService.shared().sendGETRequest(
       url: NetworkAPI.GET_GLOBAL,

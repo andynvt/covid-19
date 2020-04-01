@@ -2,12 +2,14 @@ import 'dart:ui';
 import 'package:covid/model/model.dart';
 import 'package:covid/module/module.dart';
 import 'package:covid/resource/resource.dart';
+import 'package:covid/service/service.dart';
 import 'package:covid/util/util.dart';
 import 'package:covid/widget/widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:provider/provider.dart';
+import 'package:html/parser.dart' show parse;
 import 'main_model.dart';
 
 ChangeNotifierProvider<MainModel> createMain() {
@@ -34,6 +36,7 @@ class _MainViewState extends State<_MainView> {
         final model = Provider.of<MainModel>(context, listen: false);
         model.logic.selectGlobal(false);
         model.logic.updateCountry(info);
+        model.logic.getNews();
       }
     });
   }
@@ -128,10 +131,12 @@ class _MainViewState extends State<_MainView> {
         _renderHomeTab(),
         Container(color: Colors.blue),
         Container(color: Colors.green),
-        Container(color: Colors.red),
+        _renderNewsTab(),
       ],
     );
   }
+
+  ///HOME TAB
 
   Widget _renderHomeTab() {
     final model = Provider.of<MainModel>(context);
@@ -532,6 +537,128 @@ class _MainViewState extends State<_MainView> {
       onTap: () => _menuItemClick,
       leading: Icon(icon, color: Cl.white),
       title: Text(text, style: Style.ts_3),
+    );
+  }
+
+  ///NEWS TAB
+
+  Widget _renderNewsTab() {
+    final model = Provider.of<MainModel>(context);
+    final myCountry = model.myCountry;
+
+    if (myCountry.name == null) {
+      return Container();
+    }
+
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: SizedBox(
+            height: 35,
+            child: OutlineButton(
+              padding: const EdgeInsets.all(4),
+              onPressed: _selectCountryClick,
+              borderSide: BorderSide(color: Cl.brownGrey),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Image.asset(
+                    Id.getIdByCountry(model.myCountry),
+                    width: 30,
+                  ),
+                  SizedBox(width: 16),
+                  Material(
+                    color: Colors.transparent,
+                    child: Text(
+                      model.myCountry.name,
+                      style: Style.ts_16_black,
+                    ),
+                  ),
+                  Spacer(),
+                  Container(width: 1, color: Cl.brownGrey, height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Icon(
+                      Icons.chevron_right,
+                      size: 25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 8),
+        Expanded(
+          child: ListView.builder(
+            itemCount: myCountry.news.length,
+            itemBuilder: (_, index) {
+              return _renderNewsItem(myCountry.news[index]);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _renderNewsItem(NewsInfo info) {
+    String parseStr = parse(info.title).documentElement.text;
+    double height = MediaQuery.of(context).size.height / 4 - 10;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(5),
+        onTap: () {
+          LaunchURL.launch(info.url);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Cl.grey300),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(5),
+                ),
+                child: TTNetworkImage(
+                  height: height,
+                  width: double.infinity,
+                  boxFit: BoxFit.cover,
+                  imageUrl: info.image,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(parseStr, style: Style.ts_13),
+                          SizedBox(height: 4),
+                          Text(
+                            TTString.shared().formatDate(info.time),
+                            style: Style.ts_19,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(Icons.keyboard_arrow_right, size: 30,)
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

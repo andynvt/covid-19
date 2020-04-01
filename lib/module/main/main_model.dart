@@ -2,7 +2,7 @@ import 'package:covid/model/model.dart';
 import 'package:flutter/material.dart';
 import 'main_logic.dart';
 
-enum CountryType { MINE, WORLD }
+enum PageType { HOME, NEWS }
 
 class MainModel extends ChangeNotifier {
   MainLogic _logic;
@@ -15,6 +15,7 @@ class MainModel extends ChangeNotifier {
   GlobalInfo globalInfo = GlobalInfo();
   HistoricalInfo globalHistorical = HistoricalInfo();
   HistoricalInfo myHistorical = HistoricalInfo();
+  final List<NewsInfo> news = [];
 
   MainModel() {
     _logic = MainLogic(this);

@@ -14,21 +14,36 @@ class MainLogic {
       _model.myCountry = CountryService.shared().countries.entries.first.value;
       _model.globalInfo = CountryService.shared().globalInfo;
       _model.globalHistorical = CountryService.shared().globalHistorical;
+      getNews();
       getMyHistorical(_model.myCountry.name, () {
         _model.refresh();
       });
     });
   }
-  
+
   void getMyHistorical(String name, Function() callback) {
     final his = CountryService.shared().countries[name].historical;
-    if(his != null) {
+    if (his != null) {
       _model.myHistorical = his;
       return;
     }
     CountryService.shared().getMyHistorical(name, () {
       _model.myHistorical = CountryService.shared().countries[name].historical;
       callback();
+    });
+  }
+
+  void getNews() {
+    final myCountry = _model.myCountry;
+    final news = CountryService.shared().countries[myCountry.name].news;
+    if (news.isNotEmpty) {
+      _model.news.clear();
+      _model.news.addAll(news);
+      return;
+    }
+    CountryService.shared().getNewsByCountyCode(myCountry.name, myCountry.code, () {
+      _model.news.addAll(CountryService.shared().countries[myCountry.name].news);
+      _model.refresh();
     });
   }
 

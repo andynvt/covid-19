@@ -1,4 +1,5 @@
 import 'package:covid/model/historical_info.dart';
+import 'package:covid/model/model.dart';
 import 'package:flutter/material.dart';
 
 class CountryInfo extends ChangeNotifier {
@@ -15,6 +16,7 @@ class CountryInfo extends ChangeNotifier {
   double latitude;
   double longitude;
   HistoricalInfo historical;
+  final List<NewsInfo> news = [];
 
   CountryInfo(
       {this.id,

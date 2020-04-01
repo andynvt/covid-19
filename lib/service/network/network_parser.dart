@@ -61,13 +61,30 @@ class NetworkParser {
     }
     return {};
   }
-  
+
   static Map<String, dynamic> getListCountry(dynamic json) {
     if (json is List<dynamic>) {
       final ls = json.map((e) {
         return CountryInfo.fromJson(e);
       }).toList();
       return {'list': ls};
+    }
+    return {};
+  }
+
+  static Map<String, dynamic> getListNews(dynamic json) {
+    if (json is Map<String, dynamic> && json.containsKey('countrynewsitems')) {
+      final items = json['countrynewsitems'];
+      if (items is List<dynamic> && items.length > 0) {
+        final Map<String, dynamic> item = items[0];
+        item.remove('stat');
+        final ls = item.values.map((e) {
+          return NewsInfo.fromJson(e);
+        }).toList();
+
+        ls.removeWhere((element) => element.title.isEmpty);
+        return {'news': ls};
+      }
     }
     return {};
   }
