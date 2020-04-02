@@ -70,6 +70,12 @@ class Style {
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
   );
+  static const TextStyle ts_101 = const TextStyle(
+    color: Cl.black,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    fontStyle: FontStyle.normal,
+  );
   static const TextStyle ts_12 = const TextStyle(
     color: Cl.blackTwo,
     fontSize: 16.7,

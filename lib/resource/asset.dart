@@ -19,7 +19,8 @@ class Id {
   static const String ic_arrow_right = "assets/images/ic_arrow_right.png";
   static const String ic_death = "assets/images/ic_death.png";
   static const String ic_gps = "assets/images/ic_gps.png";
-  static const String ic_sort = "assets/images/ic_sort.png";
+  static const String ic_sort_acs = "assets/images/ic_sort_acs.png";
+  static const String ic_sort_des = "assets/images/ic_sort_des.png";
   static const String ic_virus = "assets/images/ic_virus.png";
   static const String ic_world = "assets/images/ic_world.png";
 }

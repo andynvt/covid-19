@@ -56,6 +56,11 @@ class _SelectCountryViewState extends State<_SelectCountryView> {
                 labelText: 'Select country',
                 contentPadding: const EdgeInsets.all(16),
                 border: OutlineInputBorder(
+                  borderSide: BorderSide(color: Cl.grey300),
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Cl.mBlue),
                   borderRadius: BorderRadius.circular(25.0),
                 ),
               ),

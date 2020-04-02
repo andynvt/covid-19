@@ -1,5 +1,6 @@
 import 'package:covid/model/historical_info.dart';
 import 'package:covid/model/model.dart';
+import 'package:covid/module/main/main_model.dart';
 import 'package:flutter/material.dart';
 
 class CountryInfo extends ChangeNotifier {
@@ -48,5 +49,26 @@ class CountryInfo extends ChangeNotifier {
       latitude: (json['countryInfo']['lat']).toDouble(),
       longitude: (json['countryInfo']['long']).toDouble(),
     );
+  }
+  
+  int getPropertyByTypeEnum(TypeEnum type) {
+    switch (type) {
+      case TypeEnum.TOTAL:
+        return cases;
+      case TypeEnum.ACTIVE:
+        return active;
+      case TypeEnum.RECOVERED:
+        return recovered;
+      case TypeEnum.DEATH:
+        return deaths;
+      case TypeEnum.CRITICAL:
+        return critical;
+      case TypeEnum.CASE_TODAY:
+        return todayCases;
+      case TypeEnum.DEATH_TODAY:
+        return todayDeaths;
+      default:
+        return -1;
+    }
   }
 }

@@ -27,6 +27,7 @@ class _MainView extends StatefulWidget {
 class _MainViewState extends State<_MainView> {
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   PageController _pageController;
+  TextEditingController _textController;
 
   void _selectCountryClick() {
     Navigator.of(context)
@@ -41,19 +42,33 @@ class _MainViewState extends State<_MainView> {
     });
   }
 
-  void _menuItemClick() {}
+  void _tabItemClick(int index) {
+    final model = Provider.of<MainModel>(context, listen: false);
+    model.logic.changeTab(index);
+    _pageController.jumpToPage(index);
+  }
 
-  void _statisticClick(TypeEnum type) {}
+  void _statisticClick(TypeEnum type) {
+    //TODO: load data in 3th tab
+    final model = Provider.of<MainModel>(context, listen: false);
+    model.pageIndex = 1;
+    model.refresh();
+    _pageController.jumpToPage(1);
+  }
+
+  void _menuItemClick() {}
 
   @override
   void initState() {
-    _pageController = PageController(keepPage: true, initialPage: 0);
+    _pageController = PageController(keepPage: true, initialPage: 2);
+    _textController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -75,7 +90,7 @@ class _MainViewState extends State<_MainView> {
             _scaffoldKey.currentState.openDrawer();
           },
         ),
-        title: Text('Covid-19', style: Style.ts_1),
+        title: Text(model.title, style: Style.ts_1),
         actions: <Widget>[
           IconButton(
             onPressed: () {
@@ -88,32 +103,39 @@ class _MainViewState extends State<_MainView> {
       bottomNavigationBar: TTBottomBar(
         selectedIndex: model.pageIndex,
         showElevation: true,
-        onItemSelected: (index) {
-          model.pageIndex = index;
-          model.refresh();
-          _pageController.jumpToPage(index);
-        },
+        onItemSelected: _tabItemClick,
         items: [
+          TTBottomBarItem(
+            icon: Icon(Icons.insert_chart),
+            title: Text('Chart'),
+            activeColor: Cl.mBlue,
+            inactiveColor: Cl.grey,
+          ),
+          TTBottomBarItem(
+            icon: Icon(Icons.list),
+            title: Text('List'),
+            textAlign: TextAlign.center,
+            activeColor: Cl.mBlue,
+            inactiveColor: Cl.grey,
+          ),
           TTBottomBarItem(
             icon: Icon(Icons.apps),
             title: Text('Home'),
             activeColor: Cl.mBlue,
+            inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.map),
             title: Text('Map'),
-            activeColor: Cl.mCyan,
-          ),
-          TTBottomBarItem(
-            icon: Icon(Icons.insert_chart),
-            title: Text('Top'),
-            activeColor: Cl.shamrockGreen,
+            activeColor: Cl.mBlue,
+            inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.library_books),
             title: Text('News'),
             textAlign: TextAlign.center,
-            activeColor: Cl.mRed,
+            activeColor: Cl.mBlue,
+            inactiveColor: Cl.grey,
           ),
         ],
       ),
@@ -128,8 +150,9 @@ class _MainViewState extends State<_MainView> {
       controller: _pageController,
       onPageChanged: (index) => model.pageIndex,
       children: <Widget>[
-        _renderHomeTab(),
         Container(color: Colors.blue),
+        _renderTopTab(),
+        _renderHomeTab(),
         Container(color: Colors.green),
         _renderNewsTab(),
       ],
@@ -356,7 +379,7 @@ class _MainViewState extends State<_MainView> {
       padding: const EdgeInsets.only(right: 16, bottom: 8),
       child: InkWell(
         borderRadius: BorderRadius.circular(5),
-        onTap: () {},
+        onTap: () => _statisticClick(type),
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 8),
@@ -545,7 +568,6 @@ class _MainViewState extends State<_MainView> {
   Widget _renderNewsTab() {
     final model = Provider.of<MainModel>(context);
     final myCountry = model.myCountry;
-
     if (myCountry.name == null) {
       return Container();
     }
@@ -651,13 +673,162 @@ class _MainViewState extends State<_MainView> {
                         ],
                       ),
                     ),
-                    Icon(Icons.keyboard_arrow_right, size: 30,)
+                    Icon(
+                      Icons.keyboard_arrow_right,
+                      size: 30,
+                    )
                   ],
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  ///TOP TAB
+
+  Widget _renderTopTab() {
+    final model = Provider.of<MainModel>(context);
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    height: 58,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(4),
+                    child: TextFormField(
+                      controller: _textController,
+                      decoration: InputDecoration(
+                        labelText: 'Select country',
+                        labelStyle: Style.ts_101,
+                        contentPadding:
+                            const EdgeInsets.symmetric(horizontal: 16),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Cl.grey300),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Cl.mBlue),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      onChanged: model.text.add,
+                      style: Style.ts_16_black,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                InkWell(
+                  borderRadius: BorderRadius.circular(5),
+                  onTap: () => model.logic.sortFilter(),
+                  child: Container(
+                    height: 48,
+                    width: 80,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Cl.grey300),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Sort', style: Style.ts_101),
+                        SizedBox(width: 8),
+                        Image.asset(
+                          model.sortFilter == SortType.DES
+                              ? Id.ic_sort_des
+                              : Id.ic_sort_acs,
+                          width: 20,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                Container(
+                  height: 48,
+                  width: 130,
+                  padding: const EdgeInsets.only(left: 8, right: 8),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Cl.grey300),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: DropdownButton(
+                    value: typeEnumToStr(model.typeFilter),
+                    underline: Container(),
+                    icon: Icon(Icons.keyboard_arrow_down),
+                    items: [
+                      TypeEnum.TOTAL,
+                      TypeEnum.ACTIVE,
+                      TypeEnum.RECOVERED,
+                      TypeEnum.DEATH,
+                      TypeEnum.CASE_TODAY,
+                      TypeEnum.DEATH_TODAY,
+                      TypeEnum.CRITICAL,
+                    ].map((v) {
+                      return DropdownMenuItem(
+                        value: typeEnumToStr(v),
+                        child: Material(
+                          color: Colors.transparent,
+                          child:
+                              Text(typeEnumToStr(v), style: Style.ts_16_black),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (v) {
+                      model.logic.typeFilter(v);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 8),
+          _renderListTop(),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderListTop() {
+    final model = Provider.of<MainModel>(context);
+    if (model.listSearch.isEmpty) {
+      return Container();
+    }
+    final ls = model.listSearch;
+    return Expanded(
+      child: ListView.separated(
+        itemCount: ls.length,
+        itemBuilder: (_, index) {
+          return _renderTopItem(ls[index], model.typeFilter);
+        },
+        separatorBuilder: (_, __) {
+          return Container(height: 1, color: Cl.grey300);
+        },
+      ),
+    );
+  }
+
+  Widget _renderTopItem(CountryInfo info, TypeEnum type) {
+    return ListTile(
+      leading: Image.asset(
+        Id.getIdByCountry(info),
+        width: 50,
+      ),
+      title: Text(info.name, style: Style.ts_6),
+      subtitle: Text(info.code ?? ''),
+      trailing: Text(
+        typeEnumToCasesStr(type, info),
+        style: typeEnumToStyle(type),
       ),
     );
   }

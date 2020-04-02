@@ -1,3 +1,4 @@
+import 'package:covid/resource/resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:covid/module/root/root_model.dart';
@@ -14,7 +15,8 @@ class _AppView extends StatelessWidget {
       final root = Provider.of<RootModel>(context);
       return MaterialApp(
         theme: ThemeData(
-          fontFamily: 'Roboto'
+          fontFamily: 'Roboto',
+          cursorColor: Cl.mBlue,
         ),
         home: createMain(),
       );
