@@ -45,29 +45,29 @@ class _SelectCountryViewState extends State<_SelectCountryView> {
         ),
         backgroundColor: Cl.white,
         elevation: 1,
-        title: Text('Select country to track', style: Style.ts_4),
+        title: Container(
+          height: 48,
+          padding: const EdgeInsets.only(right: 48),
+          child: TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Select country',
+              contentPadding: const EdgeInsets.all(16),
+              border: OutlineInputBorder(
+                borderSide: BorderSide(color: Cl.grey300),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Cl.mBlue),
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+            ),
+            onChanged: model.text.add,
+            style: Style.ts_16_black,
+          ),
+        ),
       ),
       body: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-            child: TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Select country',
-                contentPadding: const EdgeInsets.all(16),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Cl.grey300),
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Cl.mBlue),
-                  borderRadius: BorderRadius.circular(25.0),
-                ),
-              ),
-              onChanged: model.text.add,
-              style: Style.ts_16_black,
-            ),
-          ),
           Container(
             height: 40,
             color: Cl.grey300,
@@ -76,11 +76,11 @@ class _SelectCountryViewState extends State<_SelectCountryView> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: Text('COUNTRY', style: Style.ts_6),
+                  child: Text('COUNTRY', style: Style.ts_13),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 16),
-                  child: Text('CASES', style: Style.ts_6),
+                  child: Text('CASES', style: Style.ts_13),
                 ),
               ],
             ),

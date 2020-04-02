@@ -41,6 +41,7 @@ class HistoricalInfo {
   List<TimelineInfo> _takeList(List<TimelineInfo> list, int count) {
     List<TimelineInfo> ls = [];
     final int c = count == null ? list.length : count;
+    print(c);
     ls.addAll(list.reversed.take(c));
     return ls;
   }

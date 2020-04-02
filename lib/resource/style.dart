@@ -97,22 +97,22 @@ class Style {
   static const TextStyle ts_total = const TextStyle(
     color: Cl.mBlue,
     fontWeight: FontWeight.w700,
-    fontSize: 22,
+    fontSize: 20,
   );
   static const TextStyle ts_active = const TextStyle(
     color: Cl.mCyan,
     fontWeight: FontWeight.w700,
-    fontSize: 22,
+    fontSize: 20,
   );
   static const TextStyle ts_recovered = const TextStyle(
     color: Cl.shamrockGreen,
     fontWeight: FontWeight.w700,
-    fontSize: 22,
+    fontSize: 20,
   );
   static const TextStyle ts_death = const TextStyle(
     color: Cl.mRed,
     fontWeight: FontWeight.w700,
-    fontSize: 22,
+    fontSize: 20,
   );
   static const TextStyle ts_13_pink = const TextStyle(
     color: Cl.pinkRed,
