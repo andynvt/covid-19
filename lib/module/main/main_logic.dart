@@ -108,6 +108,13 @@ class MainLogic {
     _model.refresh();
   }
 
+  void moveToListTab(TypeEnum type) {
+    _model.pageIndex = 1;
+    _model.typeFilter = type;
+    _sort(SortType.DES);
+    _model.refresh();
+  }
+
   void changeTab(int index) {
     _model.pageIndex = index;
     String title = '';

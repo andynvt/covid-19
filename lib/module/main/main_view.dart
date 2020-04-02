@@ -49,10 +49,8 @@ class _MainViewState extends State<_MainView> {
   }
 
   void _statisticClick(TypeEnum type) {
-    //TODO: load data in 3th tab
     final model = Provider.of<MainModel>(context, listen: false);
-    model.pageIndex = 1;
-    model.refresh();
+    model.logic.moveToListTab(type);
     _pageController.jumpToPage(1);
   }
 
@@ -406,22 +404,25 @@ class _MainViewState extends State<_MainView> {
     final text =
         number == -1 ? '-' : TTString.shared().formatNumber(number ?? 0);
     return Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Cl.grey300),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        padding: const EdgeInsets.all(8.0),
-        margin: const EdgeInsets.symmetric(horizontal: 4),
-        child: Column(
-          children: <Widget>[
-            Text(
-              text,
-              style: typeEnumToStyle(type),
-            ),
-            SizedBox(height: 4),
-            Text(typeEnumToStr(type).toUpperCase(), style: Style.ts_20),
-          ],
+      child: InkWell(
+        onTap: () => _statisticClick(type),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Cl.grey300),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          padding: const EdgeInsets.all(8.0),
+          margin: const EdgeInsets.symmetric(horizontal: 4),
+          child: Column(
+            children: <Widget>[
+              Text(
+                text,
+                style: typeEnumToStyle(type),
+              ),
+              SizedBox(height: 4),
+              Text(typeEnumToStr(type).toUpperCase(), style: Style.ts_20),
+            ],
+          ),
         ),
       ),
     );
