@@ -29,29 +29,37 @@ class _MainViewState extends State<_MainView> {
   PageController _pageController;
   TextEditingController _textController;
 
-  void _selectCountryClick() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (_) => createSelectCountry()))
-        .then((info) {
-      if (info is CountryInfo) {
-        final model = Provider.of<MainModel>(context, listen: false);
-        model.logic.selectGlobal(false);
-        model.logic.updateCountry(info);
-        model.logic.getNews();
-      }
-    });
-  }
-
   void _tabItemClick(int index) {
     final model = Provider.of<MainModel>(context, listen: false);
     model.logic.changeTab(index);
     _pageController.jumpToPage(index);
   }
 
+  void _selectCountryClick(int sourceIndex) {
+    final model = Provider.of<MainModel>(context, listen: false);
+    model.sourceIndex = sourceIndex;
+    model.logic.moveToListTab(TypeEnum.TOTAL);
+    _pageController.jumpToPage(1);
+  }
+
   void _statisticClick(TypeEnum type) {
     final model = Provider.of<MainModel>(context, listen: false);
+    model.sourceIndex = 2;
     model.logic.moveToListTab(type);
     _pageController.jumpToPage(1);
+  }
+
+  void _topItemClick(CountryInfo info) {
+    final model = Provider.of<MainModel>(context, listen: false);
+    model.logic.selectGlobal(false);
+    print(model.sourceIndex);
+    if (model.sourceIndex == 2) {
+      model.logic.moveToPage(info, 2);
+    } else if (model.sourceIndex == 0) {
+      model.logic.moveToPage(info, 0);
+    }
+    model.logic.updateCountry(info);
+    _pageController.jumpToPage(model.sourceIndex);
   }
 
   void _menuItemClick() {}
@@ -153,7 +161,7 @@ class _MainViewState extends State<_MainView> {
       controller: _pageController,
       onPageChanged: (index) => model.pageIndex,
       children: <Widget>[
-        Container(color: Colors.blue),
+        _renderAreaChart(),
         _renderTopTab(),
         _renderHomeTab(),
         Container(color: Colors.green),
@@ -191,7 +199,7 @@ class _MainViewState extends State<_MainView> {
                   height: 40,
                   child: OutlineButton(
                     padding: const EdgeInsets.all(4),
-                    onPressed: _selectCountryClick,
+                    onPressed: () => _selectCountryClick(2),
                     borderSide: BorderSide(color: Cl.brownGrey),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -439,92 +447,97 @@ class _MainViewState extends State<_MainView> {
     if (info == null || info.cases == null) {
       return Container();
     }
-    return Expanded(
-      child: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Echarts(
-            option: '''
-              {
-                title: {
-                    text: 'Monthly chart'
-                },
-                color: ['#FA7B74','#17C5FA','#9fdcba','#003ab2'],
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'cross',
-                        label: {
-                            backgroundColor: '#6a7985'
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          _renderSelectCountry(0),
+          SizedBox(height: 8),
+          Container(
+            color: Cl.pinkRed,
+            height: 40,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Echarts(
+                option: '''
+                  {
+                    color: ['#FA7B74','#17C5FA','#9fdcba','#003ab2'],
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
                         }
-                    }
-                },
-                legend: {
-                    data: ['Death', 'Recovered', 'Active', 'Cases'],
-                    top: 30,
-                },
-                
-                grid: {
-                    left: '2%',
-                    right: '5%',
-                    bottom: '3%',
-                    y: 60,
-                    containLabel: true
-                },
-                xAxis: [
-                    {
-                        type: 'category',
-                        boundaryGap: false,
-                        data: ${info.toDateList(count: 30)}
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value'
-                    }
-                ],
-                series: [
-                    {
-                        name: 'Death',
-                        type: 'line',
-                        stack: '1',
-                        areaStyle: {},
-                        data: ${info.toDataList(info.deaths, count: 30)}
                     },
-                    {
-                        name: 'Recovered',
-                        type: 'line',
-                        stack: '1',
-                        areaStyle: {},
-                        data: ${info.toDataList(info.recovered, count: 30)}
+                    legend: {
+                        data: ['Death', 'Recovered', 'Active', 'Cases'],
                     },
-                     {
-                        name: 'Active',
-                        type: 'line',
-                        stack: '1',
-                        areaStyle: {},
-                        data: ${info.toDataList(info.active, count: 30)}
+                    grid: {
+                        left: '2%',
+                        right: '5%',
+                        bottom: '3%',
+                        y: 40,
+                        containLabel: true
                     },
-                    {
-                        name: 'Cases',
-                        type: 'line',
-                        stack: '2',
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: ${info.toDateList(count: 30)}
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value'
+                        }
+                    ],
+                    series: [
+                        {
+                            name: 'Death',
+                            type: 'line',
+                            stack: '1',
+                            areaStyle: {},
+                            data: ${info.toDataList(info.deaths, count: 30)}
+                        },
+                        {
+                            name: 'Recovered',
+                            type: 'line',
+                            stack: '1',
+                            areaStyle: {},
+                            data: ${info.toDataList(info.recovered, count: 30)}
+                        },
+                         {
+                            name: 'Active',
+                            type: 'line',
+                            stack: '1',
+                            areaStyle: {},
+                            data: ${info.toDataList(info.active, count: 30)}
+                        },
+                        {
+                            name: 'Cases',
+                            type: 'line',
+                            stack: '2',
 //                        label: {
 //                            normal: {
 //                                show: true,
 //                                position: 'top'
 //                            }
 //                        },
-                        data: ${info.toDataList(info.cases, count: 30)}
-                    }
-                ]
-            }
-            ''',
-            extraScript: '''
-            document.getElementsByTagName("body")[0].style = 'position: fixed;';
-            ''',
+                            data: ${info.toDataList(info.cases, count: 30)}
+                        }
+                    ]
+                }
+                ''',
+                extraScript: '''
+                document.getElementsByTagName("body")[0].style = 'position: fixed;';
+                ''',
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -570,61 +583,67 @@ class _MainViewState extends State<_MainView> {
 
   ///NEWS TAB
 
-  Widget _renderNewsTab() {
+  Widget _renderSelectCountry(int sourceIndex) {
     final model = Provider.of<MainModel>(context);
-    final myCountry = model.myCountry;
-    if (myCountry.name == null) {
-      return Container();
-    }
-
-    return Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            height: 35,
-            child: OutlineButton(
-              padding: const EdgeInsets.all(4),
-              onPressed: _selectCountryClick,
-              borderSide: BorderSide(color: Cl.brownGrey),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: SizedBox(
+        height: 35,
+        child: OutlineButton(
+          padding: const EdgeInsets.all(4),
+          onPressed: () => _selectCountryClick(sourceIndex),
+          borderSide: BorderSide(color: Cl.brownGrey),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: Row(
+            children: <Widget>[
+              Image.asset(
+                Id.getIdByCountry(model.myCountry),
+                width: 30,
               ),
-              child: Row(
-                children: <Widget>[
-                  Image.asset(
-                    Id.getIdByCountry(model.myCountry),
-                    width: 30,
-                  ),
-                  SizedBox(width: 16),
-                  Material(
-                    color: Colors.transparent,
-                    child: Text(
-                      model.myCountry.name,
-                      style: Style.ts_16_black,
-                    ),
-                  ),
-                  Spacer(),
-                  Container(width: 1, color: Cl.brownGrey, height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Icon(
-                      Icons.chevron_right,
-                      size: 25,
-                    ),
-                  ),
-                ],
+              SizedBox(width: 16),
+              Material(
+                color: Colors.transparent,
+                child: Text(
+                  model.myCountry.name,
+                  style: Style.ts_16_black,
+                ),
               ),
-            ),
+              Spacer(),
+              Container(width: 1, color: Cl.brownGrey, height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Icon(
+                  Icons.chevron_right,
+                  size: 25,
+                ),
+              ),
+            ],
           ),
         ),
-        SizedBox(height: 8),
+      ),
+    );
+  }
+
+  Widget _renderNewsTab() {
+    return Column(
+      children: <Widget>[
         Expanded(
-          child: ListView.builder(
-            itemCount: myCountry.news.length,
-            itemBuilder: (_, index) {
-              return _renderNewsItem(myCountry.news[index]);
-            },
+          child: ChangeNotifierProvider.value(
+            value: CountryService.shared(),
+            child: Consumer<CountryService>(builder: (_, service, __) {
+              if (service.listNews.isEmpty) {
+                return Container();
+              }
+              final ls = service.listNews;
+              return ListView.builder(
+                itemCount: ls.length,
+                itemBuilder: (_, index) {
+                  return _renderNewsItem(ls[index]);
+                },
+              );
+            }),
           ),
         ),
       ],
@@ -632,57 +651,78 @@ class _MainViewState extends State<_MainView> {
   }
 
   Widget _renderNewsItem(NewsInfo info) {
-    String parseStr = parse(info.title).documentElement.text;
-    double height = MediaQuery.of(context).size.height / 4 - 10;
+//    String parseStr = parse(info.title).documentElement.text;
+    double width = MediaQuery.of(context).size.width / 2.8;
+    double height = (width * 3 / 4);
+
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.fromLTRB(12, 6, 12, 6),
       child: InkWell(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(10),
         onTap: () {
-          LaunchURL.launch(info.url);
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => createNewsDetail(info)),
+          );
         },
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(color: Cl.grey300),
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(10),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          height: height,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               ClipRRect(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(5),
-                  topRight: Radius.circular(5),
+                  topLeft: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
                 ),
                 child: TTNetworkImage(
-                  height: height,
-                  width: double.infinity,
+                  height: double.infinity,
+                  width: width,
                   boxFit: BoxFit.cover,
-                  imageUrl: info.image,
+                  imageUrl: info.urlToImage,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(parseStr, style: Style.ts_13),
-                          SizedBox(height: 4),
-                          Text(
-                            TTString.shared().formatDate(info.time),
-                            style: Style.ts_19,
-                          ),
-                        ],
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          info.title,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style: Style.ts_16_black,
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      size: 30,
-                    )
-                  ],
+//                      Spacer(),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            Icon(Icons.access_time, size: 15),
+                            SizedBox(width: 4),
+                            Text(
+                              TTString.shared().formatTimeAgo(info.publishedAt,
+                                  isShort: true),
+                              style: Style.ts_21,
+                            ),
+                            SizedBox(width: 4),
+                            Text('•', style: Style.ts_21_blue),
+                            SizedBox(width: 4),
+                            Expanded(
+                              child: Text(info.source, style: Style.ts_21_blue),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -825,6 +865,7 @@ class _MainViewState extends State<_MainView> {
 
   Widget _renderTopItem(CountryInfo info, TypeEnum type) {
     return ListTile(
+      onTap: () => _topItemClick(info),
       leading: Image.asset(
         Id.getIdByCountry(info),
         width: 50,

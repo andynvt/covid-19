@@ -176,4 +176,19 @@ class Style {
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
   );
+  static const TextStyle ts_21 = const TextStyle(
+    color: Cl.brownishGrey,
+    fontSize: 12,
+    fontStyle: FontStyle.normal,
+  );
+  static const TextStyle ts_21_blue = const TextStyle(
+    color: Cl.mBlue,
+    fontSize: 12,
+    fontStyle: FontStyle.normal,
+  );
+  static const TextStyle ts_21_white = const TextStyle(
+    color: Cl.white,
+    fontSize: 14,
+    fontStyle: FontStyle.normal,
+  );
 }

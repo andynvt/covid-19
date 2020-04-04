@@ -9,7 +9,8 @@ class CountryService extends ChangeNotifier implements BaseService {
   Map<String, CountryInfo> countries = {};
   GlobalInfo globalInfo;
   HistoricalInfo globalHistorical;
-//  HistoricalInfo myHistorical;
+  final List<NewsInfo> listNews = [];
+  int newsPage = 1;
 
   @override
   // ignore: non_constant_identifier_names
@@ -55,21 +56,40 @@ class CountryService extends ChangeNotifier implements BaseService {
     );
   }
 
-  void getNewsByCountyCode(String name, String code, Function() callback) {
+  void getNews() {
+    if(newsPage == -1 || newsPage > 5) {
+      return;
+    }
     NetworkService.shared().sendGETRequest(
-      url: NetworkAPI.GET_NEWS,
-      params: {'countryNewsTotal': code},
-      parser: NetworkParser.getListNews,
+      url: NetworkAPI.getNewsByPage(newsPage),
+      parser: NetworkParser.getListNewsGlobal,
       callback: (rs) {
-        if (rs.isOK && rs.data.containsKey('news')) {
-          countries[name].news.addAll(rs.data['news']);
+        if (rs.isOK && rs.data.containsKey('list')) {
+          listNews.addAll(rs.data['list']);
+          newsPage += 1;
+          _refresh();
         } else if (d___) {
-          print('---> getNewsByCountyCode error: ${rs.msgError}');
+          print('---> getNews error: ${rs.msgError}');
         }
-        callback();
       },
     );
   }
+
+//  void getNewsByCountyCode(String name, String code, Function() callback) {
+//    NetworkService.shared().sendGETRequest(
+//      url: NetworkAPI.GET_NEWS,
+//      params: {'countryNewsTotal': code},
+//      parser: NetworkParser.getListNews,
+//      callback: (rs) {
+//        if (rs.isOK && rs.data.containsKey('news')) {
+//          countries[name].news.addAll(rs.data['news']);
+//        } else if (d___) {
+//          print('---> getNewsByCountyCode error: ${rs.msgError}');
+//        }
+//        callback();
+//      },
+//    );
+//  }
 
   /// PRIVATE FUNCTION
   void _getGlobal(Function() callback) {

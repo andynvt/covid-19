@@ -88,19 +88,7 @@ class MainLogic {
   }
 
   void getNews() {
-    final myCountry = _model.myCountry;
-    final news = CountryService.shared().countries[myCountry.name].news;
-    if (news.isNotEmpty) {
-      _model.news.clear();
-      _model.news.addAll(news);
-      return;
-    }
-    CountryService.shared().getNewsByCountyCode(myCountry.name, myCountry.code,
-        () {
-      _model.news
-          .addAll(CountryService.shared().countries[myCountry.name].news);
-      _model.refresh();
-    });
+    CountryService.shared().getNews();
   }
 
   void selectGlobal(bool value) {
@@ -112,6 +100,12 @@ class MainLogic {
     _model.pageIndex = 1;
     _model.typeFilter = type;
     _sort(SortType.DES);
+    _model.refresh();
+  }
+
+  void moveToPage(CountryInfo info, int index) {
+    _model.pageIndex = index;
+    _model.myCountry = info;
     _model.refresh();
   }
 

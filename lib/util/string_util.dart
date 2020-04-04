@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeAgo;
 
 class TTString {
   static TTString _sInstance;
@@ -29,5 +30,8 @@ class TTString {
   }
   String formatDateMonth(DateTime date) {
     return _dateMonth.format(date);
+  }
+  String formatTimeAgo(DateTime date, {bool isShort = false}) {
+    return timeAgo.format(date, locale: isShort ? 'en_short' : 'en');
   }
 }

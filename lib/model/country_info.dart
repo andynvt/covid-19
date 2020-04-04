@@ -17,7 +17,7 @@ class CountryInfo extends ChangeNotifier {
   double latitude;
   double longitude;
   HistoricalInfo historical;
-  final List<NewsInfo> news = [];
+//  final List<NewsInfo> news = [];
 
   CountryInfo(
       {this.id,

@@ -15,4 +15,8 @@ class NetworkAPI {
     return '$NOVEL/v2/historical/$country';
   }
 
+  static String getNewsByPage(int page) {
+    return 'https://newsapi.org/v2/everything?q=covid&sortBy=publishedAt&language=en&pageSize=20&page=$page&apiKey=baf9798fd0c54452a42800b12f20e2f0';
+  }
+
 }
