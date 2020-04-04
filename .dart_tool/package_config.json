@@ -302,6 +302,12 @@
       "languageVersion": "2.4"
     },
     {
+      "name": "timeago",
+      "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/timeago-2.0.26",
+      "packageUri": "lib/",
+      "languageVersion": "2.6"
+    },
+    {
       "name": "typed_data",
       "rootUri": "file:///Users/andy/Documents/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.1.6",
       "packageUri": "lib/",
@@ -362,7 +368,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-04-01T11:30:16.482088Z",
+  "generated": "2020-04-04T04:25:22.067440Z",
   "generator": "pub",
   "generatorVersion": "2.8.0-dev.12.0.flutter-9983424a3c"
 }
