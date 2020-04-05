@@ -16,15 +16,7 @@ class NetworkParser {
     return {'list': []};
   }
 
-  static Map<String, dynamic> getGlobal(dynamic json) {
-    if (json is Map<String, dynamic>) {
-      final info = GlobalInfo.fromJson(json);
-      return {'info': info};
-    }
-    return {};
-  }
-
-  static Map<String, dynamic> getHistorical(dynamic json) {
+  static Map<String, dynamic> getGlobalHistorical(dynamic json) {
     if (json is Map<String, dynamic>) {
       final info = HistoricalInfo.fromJson(json);
       final cases = info.cases;
@@ -62,12 +54,26 @@ class NetworkParser {
     return {};
   }
 
+  static Map<String, dynamic> getGlobal(dynamic json) {
+    if (json is Map<String, dynamic>) {
+      final info = CountryInfo.fromJson(json);
+      return {'info': info};
+    }
+    return {};
+  }
+
   static Map<String, dynamic> getListCountry(dynamic json) {
     if (json is List<dynamic>) {
-      final ls = json.map((e) {
-        return CountryInfo.fromJson(e);
-      }).toList();
-      return {'list': ls};
+      final Map<String, CountryInfo> map = Map.fromIterable(json,
+          key: (e) => e['country'], value: (e) => CountryInfo.fromJson(e));
+//      CountryInfo global = map['World'];
+//      global.name = 'GLOBAL';
+//      map.remove('World');
+      map.values
+        ..toList().sort((a, b) {
+          return b.cases.compareTo(a.cases);
+        });
+      return {'map': map};
     }
     return {};
   }

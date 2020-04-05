@@ -16,8 +16,8 @@ class MainModel extends ChangeNotifier {
   int sourceIndex = 2;
   String title = 'Covid-19';
   bool isGlobal = true;
-  CountryInfo myCountry = CountryInfo(id: -1);
-  GlobalInfo globalInfo = GlobalInfo();
+  CountryInfo myCountry = CountryInfo();
+  CountryInfo globalInfo = CountryInfo();
   HistoricalInfo globalHistorical = HistoricalInfo();
   HistoricalInfo myHistorical = HistoricalInfo();
 

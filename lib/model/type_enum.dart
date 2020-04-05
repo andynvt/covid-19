@@ -71,13 +71,13 @@ String typeEnumToCasesStr(TypeEnum type, CountryInfo info) {
 Color typeEnumToColor(TypeEnum type) {
   switch (type) {
     case TypeEnum.TOTAL:
-      return Cl.mBlue;
+      return Cl.orangeYellow;
     case TypeEnum.ACTIVE:
-      return Cl.mCyan;
+      return Cl.tealish;
     case TypeEnum.RECOVERED:
-      return Cl.shamrockGreen;
+      return Cl.lightAqua;
     case TypeEnum.DEATH:
-      return Cl.mRed;
+      return Cl.salmon;
     default:
       return Cl.black;
   }
@@ -88,11 +88,11 @@ TextStyle typeEnumToStyle(TypeEnum type) {
     case TypeEnum.TOTAL:
       return Style.ts_total;
     case TypeEnum.ACTIVE:
-      return Style.ts_active;
+      return Style.ts_total;
     case TypeEnum.RECOVERED:
-      return Style.ts_recovered;
+      return Style.ts_total;
     case TypeEnum.DEATH:
-      return Style.ts_death;
+      return Style.ts_total;
     default:
       return Style.ts_13_black;
   }

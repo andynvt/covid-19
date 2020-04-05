@@ -5,7 +5,7 @@ class NetworkAPI {
 
   static const GET_GLOBAL = '$NOVEL/all';
   static const GET_COUNTRIES = '$NOVEL/countries';
-  static const GET_HISTORICAL = '$NOVEL/v2/historical/all';
+  static const GET_GLOBAL_HISTORICAL = '$NOVEL/v2/historical/all';
 
   static const GET_MAP = '$NOVEL/jhucsse';
 

@@ -95,28 +95,9 @@ class Style {
     fontStyle: FontStyle.normal,
   );
   static const TextStyle ts_total = const TextStyle(
-    color: Cl.mBlue,
+    color: Cl.blackThree,
     fontWeight: FontWeight.w700,
     fontSize: 20,
-  );
-  static const TextStyle ts_active = const TextStyle(
-    color: Cl.mCyan,
-    fontWeight: FontWeight.w700,
-    fontSize: 20,
-  );
-  static const TextStyle ts_recovered = const TextStyle(
-    color: Cl.shamrockGreen,
-    fontWeight: FontWeight.w700,
-    fontSize: 20,
-  );
-  static const TextStyle ts_death = const TextStyle(
-    color: Cl.mRed,
-    fontWeight: FontWeight.w700,
-    fontSize: 20,
-  );
-  static const TextStyle ts_13_pink = const TextStyle(
-    color: Cl.pinkRed,
-    fontSize: 14,
   );
   static const TextStyle ts_13_black = const TextStyle(
     color: Cl.black,
@@ -190,5 +171,55 @@ class Style {
     color: Cl.white,
     fontSize: 14,
     fontStyle: FontStyle.normal,
+  );
+
+  //new style
+
+  static const TextStyle ts1 = const TextStyle(
+    color: Cl.blackThree,
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+
+  );
+  static const TextStyle ts2 = const TextStyle(
+    color: Cl.blackThree,
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+
+  );
+  static const TextStyle ts3 = const TextStyle(
+    color: Cl.blackThree,
+    fontSize: 18,
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+
+  );
+  static const TextStyle ts4 = const TextStyle(
+    color: Cl.blackThree40,
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+
+  );
+  static const TextStyle ts5 = const TextStyle(
+    color: Cl.blackThree,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
+
+  );
+  static const TextStyle ts6 = const TextStyle(
+    color: Cl.blackThree50,
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    fontStyle: FontStyle.normal,
+    letterSpacing: 0,
   );
 }

@@ -7,7 +7,7 @@ class CountryService extends ChangeNotifier implements BaseService {
   static CountryService _sInstance;
 
   Map<String, CountryInfo> countries = {};
-  GlobalInfo globalInfo;
+  CountryInfo globalInfo;
   HistoricalInfo globalHistorical;
   final List<NewsInfo> listNews = [];
   int newsPage = 1;
@@ -25,14 +25,13 @@ class CountryService extends ChangeNotifier implements BaseService {
     return _sInstance;
   }
 
-
   void getData(Function() callback) {
     if (globalInfo != null || countries.isNotEmpty) {
       return;
     }
     _getGlobal(() {
-      _getHistoricalAll(() {
-        _getListCountry(() {
+      _getListCountry(() {
+        _getGlobalHistorical(() {
           callback();
           _refresh();
         });
@@ -57,7 +56,7 @@ class CountryService extends ChangeNotifier implements BaseService {
   }
 
   void getNews() {
-    if(newsPage == -1 || newsPage > 5) {
+    if (newsPage == -1 || newsPage > 5) {
       return;
     }
     NetworkService.shared().sendGETRequest(
@@ -92,6 +91,7 @@ class CountryService extends ChangeNotifier implements BaseService {
 //  }
 
   /// PRIVATE FUNCTION
+
   void _getGlobal(Function() callback) {
     NetworkService.shared().sendGETRequest(
       url: NetworkAPI.GET_GLOBAL,
@@ -107,15 +107,15 @@ class CountryService extends ChangeNotifier implements BaseService {
     );
   }
 
-  void _getHistoricalAll(Function() callback) {
+  void _getGlobalHistorical(Function() callback) {
     NetworkService.shared().sendGETRequest(
-      url: NetworkAPI.GET_HISTORICAL,
-      parser: NetworkParser.getHistorical,
+      url: NetworkAPI.GET_GLOBAL_HISTORICAL,
+      parser: NetworkParser.getGlobalHistorical,
       callback: (rs) {
         if (rs.isOK && rs.data.containsKey('info')) {
           globalHistorical = rs.data['info'];
         } else if (d___) {
-          print('---> _getHistoricalAll error: ${rs.msgError}');
+          print('---> _getGlobalHistorical error: ${rs.msgError}');
         }
         callback();
       },
@@ -126,15 +126,10 @@ class CountryService extends ChangeNotifier implements BaseService {
     NetworkService.shared().sendGETRequest(
       url: NetworkAPI.GET_COUNTRIES,
       parser: NetworkParser.getListCountry,
+      params: {'sort': 'cases'},
       callback: (rs) {
-        if (rs.isOK && rs.data.containsKey('list')) {
-          final List<CountryInfo> ls = rs.data['list'];
-          ls.sort((a, b) {
-            return b.cases.compareTo(a.cases);
-          });
-          ls.forEach((element) {
-            countries[element.name] = element;
-          });
+        if (rs.isOK && rs.data.containsKey('map')) {
+          countries.addAll(rs.data['map']);
         } else if (d___) {
           print('---> getListCountry error: ${rs.msgError}');
         }
