@@ -140,7 +140,7 @@ class Style {
     fontStyle: FontStyle.normal,
   );
   static const TextStyle ts_19_bold = const TextStyle(
-    color: Cl.mBlue,
+    color: Cl.black,
     fontSize: 14,
     fontWeight: FontWeight.w500,
     fontStyle: FontStyle.normal,
@@ -162,8 +162,8 @@ class Style {
     fontSize: 12,
     fontStyle: FontStyle.normal,
   );
-  static const TextStyle ts_21_blue = const TextStyle(
-    color: Cl.mBlue,
+  static const TextStyle ts_21_tealish = const TextStyle(
+    color: Cl.tealish,
     fontSize: 12,
     fontStyle: FontStyle.normal,
   );

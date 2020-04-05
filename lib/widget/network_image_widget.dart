@@ -32,7 +32,7 @@ class _TTNetworkImageState extends State<TTNetworkImage> {
       fit: widget.boxFit,
       placeholder: (_, url) => widget.hasLoading
           ? CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Cl.mBlue),
+        valueColor: AlwaysStoppedAnimation<Color>(Cl.tealish),
       )
           : null,
       errorWidget: (_, url, error) => url.isNotEmpty ? Icon(Icons.error) : null,

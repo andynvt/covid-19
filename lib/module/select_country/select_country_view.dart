@@ -57,7 +57,7 @@ class _SelectCountryViewState extends State<_SelectCountryView> {
                 borderRadius: BorderRadius.circular(25.0),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Cl.mBlue),
+                borderSide: BorderSide(color: Cl.tealish),
                 borderRadius: BorderRadius.circular(25.0),
               ),
             ),

@@ -118,33 +118,33 @@ class _MainViewState extends State<_MainView> {
           TTBottomBarItem(
             icon: Icon(Icons.insert_chart),
             title: Text('Chart'),
-            activeColor: Cl.mBlue,
+            activeColor: Cl.tealish,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.list),
             title: Text('List'),
             textAlign: TextAlign.center,
-            activeColor: Cl.mBlue,
+            activeColor: Cl.tealish,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.apps),
             title: Text('Home'),
-            activeColor: Cl.mBlue,
+            activeColor: Cl.tealish,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.map),
             title: Text('Map'),
-            activeColor: Cl.mBlue,
+            activeColor: Cl.tealish,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.library_books),
             title: Text('News'),
             textAlign: TextAlign.center,
-            activeColor: Cl.mBlue,
+            activeColor: Cl.tealish,
             inactiveColor: Cl.grey,
           ),
         ],
@@ -190,7 +190,7 @@ class _MainViewState extends State<_MainView> {
                   child: Icon(
                     Icons.language,
                     size: 40,
-                    color: isGlobal ? Cl.lightBlue : Cl.brownGrey,
+                    color: isGlobal ? Cl.black : Cl.grey,
                   ),
                 ),
                 SizedBox(width: 8),
@@ -328,7 +328,7 @@ class _MainViewState extends State<_MainView> {
             trigger: 'item',
             formatter: '{b}<br/>{c}<br/>{d}%'
         },
-        color: ['#25b7b3','#81fce4', '#ff6666'],
+        color: ['#327589','#75FAD7', '#ED6F61'],
         legend: {
             orient: 'vertical',
             right: 10,
@@ -595,7 +595,7 @@ class _MainViewState extends State<_MainView> {
             child: Icon(
               Icons.language,
               size: 40,
-              color: isGlobal ? Cl.lightBlue : Cl.brownGrey,
+              color: isGlobal ? Cl.black : Cl.grey,
             ),
           ),
           SizedBox(width: 8),
@@ -604,7 +604,7 @@ class _MainViewState extends State<_MainView> {
               height: 50,
               child: OutlineButton(
                 padding: const EdgeInsets.all(6),
-                onPressed: () => _selectCountryClick(2),
+                onPressed: () => _selectCountryClick(0),
                 borderSide: BorderSide(color: Cl.brownGrey),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
@@ -621,15 +621,15 @@ class _MainViewState extends State<_MainView> {
                     Expanded(
                       child: !isGlobal
                           ? Material(
-                        color: Colors.transparent,
-                        child: AutoSizeText(
-                          model.myCountry.name,
-                          style: Style.ts4,
-                          maxLines: 2,
-                          minFontSize: 13,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      )
+                              color: Colors.transparent,
+                              child: AutoSizeText(
+                                model.myCountry.name,
+                                style: Style.ts4,
+                                maxLines: 2,
+                                minFontSize: 13,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            )
                           : Text('Global', style: Style.ts4),
                     ),
                     Padding(
@@ -647,6 +647,7 @@ class _MainViewState extends State<_MainView> {
   }
 
   Widget _renderNewsTab() {
+    final model = Provider.of<MainModel>(context);
     return Column(
       children: <Widget>[
         Expanded(
@@ -657,12 +658,30 @@ class _MainViewState extends State<_MainView> {
                 return Container();
               }
               final ls = service.listNews;
-              return ListView.builder(
-                itemCount: ls.length,
-                itemBuilder: (_, index) {
-                  return _renderNewsItem(ls[index]);
-                },
+              return CustomScrollView(
+                slivers: <Widget>[
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (_, index) {
+                        return _renderNewsItem(ls[index]);
+                      },
+                      childCount: ls.length,
+                      semanticIndexCallback: (_, index) {
+                        if (index == ls.length - 5) {
+                          model.logic.getNews();
+                        }
+                        return index;
+                      },
+                    ),
+                  ),
+                ],
               );
+//                ListView.builder(
+//                itemCount: ls.length,
+//                itemBuilder: (_, index) {
+//                  return _renderNewsItem(ls[index]);
+//                },
+//              );
             }),
           ),
         ),
@@ -731,10 +750,11 @@ class _MainViewState extends State<_MainView> {
                               style: Style.ts_21,
                             ),
                             SizedBox(width: 4),
-                            Text('•', style: Style.ts_21_blue),
+                            Text('•', style: Style.ts_21_tealish),
                             SizedBox(width: 4),
                             Expanded(
-                              child: Text(info.source, style: Style.ts_21_blue),
+                              child:
+                                  Text(info.source, style: Style.ts_21_tealish),
                             ),
                           ],
                         ),
@@ -780,7 +800,7 @@ class _MainViewState extends State<_MainView> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Cl.mBlue),
+                          borderSide: BorderSide(color: Cl.tealish),
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
@@ -920,10 +940,10 @@ class _MainViewState extends State<_MainView> {
                       restore: {},
                   }
               },
-              color: ['#FA7B74','#17C5FA','#9fdcba','#003ab2'],
+              color: ['#ED6F61','#75FAD7','#327589','#faa700'],
               legend: {
                   left: 10,
-                  data: ['Death', 'Recovered', 'Active', 'Cases'],
+                  data: ['Death', 'Recovered', 'Active', 'Total'],
               },
               grid: {
                   containLabel: true,
@@ -1001,7 +1021,7 @@ class _MainViewState extends State<_MainView> {
                       data: ${info.toDataList(info.active)}
                   },
                   {
-                      name: 'Cases',
+                      name: 'Total',
                       type: 'line',
                       smooth: true,
                       stack: '1',

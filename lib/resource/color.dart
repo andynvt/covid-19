@@ -7,15 +7,6 @@ class Cl {
   static const black = const Color(0xff000000);
   static const dark = const Color(0xff212631);
 
-  static const mBlue = const Color(0xff003AB2);
-  static const mDarkBlue = const Color(0xff001534);
-  static const mCyan = const Color(0xff17C5FA);
-  static const mRed = const Color(0xffFD5047);
-  static const mLighterRed = const Color(0xffFA7B74);
-  static const mYellow = const Color(0xffFFD43E);
-  static const mAmber = const Color(0xffE7A83C);
-  static const mLightGreen = const Color(0xff9FDCBA);
-
   static const brownishGrey = const Color(0xff6b6b6b);
   static const shamrockGreen = const Color(0xff00d43d);
   static const rustyRed = const Color(0xffc81913);
@@ -32,9 +23,9 @@ class Cl {
 
   //new color
 
-  static const tealish = const Color(0xff25b7b3);
-  static const lightAqua = const Color(0xff81fce4);
-  static const salmon = const Color(0xffff6666);
+  static const tealish = const Color(0xff327589);
+  static const lightAqua = const Color(0xff75FAD7);
+  static const salmon = const Color(0xffED6F61);
   static const orangeYellow = const Color(0xfffaa700);
   static const yellowishOrange = const Color(0xfffaad13);
   static const blackThree = const Color(0xff121212);

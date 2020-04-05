@@ -16,7 +16,7 @@ class _AppView extends StatelessWidget {
       return MaterialApp(
         theme: ThemeData(
           fontFamily: 'Roboto',
-          cursorColor: Cl.mBlue,
+          cursorColor: Cl.tealish,
         ),
         home: createMain(),
       );
