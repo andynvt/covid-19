@@ -400,7 +400,7 @@ class _MainViewState extends State<_MainView> {
                 border: Border.all(color: typeEnumToColor(type)),
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Text(text, style: Style.ts_total),
+              child: Text(text, style: Style.ts_total_20),
             ),
             Align(
               alignment: Alignment.topCenter,
@@ -443,10 +443,7 @@ class _MainViewState extends State<_MainView> {
           margin: const EdgeInsets.symmetric(horizontal: 4),
           child: Column(
             children: <Widget>[
-              Text(
-                text,
-                style: typeEnumToStyle(type),
-              ),
+              Text(text, style: typeEnumToStyle(type)),
               SizedBox(height: 4),
               Text(typeEnumToStr(type), style: Style.ts6),
             ],
@@ -552,7 +549,7 @@ class _MainViewState extends State<_MainView> {
                 height: 56,
                 child: Text(
                   'COVID-19',
-                  style: Style.ts_0,
+//                  style: Style.ts_0,
                 ),
               ),
               Divider(color: Cl.white),
@@ -575,7 +572,7 @@ class _MainViewState extends State<_MainView> {
     return ListTile(
       onTap: () => _menuItemClick,
       leading: Icon(icon, color: Cl.white),
-      title: Text(text, style: Style.ts_3),
+      title: Text(text),
     );
   }
 
@@ -909,7 +906,7 @@ class _MainViewState extends State<_MainView> {
         Id.getIdByCountry(info),
         width: 50,
       ),
-      title: Text(info.name, style: Style.ts_6),
+      title: Text(info.name, style: Style.ts_total_18),
       subtitle: Text(info.code ?? ''),
       trailing: Text(
         typeEnumToCasesStr(type, info),

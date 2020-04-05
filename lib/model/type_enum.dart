@@ -86,14 +86,14 @@ Color typeEnumToColor(TypeEnum type) {
 TextStyle typeEnumToStyle(TypeEnum type) {
   switch (type) {
     case TypeEnum.TOTAL:
-      return Style.ts_total;
+      return Style.ts_total_20;
     case TypeEnum.ACTIVE:
-      return Style.ts_total;
+      return Style.ts_total_20;
     case TypeEnum.RECOVERED:
-      return Style.ts_total;
+      return Style.ts_total_20;
     case TypeEnum.DEATH:
-      return Style.ts_total;
+      return Style.ts_total_20;
     default:
-      return Style.ts_13_black;
+      return Style.ts_total_18;
   }
 }

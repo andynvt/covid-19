@@ -57,7 +57,7 @@ class _NewsDetailViewState extends State<_NewsDetailView> {
                               .formatDate(model.info.publishedAt)),
                         ],
                       ),
-                      Text(model.info.title, style: Style.ts_6),
+                      Text(model.info.title, style: Style.ts_total_18),
                       SizedBox(height: 8),
                       Row(
                         children: <Widget>[

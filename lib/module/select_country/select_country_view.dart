@@ -76,11 +76,11 @@ class _SelectCountryViewState extends State<_SelectCountryView> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(left: 20),
-                  child: Text('COUNTRY', style: Style.ts_13),
+                  child: Text('COUNTRY', style: Style.ts_101),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 16),
-                  child: Text('CASES', style: Style.ts_13),
+                  child: Text('CASES', style: Style.ts_101),
                 ),
               ],
             ),
@@ -110,9 +110,12 @@ class _SelectCountryViewState extends State<_SelectCountryView> {
         Id.getIdByCountry(info),
         width: 50,
       ),
-      title: Text(info.name, style: Style.ts_6),
+      title: Text(info.name, style: Style.ts_total_18),
       subtitle: Text(info.code ?? ''),
-      trailing: Text(TTString.shared().formatNumber(info.cases), style: Style.ts_15),
+      trailing: Text(
+        TTString.shared().formatNumber(info.cases),
+        style: Style.ts_total_18,
+      ),
     );
   }
 }
