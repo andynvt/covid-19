@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:provider/provider.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'main_model.dart';
 
 ChangeNotifierProvider<MainModel> createMain() {
@@ -163,7 +164,7 @@ class _MainViewState extends State<_MainView> {
         _renderChart(),
         _renderTopTab(),
         _renderHomeTab(),
-        Container(color: Colors.green),
+        _renderMap(),
         _renderNewsTab(),
       ],
     );
@@ -228,7 +229,7 @@ class _MainViewState extends State<_MainView> {
                                 : Text('Global', style: Style.ts4),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 12),
+                            padding: const EdgeInsets.only(right: 12, left: 8),
                             child: Icon(Icons.search, size: 32),
                           ),
                         ],
@@ -311,7 +312,6 @@ class _MainViewState extends State<_MainView> {
             ),
           ),
           SizedBox(height: 16),
-//        _renderAreaChart(),
         ],
       ),
     );
@@ -388,7 +388,7 @@ class _MainViewState extends State<_MainView> {
     return Expanded(
       child: InkWell(
         borderRadius: BorderRadius.circular(5),
-//        onTap: () => _statisticClick(type),
+        onTap: () => _statisticClick(type),
         child: Stack(
           children: <Widget>[
             Container(
@@ -406,22 +406,13 @@ class _MainViewState extends State<_MainView> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: Cl.white,
-                width: left + 80,
+                width: left + 50,
                 height: 10,
               ),
             ),
             Align(
               alignment: Alignment.topCenter,
               child: Text(typeEnumToStr(type), style: Style.ts5),
-            ),
-            Positioned(
-              left: left,
-              child: Container(
-                margin: const EdgeInsets.only(top: 2),
-                color: typeEnumToColor(type),
-                width: 10,
-                height: 10,
-              ),
             ),
           ],
         ),
@@ -450,90 +441,6 @@ class _MainViewState extends State<_MainView> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _renderAreaChart() {
-    final model = Provider.of<MainModel>(context);
-    final info = model.isGlobal ? model.globalHistorical : model.myHistorical;
-    if (info == null || info.cases == null) {
-      return Container();
-    }
-    return Echarts(
-      option: '''
-        {
-          color: ['#FA7B74','#17C5FA','#9fdcba','#003ab2'],
-          tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                  type: 'cross',
-                  label: {
-                      backgroundColor: '#6a7985'
-                  }
-              }
-          },
-          legend: {
-              data: ['Death', 'Recovered', 'Active', 'Cases'],
-          },
-          grid: {
-              left: '2%',
-              right: '5%',
-              bottom: '3%',
-              y: 40,
-              containLabel: true
-          },
-          xAxis: [
-              {
-                  type: 'category',
-                  boundaryGap: false,
-                  data: ${info.toDateList(count: 30)}
-              }
-          ],
-          yAxis: [
-              {
-                  type: 'value'
-              }
-          ],
-          series: [
-              {
-                  name: 'Death',
-                  type: 'line',
-                  stack: '1',
-                  areaStyle: {},
-                  data: ${info.toDataList(info.deaths, count: 30)}
-              },
-              {
-                  name: 'Recovered',
-                  type: 'line',
-                  stack: '1',
-                  areaStyle: {},
-                  data: ${info.toDataList(info.recovered, count: 30)}
-              },
-               {
-                  name: 'Active',
-                  type: 'line',
-                  stack: '1',
-                  areaStyle: {},
-                  data: ${info.toDataList(info.active, count: 30)}
-              },
-              {
-                  name: 'Cases',
-                  type: 'line',
-                  stack: '2',
-//                        label: {
-//                            normal: {
-//                                show: true,
-//                                position: 'top'
-//                            }
-//                        },
-                  data: ${info.toDataList(info.cases, count: 30)}
-              }
-          ]
-      }
-      ''',
-      extraScript: '''
-      document.getElementsByTagName("body")[0].style = 'position: fixed;';
-      ''',
     );
   }
 
@@ -1034,6 +941,35 @@ class _MainViewState extends State<_MainView> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _renderMap() {
+    WebViewController _viewController;
+
+    return WebView(
+      initialUrl: '',
+      javascriptMode: JavascriptMode.unrestricted,
+      onWebViewCreated: (WebViewController webViewController) {
+        _viewController = webViewController;
+//            _viewController.loadUrl('https://covid19.data.eti.br');
+        _viewController.loadUrl('https://covid19.health/');
+      },
+      onPageFinished: (String url) {
+        Future.delayed(Duration(seconds: 2), () {
+          _viewController.evaluateJavascript('''
+            document.getElementsByClassName('col-right')[0].remove();
+            document.getElementsByClassName('footer')[0].remove();
+            document.getElementsByClassName('header')[0].remove();
+            document.getElementsByClassName("nav-bar")[0].style = 'padding-top: 20px';
+            document.getElementsByClassName("anime-ctrl")[0].style = 'padding-bottom: 0px';
+            document.getElementsByClassName("date-slider")[0].style = 'padding-bottom: 0px';
+            document.getElementsByClassName("footer-white")[0].style = 'height: 130px;';
+            document.getElementsByClassName("map-toggle")[0].style = 'margin-bottom: 150px';
+            document.getElementsByClassName("nav-bar-icon")[1].click();
+            ''');
+        });
+      },
     );
   }
 }
