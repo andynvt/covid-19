@@ -85,32 +85,32 @@ class _MainViewState extends State<_MainView> {
     return Scaffold(
       backgroundColor: Cl.white,
       key: _scaffoldKey,
-      drawer: _renderDrawer(),
-      appBar: AppBar(
-        elevation: 0,
-        brightness: Brightness.light,
-        backgroundColor: Cl.white,
-        leading: InkWell(
-          borderRadius: BorderRadius.circular(30),
-          child: Icon(Icons.menu, color: Cl.black),
-          onTap: () {
-            _scaffoldKey.currentState.openDrawer();
-          },
-        ),
-        title: Text(model.title, style: Style.ts_1),
-        actions: <Widget>[
-          InkWell(
-            borderRadius: BorderRadius.circular(30),
-            onTap: () {
-              model.logic.loadData();
-            },
-            child: SizedBox(
-              width: 58,
-              child: Icon(Icons.refresh, color: Cl.black),
-            ),
-          )
-        ],
-      ),
+//      drawer: _renderDrawer(),
+//      appBar: AppBar(
+//        elevation: 0,
+//        brightness: Brightness.light,
+//        backgroundColor: Cl.white,
+//        leading: InkWell(
+//          borderRadius: BorderRadius.circular(30),
+//          child: Icon(Icons.menu, color: Cl.black),
+//          onTap: () {
+//            _scaffoldKey.currentState.openDrawer();
+//          },
+//        ),
+//        title: Text(model.title, style: Style.ts_1),
+//        actions: <Widget>[
+//          InkWell(
+//            borderRadius: BorderRadius.circular(30),
+//            onTap: () {
+//              model.logic.loadData();
+//            },
+//            child: SizedBox(
+//              width: 58,
+//              child: Icon(Icons.refresh, color: Cl.black),
+//            ),
+//          )
+//        ],
+//      ),
       bottomNavigationBar: TTBottomBar(
         selectedIndex: model.pageIndex,
         showElevation: true,
@@ -156,17 +156,19 @@ class _MainViewState extends State<_MainView> {
 
   Widget _renderBody() {
     final model = Provider.of<MainModel>(context);
-    return PageView(
-      physics: NeverScrollableScrollPhysics(),
-      controller: _pageController,
-      onPageChanged: (index) => model.pageIndex,
-      children: <Widget>[
-        _renderChart(),
-        _renderTopTab(),
-        _renderHomeTab(),
-        _renderMap(),
-        _renderNewsTab(),
-      ],
+    return SafeArea(
+      child: PageView(
+        physics: NeverScrollableScrollPhysics(),
+        controller: _pageController,
+        onPageChanged: (index) => model.pageIndex,
+        children: <Widget>[
+          _renderChart(),
+          _renderTopTab(),
+          _renderHomeTab(),
+          _renderMap(),
+          _renderNewsTab(),
+        ],
+      ),
     );
   }
 
@@ -406,7 +408,7 @@ class _MainViewState extends State<_MainView> {
               alignment: Alignment.topCenter,
               child: Container(
                 color: Cl.white,
-                width: left + 50,
+                width: left + 60,
                 height: 10,
               ),
             ),
