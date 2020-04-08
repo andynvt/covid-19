@@ -46,7 +46,7 @@ class _RootViewState extends State<_RootView> {
             color: Colors.black38,
             child: Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Cl.pinkRed),
+                valueColor: AlwaysStoppedAnimation<Color>(Cl.salmon),
               ),
             ),
           );

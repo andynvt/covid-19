@@ -7,25 +7,57 @@ class MainLogic {
   final MainModel _model;
 
   MainLogic(this._model) {
-    loadData();
+    getData(() {});
     _model.text.listen(search);
   }
 
-  void loadData() {
-    CountryService.shared().getData(() {
-      _model.countries.addAll(CountryService.shared().countries);
-      _model.listSearch.addAll(_model.countries.values);
-      _model.myCountry = _model.countries.entries.first.value;
-      _model.globalInfo = CountryService.shared().globalInfo;
-      _model.globalHistorical = CountryService.shared().globalHistorical;
-      getNews();
-      getMyHistorical(_model.myCountry.name, () {
-        _model.refresh();
-      });
+  ///LOAD DATA
+
+  void getData(Function() callback) {
+    _getGlobal(() {
+      callback();
+    });
+    _getListCountry(() {
+      _getGlobalHistorical();
+      _getMyHistorical();
+    });
+    getNews();
+  }
+
+  void _getGlobal(Function() callback) {
+    CountryService.shared().getGlobal((info) {
+      _model.globalInfo = info;
+      _model.refresh();
+      callback();
     });
   }
 
-  void getMyHistorical(String name, Function() callback) {
+  void _getListCountry(Function() callback) {
+    CountryService.shared().getListCountry((ls) {
+      _model.countries.addAll(ls);
+      _model.listSearch.addAll(_model.countries.values);
+
+      String cacheCountry =
+          CacheService.shared().getString(CacheConfig.MY_COUNTRY);
+      if (cacheCountry.isEmpty) {
+        _model.myCountry = _model.countries.entries.first.value;
+      } else {
+        _model.myCountry = _model.countries[cacheCountry];
+      }
+      _model.refresh();
+      callback();
+    });
+  }
+
+  void _getGlobalHistorical() {
+    CountryService.shared().getGlobalHistorical((info) {
+      _model.globalHistorical = info;
+      _model.refresh();
+    });
+  }
+
+  void _getMyHistorical() {
+    final name = _model.myCountry.name;
     final his = CountryService.shared().countries[name].historical;
     if (his != null) {
       _model.myHistorical = his;
@@ -33,16 +65,32 @@ class MainLogic {
     }
     CountryService.shared().getMyHistorical(name, () {
       _model.myHistorical = CountryService.shared().countries[name].historical;
-      callback();
+      _model.refresh();
     });
   }
 
+  void reloadData(Function() callback) {
+    final delta =
+        DateTime.now().difference(_model.globalInfo.updated).inMinutes;
+    if (delta > 15) {
+      _model.countries.clear();
+      _model.listSearch.clear();
+      getData(() => callback);
+    } else {
+      callback();
+    }
+  }
+
+  void getNews() {
+    CountryService.shared().getNews();
+  }
+
+  ///LOGIC
+
   void updateCountry(CountryInfo info) {
-    //TODO: save country to cache
+    CacheService.shared().setString(CacheConfig.MY_COUNTRY, info.name);
     _model.myCountry = info;
-    getMyHistorical(_model.myCountry.name, () {
-      _model.refresh();
-    });
+    _getMyHistorical();
   }
 
   void search(String text) {
@@ -85,10 +133,6 @@ class MainLogic {
       });
     }
     _model.refresh();
-  }
-
-  void getNews() {
-    CountryService.shared().getNews();
   }
 
   void selectGlobal(bool value) {

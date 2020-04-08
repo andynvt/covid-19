@@ -5,10 +5,16 @@ INJECTED from /Users/andy/Desktop/Project/covid-19/android/app/src/main/AndroidM
 INJECTED from /Users/andy/Desktop/Project/covid-19/android/app/src/main/AndroidManifest.xml:1:1-30:12
 INJECTED from /Users/andy/Desktop/Project/covid-19/android/app/src/main/AndroidManifest.xml:1:1-30:12
 MERGED from /Users/andy/Desktop/Project/covid-19/android/app/src/main/AndroidManifest.xml:1:1-30:12
+MERGED from [:sqflite] /Users/andy/Desktop/Project/covid-19/build/sqflite/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:path_provider] /Users/andy/Desktop/Project/covid-19/build/path_provider/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:path_provider_macos] /Users/andy/Desktop/Project/covid-19/build/path_provider_macos/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:url_launcher] /Users/andy/Desktop/Project/covid-19/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-14:12
 MERGED from [:shared_preferences] /Users/andy/Desktop/Project/covid-19/build/shared_preferences/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:shared_preferences_web] /Users/andy/Desktop/Project/covid-19/build/shared_preferences_web/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:shared_preferences_macos] /Users/andy/Desktop/Project/covid-19/build/shared_preferences_macos/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [:webview_flutter] /Users/andy/Desktop/Project/covid-19/build/webview_flutter/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:url_launcher_macos] /Users/andy/Desktop/Project/covid-19/build/url_launcher_macos/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
+MERGED from [:url_launcher_web] /Users/andy/Desktop/Project/covid-19/build/url_launcher_web/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.fragment:fragment:1.0.0] /Users/andy/.gradle/caches/transforms-2/files-2.1/b8b68c04ee72209a3beca37e17f7088d/fragment-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.webkit:webkit:1.0.0] /Users/andy/.gradle/caches/transforms-2/files-2.1/e6b1c804849fbf3a96135de6255bcce0/webkit-1.0.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.legacy:legacy-support-core-ui:1.0.0] /Users/andy/.gradle/caches/transforms-2/files-2.1/f046f38cf99e9cbe4891b184ce64db19/legacy-support-core-ui-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -52,6 +58,8 @@ INJECTED from /Users/andy/Desktop/Project/covid-19/android/app/src/debug/Android
 		ADDED from /Users/andy/Desktop/Project/covid-19/android/app/src/main/AndroidManifest.xml:1:11-69
 application
 ADDED from /Users/andy/Desktop/Project/covid-19/android/app/src/main/AndroidManifest.xml:8:5-29:19
+MERGED from [:url_launcher] /Users/andy/Desktop/Project/covid-19/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-12:19
+MERGED from [:url_launcher] /Users/andy/Desktop/Project/covid-19/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-12:19
 MERGED from [androidx.core:core:1.0.0] /Users/andy/.gradle/caches/transforms-2/files-2.1/0a271e99b6771ad4a84318244d532fb7/core-1.0.0/AndroidManifest.xml:22:5-89
 MERGED from [androidx.core:core:1.0.0] /Users/andy/.gradle/caches/transforms-2/files-2.1/0a271e99b6771ad4a84318244d532fb7/core-1.0.0/AndroidManifest.xml:22:5-89
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.0.0] /Users/andy/.gradle/caches/transforms-2/files-2.1/52d4fecae8c1eb4103beef9198e64f51/versionedparcelable-1.0.0/AndroidManifest.xml:22:5-23:19
@@ -98,6 +106,14 @@ uses-sdk
 INJECTED from /Users/andy/Desktop/Project/covid-19/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/andy/Desktop/Project/covid-19/android/app/src/main/AndroidManifest.xml
 INJECTED from /Users/andy/Desktop/Project/covid-19/android/app/src/main/AndroidManifest.xml
+MERGED from [:sqflite] /Users/andy/Desktop/Project/covid-19/build/sqflite/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:sqflite] /Users/andy/Desktop/Project/covid-19/build/sqflite/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:path_provider] /Users/andy/Desktop/Project/covid-19/build/path_provider/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:path_provider] /Users/andy/Desktop/Project/covid-19/build/path_provider/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:path_provider_macos] /Users/andy/Desktop/Project/covid-19/build/path_provider_macos/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:path_provider_macos] /Users/andy/Desktop/Project/covid-19/build/path_provider_macos/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher] /Users/andy/Desktop/Project/covid-19/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher] /Users/andy/Desktop/Project/covid-19/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences] /Users/andy/Desktop/Project/covid-19/build/shared_preferences/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences] /Users/andy/Desktop/Project/covid-19/build/shared_preferences/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences_web] /Users/andy/Desktop/Project/covid-19/build/shared_preferences_web/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
@@ -106,6 +122,10 @@ MERGED from [:shared_preferences_macos] /Users/andy/Desktop/Project/covid-19/bui
 MERGED from [:shared_preferences_macos] /Users/andy/Desktop/Project/covid-19/build/shared_preferences_macos/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:webview_flutter] /Users/andy/Desktop/Project/covid-19/build/webview_flutter/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [:webview_flutter] /Users/andy/Desktop/Project/covid-19/build/webview_flutter/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher_macos] /Users/andy/Desktop/Project/covid-19/build/url_launcher_macos/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher_macos] /Users/andy/Desktop/Project/covid-19/build/url_launcher_macos/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher_web] /Users/andy/Desktop/Project/covid-19/build/url_launcher_web/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
+MERGED from [:url_launcher_web] /Users/andy/Desktop/Project/covid-19/build/url_launcher_web/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-44
 MERGED from [androidx.fragment:fragment:1.0.0] /Users/andy/.gradle/caches/transforms-2/files-2.1/b8b68c04ee72209a3beca37e17f7088d/fragment-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.fragment:fragment:1.0.0] /Users/andy/.gradle/caches/transforms-2/files-2.1/b8b68c04ee72209a3beca37e17f7088d/fragment-1.0.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.webkit:webkit:1.0.0] /Users/andy/.gradle/caches/transforms-2/files-2.1/e6b1c804849fbf3a96135de6255bcce0/webkit-1.0.0/AndroidManifest.xml:20:5-44
@@ -166,3 +186,11 @@ uses-permission#android.permission.INTERNET
 ADDED from /Users/andy/Desktop/Project/covid-19/android/app/src/debug/AndroidManifest.xml:6:5-66
 	android:name
 		ADDED from /Users/andy/Desktop/Project/covid-19/android/app/src/debug/AndroidManifest.xml:6:22-64
+activity#io.flutter.plugins.urllauncher.WebViewActivity
+ADDED from [:url_launcher] /Users/andy/Desktop/Project/covid-19/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:8:9-11:74
+	android:exported
+		ADDED from [:url_launcher] /Users/andy/Desktop/Project/covid-19/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:10:13-37
+	android:theme
+		ADDED from [:url_launcher] /Users/andy/Desktop/Project/covid-19/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:11:13-71
+	android:name
+		ADDED from [:url_launcher] /Users/andy/Desktop/Project/covid-19/build/url_launcher/intermediates/library_manifest/debug/AndroidManifest.xml:9:13-74

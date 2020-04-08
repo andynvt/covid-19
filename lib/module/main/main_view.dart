@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:covid/model/model.dart';
 import 'package:covid/module/module.dart';
+import 'package:covid/module/root/root_model.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/service/service.dart';
 import 'package:covid/util/util.dart';
@@ -27,16 +29,19 @@ class _MainView extends StatefulWidget {
 
 class _MainViewState extends State<_MainView> {
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
+  ScrollController _scrollController;
   PageController _pageController;
   TextEditingController _textController;
 
   void _tabItemClick(int index) {
+    FocusScope.of(context).unfocus();
     final model = Provider.of<MainModel>(context, listen: false);
     model.logic.changeTab(index);
     _pageController.jumpToPage(index);
   }
 
   void _selectCountryClick(int sourceIndex) {
+    FocusScope.of(context).unfocus();
     final model = Provider.of<MainModel>(context, listen: false);
     model.sourceIndex = sourceIndex;
     model.logic.moveToListTab(TypeEnum.TOTAL);
@@ -44,6 +49,7 @@ class _MainViewState extends State<_MainView> {
   }
 
   void _statisticClick(TypeEnum type) {
+    FocusScope.of(context).unfocus();
     final model = Provider.of<MainModel>(context, listen: false);
     model.sourceIndex = 2;
     model.logic.moveToListTab(type);
@@ -51,6 +57,7 @@ class _MainViewState extends State<_MainView> {
   }
 
   void _topItemClick(CountryInfo info) {
+    FocusScope.of(context).unfocus();
     final model = Provider.of<MainModel>(context, listen: false);
     model.logic.selectGlobal(false);
     if (model.sourceIndex == 2) {
@@ -62,12 +69,18 @@ class _MainViewState extends State<_MainView> {
     _pageController.jumpToPage(model.sourceIndex);
   }
 
-  void _menuItemClick() {}
+  void _chartClick() {
+    final model = Provider.of<MainModel>(context, listen: false);
+    model.pageIndex = 0;
+    model.refresh();
+    _pageController.jumpToPage(0);
+  }
 
   @override
   void initState() {
     _pageController = PageController(keepPage: true, initialPage: 2);
     _textController = TextEditingController();
+    _scrollController = ScrollController();
     super.initState();
   }
 
@@ -75,43 +88,24 @@ class _MainViewState extends State<_MainView> {
   void dispose() {
     _pageController.dispose();
     _textController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final root = Provider.of<RootModel>(context);
     final model = Provider.of<MainModel>(context);
+    root.logic.showLoading(this.toString());
+    if (model.countries.isNotEmpty) {
+      root.logic.hideLoading(this.toString());
+    }
 
     return Scaffold(
       backgroundColor: Cl.white,
       key: _scaffoldKey,
-//      drawer: _renderDrawer(),
-//      appBar: AppBar(
-//        elevation: 0,
-//        brightness: Brightness.light,
-//        backgroundColor: Cl.white,
-//        leading: InkWell(
-//          borderRadius: BorderRadius.circular(30),
-//          child: Icon(Icons.menu, color: Cl.black),
-//          onTap: () {
-//            _scaffoldKey.currentState.openDrawer();
-//          },
-//        ),
-//        title: Text(model.title, style: Style.ts_1),
-//        actions: <Widget>[
-//          InkWell(
-//            borderRadius: BorderRadius.circular(30),
-//            onTap: () {
-//              model.logic.loadData();
-//            },
-//            child: SizedBox(
-//              width: 58,
-//              child: Icon(Icons.refresh, color: Cl.black),
-//            ),
-//          )
-//        ],
-//      ),
       bottomNavigationBar: TTBottomBar(
+        backgroundColor: Cl.white,
         selectedIndex: model.pageIndex,
         showElevation: true,
         onItemSelected: _tabItemClick,
@@ -119,33 +113,33 @@ class _MainViewState extends State<_MainView> {
           TTBottomBarItem(
             icon: Icon(Icons.insert_chart),
             title: Text('Chart'),
-            activeColor: Cl.tealish,
+            activeColor: Cl.salmon,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.list),
             title: Text('List'),
             textAlign: TextAlign.center,
-            activeColor: Cl.tealish,
+            activeColor: Cl.salmon,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.apps),
             title: Text('Home'),
-            activeColor: Cl.tealish,
-            inactiveColor: Cl.grey,
-          ),
-          TTBottomBarItem(
-            icon: Icon(Icons.map),
-            title: Text('Map'),
-            activeColor: Cl.tealish,
+            activeColor: Cl.salmon,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.library_books),
             title: Text('News'),
             textAlign: TextAlign.center,
-            activeColor: Cl.tealish,
+            activeColor: Cl.salmon,
+            inactiveColor: Cl.grey,
+          ),
+          TTBottomBarItem(
+            icon: Icon(Icons.settings),
+            title: Text('Setting'),
+            activeColor: Cl.salmon,
             inactiveColor: Cl.grey,
           ),
         ],
@@ -165,8 +159,8 @@ class _MainViewState extends State<_MainView> {
           _renderChart(),
           _renderTopTab(),
           _renderHomeTab(),
-          _renderMap(),
           _renderNewsTab(),
+          _renderSetting(),
         ],
       ),
     );
@@ -174,13 +168,27 @@ class _MainViewState extends State<_MainView> {
 
   ///HOME TAB
 
+  Future<void> _onRefresh() async {
+    final model = Provider.of<MainModel>(context, listen: false);
+    final root = Provider.of<RootModel>(context, listen: false);
+    root.logic.showLoading(this.toString());
+    model.logic.reloadData(() {
+      root.logic.hideLoading(this.toString());
+    });
+    return Future.value();
+  }
+
   Widget _renderHomeTab() {
     final model = Provider.of<MainModel>(context);
     final isGlobal = model.isGlobal;
     final info = isGlobal ? model.globalInfo : model.myCountry;
 
-    return SingleChildScrollView(
-      child: Column(
+    return RefreshIndicator(
+      color: Cl.salmon,
+      onRefresh: _onRefresh,
+      child: ListView(
+        controller: _scrollController,
+        physics: AlwaysScrollableScrollPhysics(),
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
@@ -250,8 +258,8 @@ class _MainViewState extends State<_MainView> {
           ),
           SizedBox(height: 8),
           Container(
-            height: 48,
-            margin: const EdgeInsets.only(bottom: 26),
+            height: 58,
+            margin: const EdgeInsets.only(bottom: 32),
             width: double.infinity,
             alignment: Alignment.center,
             decoration: BoxDecoration(
@@ -276,7 +284,7 @@ class _MainViewState extends State<_MainView> {
               ],
             ),
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
@@ -287,9 +295,9 @@ class _MainViewState extends State<_MainView> {
               ],
             ),
           ),
-          SizedBox(height: 24),
+          SizedBox(height: 32),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               children: <Widget>[
                 _renderBoxInfo(TypeEnum.CASE_TODAY, info.todayCases),
@@ -298,22 +306,64 @@ class _MainViewState extends State<_MainView> {
               ],
             ),
           ),
-          SizedBox(height: 28),
-          RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(text: 'Update: ', style: Style.ts_19),
-                info.updated != null
-                    ? TextSpan(
-                        text: TTString.shared().formatDate(info.updated),
-                        style: Style.ts_19_bold,
-                      )
-                    : TextSpan(),
-                TextSpan(text: ' - WHO, JHU', style: Style.ts_19),
+          SizedBox(height: 24),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: SizedBox(
+                    height: 45,
+                    child: FlatButton.icon(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(color: Cl.tealish)),
+                      onPressed: _chartClick,
+                      icon: Icon(Icons.insert_chart),
+                      label: Text('Chart', style: Style.ts3),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: SizedBox(
+                    height: 45,
+                    child: FlatButton.icon(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(color: Cl.tealish)),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => createMap()),
+                        );
+                      },
+                      icon: Icon(Icons.map),
+                      label: Text('Map', style: Style.ts3),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: Center(
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(text: 'Update: ', style: Style.ts_19),
+                    info.updated != null
+                        ? TextSpan(
+                            text: TTString.shared().formatDate(info.updated),
+                            style: Style.ts_19_bold,
+                          )
+                        : TextSpan(),
+                    TextSpan(text: ' - WHO, JHU', style: Style.ts_19),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -389,18 +439,19 @@ class _MainViewState extends State<_MainView> {
     final left = (MediaQuery.of(context).size.width / 2) - 160;
     return Expanded(
       child: InkWell(
-        borderRadius: BorderRadius.circular(5),
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
         onTap: () => _statisticClick(type),
         child: Stack(
           children: <Widget>[
             Container(
               width: double.infinity,
               margin: const EdgeInsets.only(top: 7),
-              height: 60,
+              height: 70,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 border: Border.all(color: typeEnumToColor(type)),
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Text(text, style: Style.ts_total_20),
             ),
@@ -426,6 +477,8 @@ class _MainViewState extends State<_MainView> {
     final text = TTString.shared().formatNumber(number ?? 0);
     return Expanded(
       child: InkWell(
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
         onTap: () => _statisticClick(type),
         child: Container(
           decoration: BoxDecoration(
@@ -433,55 +486,16 @@ class _MainViewState extends State<_MainView> {
             borderRadius: BorderRadius.circular(8),
           ),
           padding: const EdgeInsets.all(8.0),
-          margin: const EdgeInsets.symmetric(horizontal: 4),
+          margin: const EdgeInsets.symmetric(horizontal: 6),
           child: Column(
             children: <Widget>[
               Text(text, style: typeEnumToStyle(type)),
-              SizedBox(height: 4),
+              SizedBox(height: 8),
               Text(typeEnumToStr(type), style: Style.ts6),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _renderDrawer() {
-    return Drawer(
-      child: Container(
-        color: Cl.white,
-        child: SafeArea(
-          child: Column(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.center,
-                height: 56,
-                child: Text(
-                  'COVID-19',
-//                  style: Style.ts_0,
-                ),
-              ),
-              Divider(color: Cl.white),
-              _renderDrawerItem(Icons.library_books, 'NEWS'),
-              _renderDrawerItem(Icons.info, 'INFO'),
-              _renderDrawerItem(Icons.help, 'SUPPORT'),
-              _renderDrawerItem(Icons.phone, 'EMERGENCY CALL'),
-              _renderDrawerItem(Icons.local_hospital, 'FIND HOSPITAL'),
-              Divider(color: Cl.white),
-              _renderDrawerItem(Icons.live_help, 'FAQ'),
-              _renderDrawerItem(Icons.tag_faces, 'FUNNY MEME'),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _renderDrawerItem(IconData icon, String text) {
-    return ListTile(
-      onTap: () => _menuItemClick,
-      leading: Icon(icon, color: Cl.white),
-      title: Text(text),
     );
   }
 
@@ -582,12 +596,6 @@ class _MainViewState extends State<_MainView> {
                   ),
                 ],
               );
-//                ListView.builder(
-//                itemCount: ls.length,
-//                itemBuilder: (_, index) {
-//                  return _renderNewsItem(ls[index]);
-//                },
-//              );
             }),
           ),
         ),
@@ -946,32 +954,89 @@ class _MainViewState extends State<_MainView> {
     );
   }
 
-  Widget _renderMap() {
-    WebViewController _viewController;
+  ///SETTING
 
-    return WebView(
-      initialUrl: '',
-      javascriptMode: JavascriptMode.unrestricted,
-      onWebViewCreated: (WebViewController webViewController) {
-        _viewController = webViewController;
-//            _viewController.loadUrl('https://covid19.data.eti.br');
-        _viewController.loadUrl('https://covid19.health/');
-      },
-      onPageFinished: (String url) {
-        Future.delayed(Duration(seconds: 2), () {
-          _viewController.evaluateJavascript('''
-            document.getElementsByClassName('col-right')[0].remove();
-            document.getElementsByClassName('footer')[0].remove();
-            document.getElementsByClassName('header')[0].remove();
-            document.getElementsByClassName("nav-bar")[0].style = 'padding-top: 20px';
-            document.getElementsByClassName("anime-ctrl")[0].style = 'padding-bottom: 0px';
-            document.getElementsByClassName("date-slider")[0].style = 'padding-bottom: 0px';
-            document.getElementsByClassName("footer-white")[0].style = 'height: 130px;';
-            document.getElementsByClassName("map-toggle")[0].style = 'margin-bottom: 150px';
-            document.getElementsByClassName("nav-bar-icon")[1].click();
-            ''');
-        });
-      },
+  Widget _renderSetting() {
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 32),
+          Image.asset(Id.ic_virus),
+          SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: <Widget>[
+                Text('COVID-19', style: Style.ts2),
+                SizedBox(height: 4),
+                Text('Version: ${CS.APP_VERSION}', style: Style.ts5),
+              ],
+            ),
+          ),
+          SizedBox(height: 32),
+          Container(width: double.infinity, height: 1, color: Cl.grey300),
+          _renderSettingItem(Icons.help, 'Support', null),
+          _renderSettingItem(Icons.phone, 'Emergency Call', null),
+          _renderSettingItem(Icons.live_help, 'FAQ', null),
+          SizedBox(height: 32),
+          Container(width: double.infinity, height: 1, color: Cl.grey300),
+          _renderSettingItem(Icons.language, 'Change Language', () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => createChangeLanguage()),
+            );
+          }),
+          _renderSettingItem(Icons.feedback, 'Send Feedback', () {
+            LaunchURL.launch(CS.FORM_FEEDBACK);
+          }),
+          SizedBox(height: 32),
+          Text('Data source: WHO, JHU', style: Style.ts_19),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: InkWell(
+              onTap: () {
+                LaunchURL.launch(NetworkAPI.NOVEL);
+              },
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(text: 'Statistics API: ', style: Style.ts_19),
+                    TextSpan(text: 'NovelCOVID', style: Style.ts_19_tealish),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              LaunchURL.launch(CS.NEWS_API);
+            },
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(text: 'News API: ', style: Style.ts_19),
+                  TextSpan(text: 'NewsAPI', style: Style.ts_19_tealish),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _renderSettingItem(IconData icon, String text, Function onClick) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Cl.grey300),
+        ),
+      ),
+      child: ListTile(
+        onTap: onClick,
+        leading: Icon(icon, color: Cl.tealish),
+        title: Text(text, style: Style.ts3),
+        trailing: Icon(Icons.chevron_right),
+      ),
     );
   }
 }

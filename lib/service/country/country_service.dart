@@ -25,20 +25,6 @@ class CountryService extends ChangeNotifier implements BaseService {
     return _sInstance;
   }
 
-  void getData(Function() callback) {
-    if (globalInfo != null || countries.isNotEmpty) {
-      return;
-    }
-    _getGlobal(() {
-      _getListCountry(() {
-        _getGlobalHistorical(() {
-          callback();
-          _refresh();
-        });
-      });
-    });
-  }
-
   void getMyHistorical(String country, Function() callback) {
     NetworkService.shared().sendGETRequest(
       url: NetworkAPI.getHistoricalByName(country),
@@ -74,25 +60,7 @@ class CountryService extends ChangeNotifier implements BaseService {
     );
   }
 
-//  void getNewsByCountyCode(String name, String code, Function() callback) {
-//    NetworkService.shared().sendGETRequest(
-//      url: NetworkAPI.GET_NEWS,
-//      params: {'countryNewsTotal': code},
-//      parser: NetworkParser.getListNews,
-//      callback: (rs) {
-//        if (rs.isOK && rs.data.containsKey('news')) {
-//          countries[name].news.addAll(rs.data['news']);
-//        } else if (d___) {
-//          print('---> getNewsByCountyCode error: ${rs.msgError}');
-//        }
-//        callback();
-//      },
-//    );
-//  }
-
-  /// PRIVATE FUNCTION
-
-  void _getGlobal(Function() callback) {
+  void getGlobal(Function(CountryInfo) callback) {
     NetworkService.shared().sendGETRequest(
       url: NetworkAPI.GET_GLOBAL,
       parser: NetworkParser.getGlobal,
@@ -102,12 +70,29 @@ class CountryService extends ChangeNotifier implements BaseService {
         } else if (d___) {
           print('---> getGlobal error: ${rs.msgError}');
         }
-        callback();
+        callback(globalInfo);
       },
     );
   }
 
-  void _getGlobalHistorical(Function() callback) {
+  void getListCountry(Function(Map<String, CountryInfo>) callback) {
+    NetworkService.shared().sendGETRequest(
+      url: NetworkAPI.GET_COUNTRIES,
+      parser: NetworkParser.getListCountry,
+      params: {'sort': 'cases'},
+      callback: (rs) {
+        if (rs.isOK && rs.data.containsKey('map')) {
+          countries.clear();
+          countries.addAll(rs.data['map']);
+        } else if (d___) {
+          print('---> getListCountry error: ${rs.msgError}');
+        }
+        callback(countries);
+      },
+    );
+  }
+
+  void getGlobalHistorical(Function(HistoricalInfo) callback) {
     NetworkService.shared().sendGETRequest(
       url: NetworkAPI.GET_GLOBAL_HISTORICAL,
       parser: NetworkParser.getGlobalHistorical,
@@ -117,26 +102,12 @@ class CountryService extends ChangeNotifier implements BaseService {
         } else if (d___) {
           print('---> _getGlobalHistorical error: ${rs.msgError}');
         }
-        callback();
+        callback(globalHistorical);
       },
     );
   }
 
-  void _getListCountry(Function() callback) {
-    NetworkService.shared().sendGETRequest(
-      url: NetworkAPI.GET_COUNTRIES,
-      parser: NetworkParser.getListCountry,
-      params: {'sort': 'cases'},
-      callback: (rs) {
-        if (rs.isOK && rs.data.containsKey('map')) {
-          countries.addAll(rs.data['map']);
-        } else if (d___) {
-          print('---> getListCountry error: ${rs.msgError}');
-        }
-        callback();
-      },
-    );
-  }
+
 
   void _refresh() {
     notifyListeners();

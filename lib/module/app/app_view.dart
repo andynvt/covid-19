@@ -18,6 +18,18 @@ class _AppView extends StatelessWidget {
           fontFamily: 'Roboto',
           cursorColor: Cl.tealish,
         ),
+//        localizationsDelegates: [
+//          GlobalMaterialLocalizations.delegate,
+//          GlobalWidgetsLocalizations.delegate,
+//          GlobalCupertinoLocalizations.delegate,
+//          DefaultCupertinoLocalizations.delegate,
+//          Language.shared().delegate,
+//        ],
+        supportedLocales: [
+          const Locale('en', 'US'),
+          const Locale('ko', 'KR'),
+        ],
+        locale: root.currentLocale,
         home: createMain(),
       );
     });
