@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "active": MessageLookupByLibrary.simpleMessage("Đang nhiễm"),
+    "author": MessageLookupByLibrary.simpleMessage("Tác giả"),
     "case_today": MessageLookupByLibrary.simpleMessage("Ca hôm nay"),
     "change_language": MessageLookupByLibrary.simpleMessage("Thay đổi ngôn ngữ"),
     "chart": MessageLookupByLibrary.simpleMessage("Đồ thị"),
@@ -29,7 +30,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "data_source": MessageLookupByLibrary.simpleMessage("Nguồn số liệu: WHO, JHU"),
     "death": MessageLookupByLibrary.simpleMessage("Tử vong"),
     "death_today": MessageLookupByLibrary.simpleMessage("Tử vong hôm nay"),
-    "emergency_call": MessageLookupByLibrary.simpleMessage("Cuộc gọi khẩn cấp"),
     "global": MessageLookupByLibrary.simpleMessage("Toàn cầu"),
     "home": MessageLookupByLibrary.simpleMessage("Trang Chủ"),
     "list": MessageLookupByLibrary.simpleMessage("Danh sách"),

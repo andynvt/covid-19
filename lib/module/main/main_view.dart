@@ -185,7 +185,7 @@ class _MainViewState extends State<_MainView> {
     final isGlobal = model.isGlobal;
     final info = isGlobal ? model.globalInfo : model.myCountry;
     String text = info.name;
-    if(text == null || text == 'Global') {
+    if (text == null || text == 'Global') {
       text = Language.get.global;
     }
 
@@ -995,8 +995,7 @@ class _MainViewState extends State<_MainView> {
       child: Column(
         children: <Widget>[
           SizedBox(height: 32),
-          Image.asset(Id.ic_virus),
-          SizedBox(height: 8),
+          Image.asset(Id.ic_virus, width: 100),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
@@ -1010,11 +1009,12 @@ class _MainViewState extends State<_MainView> {
           ),
           SizedBox(height: 32),
           Container(width: double.infinity, height: 1, color: Cl.grey300),
-          _renderSettingItem(Icons.help, Language.get.support, null),
-          _renderSettingItem(Icons.phone, Language.get.emergency_call, null),
-          _renderSettingItem(Icons.live_help, 'FAQ', null),
-          SizedBox(height: 32),
-          Container(width: double.infinity, height: 1, color: Cl.grey300),
+          _renderSettingItem(Icons.help, Language.get.support, () {
+            final root = Provider.of<RootModel>(context, listen: false);
+            String langCode = root.currentLocale.toString().split('_')[0];
+            String url = 'https://' + langCode + '.' + CS.ABOUT_VIRUS;
+            LaunchURL.launch(url);
+          }),
           _renderSettingItem(Icons.language, Language.get.change_language, () {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => createChangeLanguage()),
@@ -1057,6 +1057,24 @@ class _MainViewState extends State<_MainView> {
               ),
             ),
           ),
+          SizedBox(height: 32),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(text: '${Language.get.author}: ', style: Style.ts_19),
+                TextSpan(
+                  text: 'AndyNVT',
+                  style: Style.ts_19_bold,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 4),
+          Text(
+            'me.ngvantai@gmail.com',
+            style: Style.ts_19_bold,
+          ),
+          SizedBox(height: 32),
         ],
       ),
     );

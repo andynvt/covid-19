@@ -22,6 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "active": MessageLookupByLibrary.simpleMessage("Active"),
+    "author": MessageLookupByLibrary.simpleMessage("Author"),
     "case_today": MessageLookupByLibrary.simpleMessage("Case today"),
     "change_language": MessageLookupByLibrary.simpleMessage("Change Language"),
     "chart": MessageLookupByLibrary.simpleMessage("Chart"),
@@ -29,7 +30,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "data_source": MessageLookupByLibrary.simpleMessage("Data source: WHO, JHU"),
     "death": MessageLookupByLibrary.simpleMessage("Death"),
     "death_today": MessageLookupByLibrary.simpleMessage("Death today"),
-    "emergency_call": MessageLookupByLibrary.simpleMessage("Emergency Call"),
     "global": MessageLookupByLibrary.simpleMessage("Global"),
     "home": MessageLookupByLibrary.simpleMessage("Home"),
     "list": MessageLookupByLibrary.simpleMessage("List"),

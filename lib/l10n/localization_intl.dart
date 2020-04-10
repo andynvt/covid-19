@@ -132,13 +132,6 @@ class LocalizationIntl {
     );
   }
 
-  String get emergency_call {
-    return Intl.message(
-      "Emergency Call",
-      name: 'emergency_call',
-    );
-  }
-
   String get change_language {
     return Intl.message(
       "Change Language",
@@ -199,6 +192,13 @@ class LocalizationIntl {
     return Intl.message(
       "Death today",
       name: 'death_today',
+    );
+  }
+
+  String get author {
+    return Intl.message(
+      "Author",
+      name: 'author',
     );
   }
 

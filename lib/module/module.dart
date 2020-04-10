@@ -7,3 +7,6 @@ export './news_detail/news_detail_view.dart';
 export './map/map_view.dart';
 
 export './change_language/change_language_view.dart';
+
+
+export './faq/faq_view.dart';

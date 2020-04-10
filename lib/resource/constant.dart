@@ -7,6 +7,7 @@ class CS {
   static const String API_LINK = "1.0";
   static const String NEWS_API = "https://newsapi.org";
   static const String FORM_FEEDBACK = "https://docs.google.com/forms/d/e/1FAIpQLSdxR2lPxsslttmHGI6p5d0Zq0jPYBDeCxcWnD4kA8RX-YRZ7A/viewform?usp=sf_link";
+  static const String ABOUT_VIRUS = "wikipedia.org/wiki/Coronavirus";
 
 //  static const Map<String, String> COUNTRY_CODE = {
 //    "Afghanistan": "AF",
