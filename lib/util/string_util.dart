@@ -18,20 +18,37 @@ class TTString {
   }
 
   String formatNumber(int number) {
+    if (number == null) {
+      return '';
+    }
     return _number.format(number);
   }
-  
+
   String formatDateYMD(DateTime date) {
+    if (date == null) {
+      return '';
+    }
     return _dateYMD.format(date);
   }
 
   String formatDate(DateTime date) {
+    if (date == null) {
+      return '';
+    }
     return _date.format(date);
   }
+
   String formatDateMonth(DateTime date) {
+    if (date == null) {
+      return '';
+    }
     return _dateMonth.format(date);
   }
+
   String formatTimeAgo(DateTime date, {bool isShort = false}) {
+    if (date == null) {
+      return '';
+    }
     return timeAgo.format(date, locale: isShort ? 'en_short' : 'en');
   }
 }

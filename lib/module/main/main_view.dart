@@ -1,6 +1,6 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:covid/core/language/language.dart';
 import 'package:covid/model/model.dart';
 import 'package:covid/module/module.dart';
 import 'package:covid/module/root/root_model.dart';
@@ -12,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
 import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'main_model.dart';
 
 ChangeNotifierProvider<MainModel> createMain() {
@@ -29,7 +28,8 @@ class _MainView extends StatefulWidget {
 
 class _MainViewState extends State<_MainView> {
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
-  ScrollController _scrollController;
+  ScrollController _homeScrollController;
+  ScrollController _newsScrollController;
   PageController _pageController;
   TextEditingController _textController;
 
@@ -80,7 +80,8 @@ class _MainViewState extends State<_MainView> {
   void initState() {
     _pageController = PageController(keepPage: true, initialPage: 2);
     _textController = TextEditingController();
-    _scrollController = ScrollController();
+    _homeScrollController = ScrollController();
+    _newsScrollController = ScrollController();
     super.initState();
   }
 
@@ -88,7 +89,8 @@ class _MainViewState extends State<_MainView> {
   void dispose() {
     _pageController.dispose();
     _textController.dispose();
-    _scrollController.dispose();
+    _homeScrollController.dispose();
+    _newsScrollController.dispose();
     super.dispose();
   }
 
@@ -112,33 +114,33 @@ class _MainViewState extends State<_MainView> {
         items: [
           TTBottomBarItem(
             icon: Icon(Icons.insert_chart),
-            title: Text('Chart'),
+            title: Text(Language.get.chart),
             activeColor: Cl.salmon,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.list),
-            title: Text('List'),
+            title: Text(Language.get.list),
             textAlign: TextAlign.center,
             activeColor: Cl.salmon,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.apps),
-            title: Text('Home'),
+            title: Text(Language.get.home),
             activeColor: Cl.salmon,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.library_books),
-            title: Text('News'),
+            title: Text(Language.get.news),
             textAlign: TextAlign.center,
             activeColor: Cl.salmon,
             inactiveColor: Cl.grey,
           ),
           TTBottomBarItem(
             icon: Icon(Icons.settings),
-            title: Text('Setting'),
+            title: Text(Language.get.setting),
             activeColor: Cl.salmon,
             inactiveColor: Cl.grey,
           ),
@@ -168,7 +170,7 @@ class _MainViewState extends State<_MainView> {
 
   ///HOME TAB
 
-  Future<void> _onRefresh() async {
+  Future<void> _homeRefresh() async {
     final model = Provider.of<MainModel>(context, listen: false);
     final root = Provider.of<RootModel>(context, listen: false);
     root.logic.showLoading(this.toString());
@@ -182,12 +184,16 @@ class _MainViewState extends State<_MainView> {
     final model = Provider.of<MainModel>(context);
     final isGlobal = model.isGlobal;
     final info = isGlobal ? model.globalInfo : model.myCountry;
+    String text = info.name;
+    if(text == null || text == 'Global') {
+      text = Language.get.global;
+    }
 
     return RefreshIndicator(
       color: Cl.salmon,
-      onRefresh: _onRefresh,
+      onRefresh: _homeRefresh,
       child: ListView(
-        controller: _scrollController,
+        controller: _homeScrollController,
         physics: AlwaysScrollableScrollPhysics(),
         children: <Widget>[
           Padding(
@@ -236,7 +242,7 @@ class _MainViewState extends State<_MainView> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   )
-                                : Text('Global', style: Style.ts4),
+                                : Text(Language.get.global, style: Style.ts4),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 12, left: 8),
@@ -272,7 +278,7 @@ class _MainViewState extends State<_MainView> {
                 )
               ],
             ),
-            child: Text(info.name ?? 'Global', style: Style.ts2),
+            child: Text(text, style: Style.ts2),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -320,7 +326,7 @@ class _MainViewState extends State<_MainView> {
                           side: BorderSide(color: Cl.tealish)),
                       onPressed: _chartClick,
                       icon: Icon(Icons.insert_chart),
-                      label: Text('Chart', style: Style.ts3),
+                      label: Text(Language.get.chart, style: Style.ts3),
                     ),
                   ),
                 ),
@@ -338,7 +344,7 @@ class _MainViewState extends State<_MainView> {
                         );
                       },
                       icon: Icon(Icons.map),
-                      label: Text('Map', style: Style.ts3),
+                      label: Text(Language.get.map, style: Style.ts3),
                     ),
                   ),
                 ),
@@ -351,10 +357,11 @@ class _MainViewState extends State<_MainView> {
               child: RichText(
                 text: TextSpan(
                   children: [
-                    TextSpan(text: 'Update: ', style: Style.ts_19),
+                    TextSpan(text: Language.get.update, style: Style.ts_19),
                     info.updated != null
                         ? TextSpan(
-                            text: TTString.shared().formatDate(info.updated),
+                            text: ' ' +
+                                TTString.shared().formatDate(info.updated),
                             style: Style.ts_19_bold,
                           )
                         : TextSpan(),
@@ -388,7 +395,7 @@ class _MainViewState extends State<_MainView> {
             itemWidth: 10,
             itemHeight: 24,
             top: 'middle',
-            data: ['Active', 'Recovered', 'Death'],
+            data: ['${Language.get.active}', '${Language.get.recovered}', '${Language.get.death}'],
             textStyle: {
                 fontSize: 14,
                 padding: [0,20],
@@ -412,9 +419,9 @@ class _MainViewState extends State<_MainView> {
                     show: false,
                 },
                 data: [
-                    {value: ${info.active}, name: 'Active'},
-                    {value: ${info.recovered}, name: 'Recovered'},
-                    {value: ${info.deaths}, name: 'Death'},
+                    {value: ${info.active}, name: '${Language.get.active}'},
+                    {value: ${info.recovered}, name: '${Language.get.recovered}'},
+                    {value: ${info.deaths}, name: '${Language.get.death}'},
                 ],
                 emphasis: {
                     itemStyle: {
@@ -491,7 +498,15 @@ class _MainViewState extends State<_MainView> {
             children: <Widget>[
               Text(text, style: typeEnumToStyle(type)),
               SizedBox(height: 8),
-              Text(typeEnumToStr(type), style: Style.ts6),
+              SizedBox(
+                height: 15,
+                child: AutoSizeText(
+                  typeEnumToStr(type),
+                  style: Style.ts6,
+                  minFontSize: 10,
+                  maxLines: 1,
+                ),
+              ),
             ],
           ),
         ),
@@ -500,6 +515,16 @@ class _MainViewState extends State<_MainView> {
   }
 
   ///NEWS TAB
+
+  Future<void> _newsRefresh() async {
+    final model = Provider.of<MainModel>(context, listen: false);
+    final root = Provider.of<RootModel>(context, listen: false);
+    root.logic.showLoading(this.toString());
+    model.logic.reloadNews(() {
+      root.logic.hideLoading(this.toString());
+    });
+    return Future.value();
+  }
 
   Widget _renderSelectCountry(int sourceIndex) {
     final model = Provider.of<MainModel>(context);
@@ -550,7 +575,7 @@ class _MainViewState extends State<_MainView> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             )
-                          : Text('Global', style: Style.ts4),
+                          : Text(Language.get.global, style: Style.ts4),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 12),
@@ -568,43 +593,40 @@ class _MainViewState extends State<_MainView> {
 
   Widget _renderNewsTab() {
     final model = Provider.of<MainModel>(context);
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: ChangeNotifierProvider.value(
-            value: CountryService.shared(),
-            child: Consumer<CountryService>(builder: (_, service, __) {
-              if (service.listNews.isEmpty) {
-                return Container();
-              }
-              final ls = service.listNews;
-              return CustomScrollView(
-                slivers: <Widget>[
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (_, index) {
-                        return _renderNewsItem(ls[index]);
-                      },
-                      childCount: ls.length,
-                      semanticIndexCallback: (_, index) {
-                        if (index == ls.length - 5) {
-                          model.logic.getNews();
-                        }
-                        return index;
-                      },
-                    ),
-                  ),
-                ],
-              );
-            }),
+    return ChangeNotifierProvider.value(
+      value: CountryService.shared(),
+      child: Consumer<CountryService>(builder: (_, service, __) {
+        if (service.listNews.isEmpty) {
+          return Container();
+        }
+        final ls = service.listNews;
+        return RefreshIndicator(
+          onRefresh: _newsRefresh,
+          child: CustomScrollView(
+            controller: _newsScrollController,
+            slivers: <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (_, index) {
+                    return _renderNewsItem(ls[index]);
+                  },
+                  childCount: ls.length,
+                  semanticIndexCallback: (_, index) {
+                    if (index == ls.length - 5) {
+                      model.logic.getNews();
+                    }
+                    return index;
+                  },
+                ),
+              ),
+            ],
           ),
-        ),
-      ],
+        );
+      }),
     );
   }
 
   Widget _renderNewsItem(NewsInfo info) {
-//    String parseStr = parse(info.title).documentElement.text;
     double width = MediaQuery.of(context).size.width / 2.8;
     double height = (width * 3 / 4);
 
@@ -647,7 +669,7 @@ class _MainViewState extends State<_MainView> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Text(
-                          info.title,
+                          info.title ?? '',
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: Style.ts_16_black,
@@ -667,8 +689,10 @@ class _MainViewState extends State<_MainView> {
                             Text('•', style: Style.ts_21_tealish),
                             SizedBox(width: 4),
                             Expanded(
-                              child:
-                                  Text(info.source, style: Style.ts_21_tealish),
+                              child: Text(
+                                info.source ?? '',
+                                style: Style.ts_21_tealish,
+                              ),
                             ),
                           ],
                         ),
@@ -705,7 +729,7 @@ class _MainViewState extends State<_MainView> {
                     child: TextFormField(
                       controller: _textController,
                       decoration: InputDecoration(
-                        labelText: 'Search country',
+                        labelText: Language.get.search_country,
                         labelStyle: Style.ts_101,
                         contentPadding:
                             const EdgeInsets.symmetric(horizontal: 16),
@@ -731,6 +755,7 @@ class _MainViewState extends State<_MainView> {
                     height: 48,
                     width: 80,
                     alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     decoration: BoxDecoration(
                       border: Border.all(color: Cl.grey300),
                       borderRadius: BorderRadius.circular(5),
@@ -738,7 +763,14 @@ class _MainViewState extends State<_MainView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text('Sort', style: Style.ts_101),
+                        Expanded(
+                          child: AutoSizeText(
+                            Language.get.sort,
+                            style: Style.ts_101,
+                            maxLines: 1,
+                            minFontSize: 13,
+                          ),
+                        ),
                         SizedBox(width: 8),
                         Image.asset(
                           model.sortFilter == SortType.DES
@@ -761,7 +793,7 @@ class _MainViewState extends State<_MainView> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: DropdownButton(
-                    value: typeEnumToStr(model.typeFilter),
+                    value: model.typeFilter,
                     underline: Container(),
                     icon: Icon(Icons.keyboard_arrow_down),
                     items: [
@@ -774,7 +806,7 @@ class _MainViewState extends State<_MainView> {
                       TypeEnum.CRITICAL,
                     ].map((v) {
                       return DropdownMenuItem(
-                        value: typeEnumToStr(v),
+                        value: v,
                         child: Material(
                           color: Colors.transparent,
                           child:
@@ -785,6 +817,7 @@ class _MainViewState extends State<_MainView> {
                     onChanged: (v) {
                       model.logic.typeFilter(v);
                     },
+                    isExpanded: true,
                   ),
                 ),
               ],
@@ -857,13 +890,14 @@ class _MainViewState extends State<_MainView> {
               color: ['#ED6F61','#75FAD7','#327589','#faa700'],
               legend: {
                   left: 10,
-                  data: ['Death', 'Recovered', 'Active', 'Total'],
+                  top: 3,
+                  data: ['${Language.get.death}', '${Language.get.recovered}', '${Language.get.active}', '${Language.get.total}'],
               },
               grid: {
                   containLabel: true,
                   left: 8,
                   right: 25,
-                  top: 40,
+                  top: 60,
                   bottom: 50,
               },
               xAxis: {
@@ -908,7 +942,7 @@ class _MainViewState extends State<_MainView> {
               }],
               series: [
                   {
-                      name: 'Death',
+                      name: '${Language.get.death}',
                       type: 'line',
                       smooth: true,
                       stack: '2',
@@ -917,7 +951,7 @@ class _MainViewState extends State<_MainView> {
                       data: ${info.toDataList(info.deaths)}
                   },
                   {
-                      name: 'Recovered',
+                      name: '${Language.get.recovered}',
                       type: 'line',
                       smooth: true,
                       stack: '2',
@@ -926,7 +960,7 @@ class _MainViewState extends State<_MainView> {
                       data: ${info.toDataList(info.recovered)}
                   },
                   {
-                      name: 'Active',
+                      name: '${Language.get.active}',
                       type: 'line',
                       smooth: true,
                       stack: '2',
@@ -935,7 +969,7 @@ class _MainViewState extends State<_MainView> {
                       data: ${info.toDataList(info.active)}
                   },
                   {
-                      name: 'Total',
+                      name: '${Language.get.total}',
                       type: 'line',
                       smooth: true,
                       stack: '1',
@@ -967,29 +1001,30 @@ class _MainViewState extends State<_MainView> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               children: <Widget>[
-                Text('COVID-19', style: Style.ts2),
+                Text('Covid-19 Tracking', style: Style.ts2),
                 SizedBox(height: 4),
-                Text('Version: ${CS.APP_VERSION}', style: Style.ts5),
+                Text('${Language.get.version} ${CS.APP_VERSION}',
+                    style: Style.ts5),
               ],
             ),
           ),
           SizedBox(height: 32),
           Container(width: double.infinity, height: 1, color: Cl.grey300),
-          _renderSettingItem(Icons.help, 'Support', null),
-          _renderSettingItem(Icons.phone, 'Emergency Call', null),
+          _renderSettingItem(Icons.help, Language.get.support, null),
+          _renderSettingItem(Icons.phone, Language.get.emergency_call, null),
           _renderSettingItem(Icons.live_help, 'FAQ', null),
           SizedBox(height: 32),
           Container(width: double.infinity, height: 1, color: Cl.grey300),
-          _renderSettingItem(Icons.language, 'Change Language', () {
+          _renderSettingItem(Icons.language, Language.get.change_language, () {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => createChangeLanguage()),
             );
           }),
-          _renderSettingItem(Icons.feedback, 'Send Feedback', () {
+          _renderSettingItem(Icons.feedback, Language.get.send_feedback, () {
             LaunchURL.launch(CS.FORM_FEEDBACK);
           }),
           SizedBox(height: 32),
-          Text('Data source: WHO, JHU', style: Style.ts_19),
+          Text(Language.get.data_source, style: Style.ts_19),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: InkWell(
@@ -999,7 +1034,9 @@ class _MainViewState extends State<_MainView> {
               child: RichText(
                 text: TextSpan(
                   children: [
-                    TextSpan(text: 'Statistics API: ', style: Style.ts_19),
+                    TextSpan(
+                        text: '${Language.get.statistics_api} ',
+                        style: Style.ts_19),
                     TextSpan(text: 'NovelCOVID', style: Style.ts_19_tealish),
                   ],
                 ),
@@ -1013,7 +1050,8 @@ class _MainViewState extends State<_MainView> {
             child: RichText(
               text: TextSpan(
                 children: [
-                  TextSpan(text: 'News API: ', style: Style.ts_19),
+                  TextSpan(
+                      text: '${Language.get.news_api} ', style: Style.ts_19),
                   TextSpan(text: 'NewsAPI', style: Style.ts_19_tealish),
                 ],
               ),

@@ -1,0 +1,28 @@
+Key/Locate,en-US,vi-VN,zh-CN,hi-IN,es-ES,fr-FR,ru-RU,pt-PT
+select_language,Select Language,Chọn ngôn ngữ,选择语言,भाषा का चयन करें,Seleccione el idioma,Choisir la langue,Выберите язык,Selecione o idioma
+chart,Chart,Đồ thị,图表,चार्ट,Gráfico,Graphique,Диаграмма,Gráfico
+list,List,Danh sách,名单,सूची,Lista,liste,Список,Lista
+news,News,Tin tức,新闻,समाचार,Noticias,Nouvelles,Новости,Notícia
+home,Home,Trang Chủ,家,घर,Hogar,Accueil,Дома,Casa
+setting,Setting,Cài đặt,设置,स्थापना,Ajuste,Réglage,настройка,Configuração
+global,Global,Toàn cầu,全球,वैश्विक,Global,Global,Глобальный,Global
+map,Map,Bản đồ,地图,नक्शा,Mapa,Carte,карта,Mapa
+update,Update: ,Cập nhật:,更新：,अपडेट करें:,Actualizar:,Mise à jour:,Обновить:,Atualizar:
+active,Active,tích cực,活性,सक्रिय,Activo,actif,активный,Ativo
+recovered,Recovered,Bình phục,回收,बरामद,Recuperado,Rétabli,Восстановленные,Recuperado
+death,Death,Tử vong,死亡,मौत,Muerte,Décès,Смерть,Morte
+search_country,Search country,Tìm kiếm,搜索国家,खोजें देश,Buscar país,Choisir un pays,Поиск страны,pesquisa país
+sort,Sort,Lọc,分类,तरह,Ordenar,Trier,Сортировать,Ordenar
+total,Total,Ca nhiễm,总,संपूर्ण,Total,Total,Всего,Total
+version,Version:,Phiên bản:,版：,संस्करण:,Versión:,Version:,Версия:,Versão:
+support,Support,Hỗ trợ,支持,सहयोग,Apoyo,Soutien,Поддержка,"Apoio, suporte"
+emergency_call,Emergency Call,Cuộc gọi khẩn cấp,紧急呼叫,आपातकालीन कॉल,Llamada de emergencia,Appel d'urgence,Экстренный звонок,Ligação de emergência
+change_language,Change Language,Thay đổi ngôn ngữ,改变语言,भाषा बदलो,Cambiar idioma,Changer de langue,Изменить язык,Mudar idioma
+send_feedback,Send Feedback,Gửi thông tin phản hồi,发送反馈,प्रतिक्रिया भेजें,Enviar Comentarios,Envoyer des commentaires,Отправить отзыв,Enviar comentários
+data_source,"Data source: WHO, JHU","Nguồn số liệu: WHO, JHU",数据来源：WHO，JHU,"डेटा स्रोत: WHO, JHU","Fuente de datos: WHO, JHU","Source des données: WHO, JHU","Источник данных: WHO, JHU","Fonte de dados: WHO, JHU"
+statistics_api,Statistics Source:,Nguồn thống kê:,统计资料来源：,सांख्यिकी स्रोत:,Estadísticas Fuente:,Statistiques Source:,Статистика Источник:,Estatísticas Fonte:
+news_api,News Source:,Nguồn tin tức:,新闻来源：,खबर के सूत्र:,Fuente de noticias:,Source de nouvelles:,Новости Источник:,Fonte de notícias:
+view_more,View More,Xem thêm,查看更多,और देखो,Ver más,Voir plus,Просмотреть больше,Veja mais
+critical,Critical,Nguy kịch,危急,नाजुक,Crítico,Critique,критический,Crítico
+case_today,Case today,Ca hôm nay,今天情况,मामला आज,caso hoy en día,cas aujourd'hui,Дело сегодня,caso hoje
+death_today,Death today,Tử vong hôm nay,今天死亡,मौत आज,hoy la muerte,mort aujourd'hui,Смерть сегодня,morte hoje

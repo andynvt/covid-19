@@ -1,7 +1,9 @@
+import 'package:covid/core/language/language.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:covid/module/root/root_model.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import '../module.dart';
 
 Widget createApp() {
@@ -18,16 +20,21 @@ class _AppView extends StatelessWidget {
           fontFamily: 'Roboto',
           cursorColor: Cl.tealish,
         ),
-//        localizationsDelegates: [
-//          GlobalMaterialLocalizations.delegate,
-//          GlobalWidgetsLocalizations.delegate,
-//          GlobalCupertinoLocalizations.delegate,
-//          DefaultCupertinoLocalizations.delegate,
-//          Language.shared().delegate,
-//        ],
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          Language.shared().delegate,
+        ],
         supportedLocales: [
           const Locale('en', 'US'),
-          const Locale('ko', 'KR'),
+          const Locale('vi', 'VN'),
+          const Locale('zh', 'CN'),
+          const Locale('hi', 'IN'),
+          const Locale('es', 'ES'),
+          const Locale('fr', 'FR'),
+          const Locale('ru', 'RU'),
+          const Locale('pt', 'PT'),
         ],
         locale: root.currentLocale,
         home: createMain(),

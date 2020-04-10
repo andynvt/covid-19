@@ -16,19 +16,19 @@ String langToCode(LanguageEnum lang) {
     case LanguageEnum.English:
       return 'en';
     case LanguageEnum.Vietnamese:
-      return 'en';
+      return 'vi';
     case LanguageEnum.Chinese:
-      return 'en';
+      return 'zh';
     case LanguageEnum.Hindi:
-      return 'en';
+      return 'hi';
     case LanguageEnum.Spanish:
-      return 'en';
+      return 'es';
     case LanguageEnum.French:
-      return 'en';
+      return 'fr';
     case LanguageEnum.Russian:
-      return 'en';
+      return 'ru';
     case LanguageEnum.Portuguese:
-      return 'en';
+      return 'pt';
     default:
       return 'en';
   }
@@ -77,5 +77,28 @@ String langToNative(LanguageEnum lang) {
       return 'Português';
     default:
       return 'English';
+  }
+}
+
+LanguageEnum strToLang(String str) {
+  switch (str) {
+    case 'en':
+      return LanguageEnum.English;
+    case 'vi':
+      return LanguageEnum.Vietnamese;
+    case 'zh':
+      return LanguageEnum.Chinese;
+    case 'hi':
+      return LanguageEnum.Hindi;
+    case 'es':
+      return LanguageEnum.Spanish;
+    case 'fr':
+      return LanguageEnum.French;
+    case 'ru':
+      return LanguageEnum.Russian;
+    case 'pt':
+      return LanguageEnum.Portuguese;
+    default:
+      return LanguageEnum.English;
   }
 }

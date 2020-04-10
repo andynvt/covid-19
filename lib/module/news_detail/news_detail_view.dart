@@ -1,3 +1,4 @@
+import 'package:covid/core/language/language.dart';
 import 'package:covid/model/model.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/service/service.dart';
@@ -55,7 +56,7 @@ class _NewsDetailViewState extends State<_NewsDetailView> {
                             Icon(Icons.access_time, size: 18),
                             SizedBox(width: 8),
                             Text(TTString.shared()
-                                .formatDate(model.info.publishedAt) ?? ''),
+                                .formatDate(model.info.publishedAt)),
                           ],
                         ),
                         Text(model.info.title, style: Style.ts_total_18),
@@ -90,7 +91,7 @@ class _NewsDetailViewState extends State<_NewsDetailView> {
                             },
                             color: Cl.tealish,
                             child: Text(
-                              'View More',
+                              Language.get.view_more,
                               style: Style.ts_21_white,
                             ),
                           ),

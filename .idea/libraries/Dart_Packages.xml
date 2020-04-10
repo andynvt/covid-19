@@ -128,6 +128,13 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_localizations">
+          <value>
+            <list>
+              <option value="$USER_HOME$/Documents/flutter/packages/flutter_localizations/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_test">
           <value>
             <list>
@@ -572,6 +579,7 @@
       <root url="file://$USER_HOME$/Documents/flutter/bin/cache/pkg/sky_engine/lib" />
       <root url="file://$USER_HOME$/Documents/flutter/packages/flutter/lib" />
       <root url="file://$USER_HOME$/Documents/flutter/packages/flutter_driver/lib" />
+      <root url="file://$USER_HOME$/Documents/flutter/packages/flutter_localizations/lib" />
       <root url="file://$USER_HOME$/Documents/flutter/packages/flutter_test/lib" />
       <root url="file://$USER_HOME$/Documents/flutter/packages/flutter_web_plugins/lib" />
       <root url="file://$USER_HOME$/Documents/flutter/packages/fuchsia_remote_debug_protocol/lib" />

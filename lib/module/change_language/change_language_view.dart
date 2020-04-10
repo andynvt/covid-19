@@ -1,4 +1,6 @@
+import 'package:covid/core/language/language.dart';
 import 'package:covid/model/language_enum.dart';
+import 'package:covid/module/root/root_model.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,9 +20,15 @@ class _ChangeLanguageView extends StatefulWidget {
 }
 
 class _ChangeLanguageViewState extends State<_ChangeLanguageView> {
+  void _changeLanguage(LanguageEnum lang) {
+    final model = Provider.of<ChangeLanguageModel>(context, listen: false);
+    final root = Provider.of<RootModel>(context, listen: false);
+    model.currentLang = lang;
+    root.logic.updateLanguage(lang);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<ChangeLanguageModel>(context);
     return Scaffold(
       backgroundColor: Cl.white,
       appBar: AppBar(
@@ -35,7 +43,7 @@ class _ChangeLanguageViewState extends State<_ChangeLanguageView> {
           child: Icon(Icons.keyboard_backspace),
           shape: CircleBorder(),
         ),
-        title: Text('Select language', style: Style.ts2),
+        title: Text(Language.get.select_language, style: Style.ts2),
       ),
       body: SafeArea(
         child: ListView.separated(
@@ -52,10 +60,13 @@ class _ChangeLanguageViewState extends State<_ChangeLanguageView> {
   }
 
   Widget _renderLanguageItem(LanguageEnum lang) {
+    final model = Provider.of<ChangeLanguageModel>(context);
     return ListTile(
-      onTap: () {},
+      onTap: () => _changeLanguage(lang),
       title: Text(langToNative(lang), style: Style.ts_16_black),
-      trailing: Icon(Icons.check_circle, color: Cl.tealish,),
+      trailing: model.currentLang == lang
+          ? Icon(Icons.check_circle, color: Cl.tealish)
+          : null,
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:covid/core/language/language.dart';
 import 'package:covid/model/country_info.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/util/util.dart';
@@ -8,19 +9,19 @@ enum TypeEnum { TOTAL, ACTIVE, RECOVERED, DEATH, CRITICAL, CASE_TODAY, DEATH_TOD
 String typeEnumToStr(TypeEnum type) {
   switch (type) {
     case TypeEnum.TOTAL:
-      return 'Total';
+      return Language.get.total;
     case TypeEnum.ACTIVE:
-      return 'Active';
+      return Language.get.active;
     case TypeEnum.RECOVERED:
-      return 'Recovered';
+      return Language.get.recovered;
     case TypeEnum.DEATH:
-      return 'Death';
+      return Language.get.death;
     case TypeEnum.CRITICAL:
-      return 'Critical';
+      return Language.get.critical;
     case TypeEnum.CASE_TODAY:
-      return 'Case today';
+      return Language.get.case_today;
     case TypeEnum.DEATH_TODAY:
-      return 'Death today';
+      return Language.get.death_today;
     default:
       return '';
   }

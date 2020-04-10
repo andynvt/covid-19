@@ -41,7 +41,7 @@ class CountryService extends ChangeNotifier implements BaseService {
     );
   }
 
-  void getNews() {
+  void getNews(Function() callback) {
     if (newsPage == -1 || newsPage > 5) {
       return;
     }
@@ -56,6 +56,7 @@ class CountryService extends ChangeNotifier implements BaseService {
         } else if (d___) {
           print('---> getNews error: ${rs.msgError}');
         }
+        callback();
       },
     );
   }

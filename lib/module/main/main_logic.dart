@@ -1,4 +1,5 @@
 import 'package:covid/model/country_info.dart';
+import 'package:covid/model/language_enum.dart';
 import 'package:covid/model/model.dart';
 import 'package:covid/service/service.dart';
 import 'main_model.dart';
@@ -81,8 +82,23 @@ class MainLogic {
     }
   }
 
+  void reloadNews(Function() callback) {
+    final news = CountryService.shared().listNews.first.publishedAt;
+    final delta = DateTime.now().difference(news).inMinutes;
+    print(delta);
+    if (delta > 15) {
+      CountryService.shared().listNews.clear();
+      CountryService.shared().newsPage = 1;
+      CountryService.shared().getNews(() {
+        callback();
+      });
+    } else {
+      callback();
+    }
+  }
+
   void getNews() {
-    CountryService.shared().getNews();
+    CountryService.shared().getNews(() {});
   }
 
   ///LOGIC
@@ -106,8 +122,8 @@ class MainLogic {
     _model.refresh();
   }
 
-  void typeFilter(String value) {
-    _model.typeFilter = strToTypeEnum(value);
+  void typeFilter(TypeEnum value) {
+    _model.typeFilter = value;
     _sort(_model.sortFilter);
   }
 
@@ -155,25 +171,6 @@ class MainLogic {
 
   void changeTab(int index) {
     _model.pageIndex = index;
-    String title = '';
-    switch (index) {
-      case 0:
-        title = 'Covid-19 Chart';
-        break;
-      case 1:
-        title = 'Covid-19 List';
-        break;
-      case 2:
-        title = 'Covid-19 Overview';
-        break;
-      case 3:
-        title = 'Covid-19 Map';
-        break;
-      case 4:
-        title = 'Covid-19 News';
-        break;
-    }
-    _model.title = title;
     _model.refresh();
   }
 }

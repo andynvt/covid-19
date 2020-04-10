@@ -14,7 +14,6 @@ class MainModel extends ChangeNotifier {
 
   int pageIndex = 2;
   int sourceIndex = 2;
-  String title = 'Covid-19';
   bool isGlobal = true;
   CountryInfo myCountry = CountryInfo();
   CountryInfo globalInfo = CountryInfo();
