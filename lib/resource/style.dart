@@ -18,7 +18,7 @@ class Style {
   );
   static const TextStyle ts_101 = const TextStyle(
     color: Cl.black,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: FontWeight.w400,
     fontStyle: FontStyle.normal,
   );
@@ -31,6 +31,11 @@ class Style {
     color: Cl.blackThree,
     fontWeight: FontWeight.w700,
     fontSize: 18,
+  );
+  static const TextStyle ts_total_16 = const TextStyle(
+    color: Cl.blackThree,
+    fontWeight: FontWeight.w500,
+    fontSize: 16,
   );
   static const TextStyle ts_16_black = const TextStyle(
     color: Cl.black,

@@ -1,6 +1,7 @@
 import 'package:covid/core/language/language.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:covid/module/root/root_model.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -13,6 +14,7 @@ Widget createApp() {
 class _AppView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
     return createRoot((context) {
       final root = Provider.of<RootModel>(context);
       return MaterialApp(

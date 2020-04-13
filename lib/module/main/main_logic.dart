@@ -115,8 +115,10 @@ class MainLogic {
       _model.listSearch.addAll(_model.countries.values);
     } else {
       List<CountryInfo> ls = _model.countries.values.where((info) {
-        return info.name.toLowerCase().contains(text);
+        return info.name.toLowerCase().contains(text.toLowerCase()) ||
+            info.name.contains(text);
       }).toList();
+
       _model.listSearch.addAll(ls);
     }
     _model.refresh();

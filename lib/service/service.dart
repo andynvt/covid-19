@@ -10,3 +10,5 @@ export './country/country_service.dart';
 export 'base_service.dart';
 
 export './lauch_url/lauch_url_service.dart';
+
+export './ads/ads_service.dart';

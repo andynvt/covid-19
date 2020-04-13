@@ -312,7 +312,7 @@ class _MainViewState extends State<_MainView> {
               ],
             ),
           ),
-          SizedBox(height: 24),
+          SizedBox(height: 32),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
@@ -322,11 +322,12 @@ class _MainViewState extends State<_MainView> {
                     height: 45,
                     child: FlatButton.icon(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          side: BorderSide(color: Cl.tealish)),
+                        borderRadius: BorderRadius.circular(5),
+                        side: BorderSide(color: Cl.grey300),
+                      ),
                       onPressed: _chartClick,
                       icon: Icon(Icons.insert_chart),
-                      label: Text(Language.get.chart, style: Style.ts3),
+                      label: Text(Language.get.chart, style: Style.ts_16_black),
                     ),
                   ),
                 ),
@@ -336,15 +337,16 @@ class _MainViewState extends State<_MainView> {
                     height: 45,
                     child: FlatButton.icon(
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                          side: BorderSide(color: Cl.tealish)),
+                        borderRadius: BorderRadius.circular(5),
+                        side: BorderSide(color: Cl.grey300),
+                      ),
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => createMap()),
                         );
                       },
                       icon: Icon(Icons.map),
-                      label: Text(Language.get.map, style: Style.ts3),
+                      label: Text(Language.get.map, style: Style.ts_16_black),
                     ),
                   ),
                 ),
@@ -387,10 +389,10 @@ class _MainViewState extends State<_MainView> {
             trigger: 'item',
             formatter: '{b}<br/>{c}<br/>{d}%'
         },
-        color: ['#327589','#75FAD7', '#ED6F61'],
+        color: ['#327589','#00bcd4', '#ED6F61'],
         legend: {
             orient: 'vertical',
-            right: 10,
+            right: '5%',
             itemGap: 35,
             itemWidth: 10,
             itemHeight: 24,
@@ -398,22 +400,23 @@ class _MainViewState extends State<_MainView> {
             data: ['${Language.get.active}', '${Language.get.recovered}', '${Language.get.death}'],
             textStyle: {
                 fontSize: 14,
-                padding: [0,20],
+                padding: [0,0,0,15],
             }
         },
         series: [
             {
                 type: 'pie',
                 radius: '90%',
-                top: 5,
-                bottom: 5,
+                top: 10,
+                bottom: 10,
                 left: 0,
-                right: '35%',
+                right: '39%',
                 selectedOffset : 5,
                 hoverOffset: 0,
                 selectedMode: 'single',
                 label: {
-                   show: false,
+                   formatter: '{d} %',
+                   position: 'inside',
                 },
                 labelLine: {
                     show: false,
@@ -727,6 +730,7 @@ class _MainViewState extends State<_MainView> {
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(4),
                     child: TextFormField(
+                      autofocus: true,
                       controller: _textController,
                       decoration: InputDecoration(
                         labelText: Language.get.search_country,
@@ -755,7 +759,7 @@ class _MainViewState extends State<_MainView> {
                     height: 48,
                     width: 80,
                     alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
                     decoration: BoxDecoration(
                       border: Border.all(color: Cl.grey300),
                       borderRadius: BorderRadius.circular(5),
@@ -767,11 +771,11 @@ class _MainViewState extends State<_MainView> {
                           child: AutoSizeText(
                             Language.get.sort,
                             style: Style.ts_101,
-                            maxLines: 1,
-                            minFontSize: 13,
+                            maxLines: 2,
+                            minFontSize: 12,
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 4),
                         Image.asset(
                           model.sortFilter == SortType.DES
                               ? Id.ic_sort_des
@@ -785,7 +789,7 @@ class _MainViewState extends State<_MainView> {
                 SizedBox(width: 8),
                 Container(
                   height: 48,
-                  width: 130,
+                  width: 110,
                   padding: const EdgeInsets.only(left: 8, right: 8),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -809,14 +813,19 @@ class _MainViewState extends State<_MainView> {
                         value: v,
                         child: Material(
                           color: Colors.transparent,
-                          child:
-                              Text(typeEnumToStr(v), style: Style.ts_16_black),
+                          child: AutoSizeText(
+                            typeEnumToStr(v),
+                            style: Style.ts_101,
+                            minFontSize: 12,
+                            maxLines: 2,
+                          ),
                         ),
                       );
                     }).toList(),
                     onChanged: (v) {
                       model.logic.typeFilter(v);
                     },
+                    style: Style.ts_101,
                     isExpanded: true,
                   ),
                 ),
@@ -856,7 +865,7 @@ class _MainViewState extends State<_MainView> {
         Id.getIdByCountry(info),
         width: 50,
       ),
-      title: Text(info.name, style: Style.ts_total_18),
+      title: Text(info.name, style: Style.ts_total_16, maxLines: 1),
       subtitle: Text(info.code ?? ''),
       trailing: Text(
         typeEnumToCasesStr(type, info),
@@ -887,7 +896,7 @@ class _MainViewState extends State<_MainView> {
                       restore: {},
                   }
               },
-              color: ['#ED6F61','#75FAD7','#327589','#faa700'],
+              color: ['#ED6F61','#00bcd4','#327589','#faa700'],
               legend: {
                   left: 10,
                   top: 3,
@@ -1029,7 +1038,7 @@ class _MainViewState extends State<_MainView> {
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: InkWell(
               onTap: () {
-                LaunchURL.launch(NetworkAPI.NOVEL);
+                LaunchURL.launch(NetworkAPI.END_POINT);
               },
               child: RichText(
                 text: TextSpan(

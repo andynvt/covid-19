@@ -14,7 +14,7 @@ class Cl {
   //new color
 
   static const tealish = const Color(0xff327589);
-  static const lightAqua = const Color(0xff75FAD7);
+  static const lightAqua = const Color(0xff00bcd4);
   static const salmon = const Color(0xffED6F61);
   static const orangeYellow = const Color(0xfffaa700);
   static const blackThree = const Color(0xff121212);
