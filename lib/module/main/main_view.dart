@@ -8,6 +8,7 @@ import 'package:covid/resource/resource.dart';
 import 'package:covid/service/service.dart';
 import 'package:covid/util/util.dart';
 import 'package:covid/widget/widget.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
@@ -101,6 +102,8 @@ class _MainViewState extends State<_MainView> {
     root.logic.showLoading(this.toString());
     if (model.countries.isNotEmpty) {
       root.logic.hideLoading(this.toString());
+//      AdsService.shared().createInterstitialAd()..load()..show();
+      AdsService.shared().createBannerAd()..load()..show(anchorType: AnchorType.bottom, anchorOffset: 58);
     }
 
     return Scaffold(
@@ -373,6 +376,7 @@ class _MainViewState extends State<_MainView> {
               ),
             ),
           ),
+          SizedBox(height: 45),
         ],
       ),
     );

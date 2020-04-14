@@ -8,8 +8,8 @@ import 'service/service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheService.init();
-  PushNotificationService.init();
-  //  AdsService.init();
+//  await AdsService.init();
+  await PushNotificationService.init();
   Language.init(LanguageEnum.values.map((e) => langToCode(e)).toList());
   runApp(Module.createApp());
 }

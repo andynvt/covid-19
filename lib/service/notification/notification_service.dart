@@ -15,19 +15,20 @@ class PushNotificationService extends BaseService {
     return _sInstance;
   }
 
-  static void init() {
-    PushNotificationService.shared()._init();
+  static Future init() async {
+    await PushNotificationService.shared()._init();
   }
 
-  void _init() {
+  Future _init() async {
     _service = FirebaseMessaging();
+    if (Platform.isIOS) {
+      await _requestIOSPermission();
+    }
     _fireBaseListeners();
   }
 
   void _fireBaseListeners() {
-    if (Platform.isIOS) {
-      _requestIOSPermission();
-    }
+
     _service.getToken().then((token) {
       if (d___) {
         print('---> fcmToken: $token');
@@ -60,8 +61,8 @@ class PushNotificationService extends BaseService {
     }
   }
 
-  void _requestIOSPermission() {
-    _service.requestNotificationPermissions(
+  Future _requestIOSPermission() async {
+    await _service.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true));
     _service.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
       if (d___) {
