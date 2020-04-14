@@ -1,5 +1,4 @@
 import 'package:covid/model/country_info.dart';
-import 'package:covid/model/language_enum.dart';
 import 'package:covid/model/model.dart';
 import 'package:covid/service/service.dart';
 import 'main_model.dart';

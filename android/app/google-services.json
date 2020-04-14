@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "235776703126",
+    "firebase_url": "https://covid-2c6f2.firebaseio.com",
+    "project_id": "covid-2c6f2",
+    "storage_bucket": "covid-2c6f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235776703126:android:10c72824fa4b865e73a0b7",
+        "android_client_info": {
+          "package_name": "com.ngvantai.covid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "235776703126-4cu34bluqo2ss7jqultt647hbbd5p5ec.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxYvpog-UYdN1y4ZtUAb03qCaMJvd8gx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235776703126-4cu34bluqo2ss7jqultt647hbbd5p5ec.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "235776703126-qpl8pvtqi6s9fvl4qkn88cicsrsj666d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ngvantai.covid"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

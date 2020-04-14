@@ -4849,6 +4849,7 @@ url_launcher_platform_interface
 --------------------------------------------------------------------------------
 firebase_core
 firebase_core_platform_interface
+firebase_messaging
 shared_preferences
 shared_preferences_platform_interface
 url_launcher
