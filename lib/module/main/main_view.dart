@@ -103,7 +103,9 @@ class _MainViewState extends State<_MainView> {
     if (model.countries.isNotEmpty) {
       root.logic.hideLoading(this.toString());
 //      AdsService.shared().createInterstitialAd()..load()..show();
-      AdsService.shared().createBannerAd()..load()..show(anchorType: AnchorType.bottom, anchorOffset: 58);
+      AdsService.shared().createBannerAd()
+        ..load()
+        ..show(anchorType: AnchorType.bottom, anchorOffset: 58);
     }
 
     return Scaffold(
@@ -376,6 +378,7 @@ class _MainViewState extends State<_MainView> {
               ),
             ),
           ),
+          //TODO: Ads Remove
           SizedBox(height: 45),
         ],
       ),
@@ -626,6 +629,10 @@ class _MainViewState extends State<_MainView> {
                   },
                 ),
               ),
+              //TODO: Ads Remove
+              SliverToBoxAdapter(
+                child: SizedBox(height: 58),
+              ),
             ],
           ),
         );
@@ -734,7 +741,6 @@ class _MainViewState extends State<_MainView> {
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(4),
                     child: TextFormField(
-                      autofocus: true,
                       controller: _textController,
                       decoration: InputDecoration(
                         labelText: Language.get.search_country,
@@ -838,6 +844,8 @@ class _MainViewState extends State<_MainView> {
           ),
           SizedBox(height: 8),
           _renderListTop(),
+          //TODO: Ads Remove
+          SizedBox(height: 58),
         ],
       ),
     );
@@ -997,6 +1005,8 @@ class _MainViewState extends State<_MainView> {
             ''',
           ),
         ),
+        //TODO: Ads Remove
+        SizedBox(height: 58),
       ],
     );
   }

@@ -1,6 +1,4 @@
 PODS:
-  - device_id (0.0.1):
-    - Flutter
   - Firebase/AdMob (6.18.0):
     - Firebase/CoreOnly
     - Google-Mobile-Ads-SDK (~> 7.50)
@@ -129,7 +127,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - device_id (from `.symlinks/plugins/device_id/ios`)
   - firebase_admob (from `.symlinks/plugins/firebase_admob/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
@@ -168,8 +165,6 @@ SPEC REPOS:
     - Protobuf
 
 EXTERNAL SOURCES:
-  device_id:
-    :path: ".symlinks/plugins/device_id/ios"
   firebase_admob:
     :path: ".symlinks/plugins/firebase_admob/ios"
   firebase_core:
@@ -202,7 +197,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
-  device_id: 4a0bf078741a3eec6ba0e6cc72e786395d5991b0
   Firebase: 0490eca762a72e4f1582319539153897f1508dee
   firebase_admob: d8c2bc95b5e0069406280ce6adb816cdee6aa595
   firebase_core: 0d8be0e0d14c4902953aeb5ac5d7316d1fe4b978

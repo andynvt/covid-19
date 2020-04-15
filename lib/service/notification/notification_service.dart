@@ -29,11 +29,11 @@ class PushNotificationService extends BaseService {
 
   void _fireBaseListeners() {
 
-    _service.getToken().then((token) {
-      if (d___) {
-        print('---> fcmToken: $token');
-      }
-    });
+//    _service.getToken().then((token) {
+//      if (d___) {
+//        print('---> fcmToken: $token');
+//      }
+//    });
     _service.configure(
       onMessage: (Map<String, dynamic> message) async {
         if (d___) {

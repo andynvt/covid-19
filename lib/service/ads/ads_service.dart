@@ -53,8 +53,8 @@ class AdsService extends BaseService {
 
   BannerAd createBannerAd() {
     return BannerAd(
-//      adUnitId: getBannerAdUnitId(),
-      adUnitId: BannerAd.testAdUnitId,
+      adUnitId: getBannerAdUnitId(),
+//      adUnitId: BannerAd.testAdUnitId,
       size: AdSize.smartBanner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
