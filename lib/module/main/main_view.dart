@@ -108,7 +108,7 @@ class _MainViewState extends State<_MainView> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       final model = Provider.of<MainModel>(context, listen: false);
       model.openTimes += 1;
-      if(model.openTimes % 4 == 0) {
+      if(model.openTimes == 1 || model.openTimes % 4 == 0) {
         AdsService.shared().createInterstitialAd()
           ..load()
           ..show();

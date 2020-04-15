@@ -1,6 +1,6 @@
 class BaseService {
   // ignore: non_constant_identifier_names
-  bool d___ = true;
+  bool d___ = false;
   // ignore: non_constant_identifier_names
-  static bool sd___ = true;
+  static bool sd___ = false;
 }

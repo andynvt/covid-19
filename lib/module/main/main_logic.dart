@@ -8,13 +8,6 @@ class MainLogic {
   final MainModel _model;
 
   MainLogic(this._model) {
-//    getData((isOK) {
-//      if(isOK) {
-//
-//      } else {
-//
-//      }
-//    });
     _model.text.listen(search);
   }
 
@@ -22,9 +15,6 @@ class MainLogic {
 
   void getData(Function(bool) callback) {
     _getGlobal((isOK) {
-      AdsService.shared().createInterstitialAd()
-        ..load()
-        ..show();
       AdsService.shared().createBannerAd()
         ..load()
         ..show(anchorType: AnchorType.bottom, anchorOffset: 58);

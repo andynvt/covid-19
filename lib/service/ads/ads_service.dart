@@ -49,7 +49,9 @@ class AdsService extends BaseService {
       size: AdSize.smartBanner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        print("--> BannerAd event $event");
+        if (d___) {
+          print("--> BannerAd event $event");
+        }
       },
     );
   }
@@ -59,7 +61,9 @@ class AdsService extends BaseService {
       adUnitId: getInterstitialAdUnitId(),
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
-        print("--> InterstitialAd event $event");
+        if (d___) {
+          print("--> InterstitialAd event $event");
+        }
       },
     );
   }
