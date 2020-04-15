@@ -7,7 +7,6 @@ class RootModel extends ChangeNotifier {
   RootLogic _logic;
   RootLogic get logic => _logic;
   final isLoading = BehaviorSubject.seeded(false);
-  var loadingKey = '';
   Locale currentLocale;
 
   RootModel() {

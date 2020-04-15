@@ -105,6 +105,6 @@ class NetworkService extends BaseService {
       case 500:
         return '$id - Internal server error';
     }
-    return '';
+    return 'Unknow Error';
   }
 }

@@ -14,22 +14,18 @@ class RootLogic {
     cloneLanguage();
   }
 
-  void showLoading(String key) {
+  void showLoading() {
     if (_model.isLoading.value) {
       return;
     }
     _model.isLoading.add(true);
-    _model.loadingKey = key;
+    Future.delayed(Duration(seconds: 15), () {
+      _model.isLoading.add(false);
+    });
   }
 
-  void hideLoading(String key) {
-    if (!_model.isLoading.value ||
-        key != _model.loadingKey ||
-        _model.loadingKey.isEmpty) {
-      return;
-    }
+  void hideLoading() {
     _model.isLoading.add(false);
-    _model.loadingKey = key;
   }
 
   void cloneLanguage() {

@@ -12,6 +12,7 @@ class MainModel extends ChangeNotifier {
 
   MainLogic get logic => _logic;
 
+  int openTimes = 0;
   int pageIndex = 2;
   int sourceIndex = 2;
   bool isGlobal = true;

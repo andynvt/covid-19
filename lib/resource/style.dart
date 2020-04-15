@@ -4,6 +4,20 @@ import 'package:flutter/material.dart';
 class Style {
   Style._();
 
+  static const TextStyle alertTitle = const TextStyle(
+    color: Cl.black,
+    fontSize: 20,
+    fontWeight: FontWeight.w500, //medium
+  );
+  static const TextStyle alertMessage = const TextStyle(
+    color: Cl.black,
+    fontSize: 16.7,
+    fontWeight: FontWeight.w300,
+  );
+  static const TextStyle alertButton = const TextStyle(
+    color: Cl.salmon,
+    fontSize: 16.7,
+  );
   static const TextStyle ts_1 = const TextStyle(
     color: Cl.black,
     fontSize: 22.2,

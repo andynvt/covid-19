@@ -1,21 +1,34 @@
 import 'package:covid/model/country_info.dart';
 import 'package:covid/model/model.dart';
 import 'package:covid/service/service.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'main_model.dart';
 
 class MainLogic {
   final MainModel _model;
 
   MainLogic(this._model) {
-    getData(() {});
+//    getData((isOK) {
+//      if(isOK) {
+//
+//      } else {
+//
+//      }
+//    });
     _model.text.listen(search);
   }
 
   ///LOAD DATA
 
-  void getData(Function() callback) {
-    _getGlobal(() {
-      callback();
+  void getData(Function(bool) callback) {
+    _getGlobal((isOK) {
+      AdsService.shared().createInterstitialAd()
+        ..load()
+        ..show();
+      AdsService.shared().createBannerAd()
+        ..load()
+        ..show(anchorType: AnchorType.bottom, anchorOffset: 58);
+      callback(isOK);
     });
     _getListCountry(() {
       _getGlobalHistorical();
@@ -24,11 +37,15 @@ class MainLogic {
     getNews();
   }
 
-  void _getGlobal(Function() callback) {
+  void _getGlobal(Function(bool) callback) {
     CountryService.shared().getGlobal((info) {
+      if(info == null) {
+        callback(false);
+        return;
+      }
       _model.globalInfo = info;
       _model.refresh();
-      callback();
+      callback(true);
     });
   }
 
@@ -69,35 +86,38 @@ class MainLogic {
     });
   }
 
-  void reloadData(Function() callback) {
+  void reloadData(Function(bool) callback) {
+    if(_model.globalInfo.updated == null) {
+      callback(false);
+      return;
+    }
     final delta =
         DateTime.now().difference(_model.globalInfo.updated).inMinutes;
     if (delta > 15) {
       _model.countries.clear();
       _model.listSearch.clear();
-      getData(() => callback);
+      getData((isOK) => callback);
     } else {
-      callback();
+      callback(true);
     }
   }
 
-  void reloadNews(Function() callback) {
+  void reloadNews(Function(bool) callback) {
     final news = CountryService.shared().listNews.first.publishedAt;
     final delta = DateTime.now().difference(news).inMinutes;
-    print(delta);
     if (delta > 15) {
       CountryService.shared().listNews.clear();
       CountryService.shared().newsPage = 1;
-      CountryService.shared().getNews(() {
-        callback();
+      CountryService.shared().getNews((isOK) {
+        callback(isOK);
       });
     } else {
-      callback();
+      callback(true);
     }
   }
 
   void getNews() {
-    CountryService.shared().getNews(() {});
+    CountryService.shared().getNews((isOK) {});
   }
 
   ///LOGIC

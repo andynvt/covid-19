@@ -4,9 +4,8 @@ import '../service.dart';
 
 class AdsService extends BaseService {
   static AdsService _sInstance;
-  static String id = '';
 
-  AdsService._(){
+  AdsService._() {
     FirebaseAdMob.instance.initialize(appId: getAppId());
   }
 
@@ -16,13 +15,6 @@ class AdsService extends BaseService {
     }
     return _sInstance;
   }
-
-//  static Future init() async {
-//    id = await DeviceId.getID;
-//
-//    await FirebaseAdMob.instance.initialize(appId: getAppId());
-//    print('---> Device ID: $id');
-//  }
 
   static String getAppId() {
     if (Platform.isIOS) {
@@ -54,7 +46,6 @@ class AdsService extends BaseService {
   BannerAd createBannerAd() {
     return BannerAd(
       adUnitId: getBannerAdUnitId(),
-//      adUnitId: BannerAd.testAdUnitId,
       size: AdSize.smartBanner,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
@@ -62,10 +53,10 @@ class AdsService extends BaseService {
       },
     );
   }
+
   InterstitialAd createInterstitialAd() {
     return InterstitialAd(
       adUnitId: getInterstitialAdUnitId(),
-//      adUnitId: InterstitialAd.testAdUnitId,
       targetingInfo: targetingInfo,
       listener: (MobileAdEvent event) {
         print("--> InterstitialAd event $event");
@@ -74,10 +65,17 @@ class AdsService extends BaseService {
   }
 
   MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    keywords: <String>['covid', 'corona', 'news', 'app', 'game', 'entertainment'],
-//    contentUrl: 'https://flutter.io',
+    keywords: <String>[
+      'covid',
+      'covid-19',
+      'corona',
+      'virus',
+      'news',
+      'app',
+      'game',
+      'entertainment',
+    ],
     childDirected: false,
-//    testDevices: <String>[id],
+    testDevices: <String>['4701BEC495FDC0E6F633252C581D79E7'],
   );
-
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:covid/core/language/language.dart';
@@ -7,8 +8,8 @@ import 'package:covid/module/root/root_model.dart';
 import 'package:covid/resource/resource.dart';
 import 'package:covid/service/service.dart';
 import 'package:covid/util/util.dart';
+import 'package:covid/widget/dialog_widget.dart';
 import 'package:covid/widget/widget.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_echarts/flutter_echarts.dart';
@@ -27,7 +28,7 @@ class _MainView extends StatefulWidget {
   _MainViewState createState() => _MainViewState();
 }
 
-class _MainViewState extends State<_MainView> {
+class _MainViewState extends State<_MainView> with WidgetsBindingObserver {
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   ScrollController _homeScrollController;
   ScrollController _newsScrollController;
@@ -77,17 +78,70 @@ class _MainViewState extends State<_MainView> {
     _pageController.jumpToPage(0);
   }
 
+  void _mapClick() {
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(builder: (_) => createMap()),
+    )
+        .then((_) {
+      AdsService.shared().createInterstitialAd()
+        ..load()
+        ..show();
+    });
+  }
+
+  void _selectLanguageClick() {
+    Navigator.of(context)
+        .push(
+      MaterialPageRoute(builder: (_) => createChangeLanguage()),
+    )
+        .then((_) {
+      AdsService.shared().createInterstitialAd()
+        ..load()
+        ..show();
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      final model = Provider.of<MainModel>(context, listen: false);
+      model.openTimes += 1;
+      if(model.openTimes % 4 == 0) {
+        AdsService.shared().createInterstitialAd()
+          ..load()
+          ..show();
+      }
+    }
+  }
+
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     _pageController = PageController(keepPage: true, initialPage: 2);
     _textController = TextEditingController();
     _homeScrollController = ScrollController();
     _newsScrollController = ScrollController();
+
+    final model = Provider.of<MainModel>(context, listen: false);
+    final root = Provider.of<RootModel>(context, listen: false);
+    root.logic.showLoading();
+    model.logic.getData((isOK) {
+      if (!isOK) {
+        TTDialog.shared().showAlert(
+          context,
+          message: Language.get.please_check_your_network_connection,
+        );
+      }
+      root.logic.hideLoading();
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _pageController.dispose();
     _textController.dispose();
     _homeScrollController.dispose();
@@ -97,16 +151,7 @@ class _MainViewState extends State<_MainView> {
 
   @override
   Widget build(BuildContext context) {
-    final root = Provider.of<RootModel>(context);
     final model = Provider.of<MainModel>(context);
-    root.logic.showLoading(this.toString());
-    if (model.countries.isNotEmpty) {
-      root.logic.hideLoading(this.toString());
-//      AdsService.shared().createInterstitialAd()..load()..show();
-      AdsService.shared().createBannerAd()
-        ..load()
-        ..show(anchorType: AnchorType.bottom, anchorOffset: 58);
-    }
 
     return Scaffold(
       backgroundColor: Cl.white,
@@ -178,9 +223,15 @@ class _MainViewState extends State<_MainView> {
   Future<void> _homeRefresh() async {
     final model = Provider.of<MainModel>(context, listen: false);
     final root = Provider.of<RootModel>(context, listen: false);
-    root.logic.showLoading(this.toString());
-    model.logic.reloadData(() {
-      root.logic.hideLoading(this.toString());
+    root.logic.showLoading();
+    model.logic.reloadData((isOK) {
+      if (!isOK) {
+        TTDialog.shared().showAlert(
+          context,
+          message: Language.get.please_check_your_network_connection,
+        );
+      }
+      root.logic.hideLoading();
     });
     return Future.value();
   }
@@ -189,8 +240,8 @@ class _MainViewState extends State<_MainView> {
     final model = Provider.of<MainModel>(context);
     final isGlobal = model.isGlobal;
     final info = isGlobal ? model.globalInfo : model.myCountry;
-    String text = info.name;
-    if (text == null || text == 'Global') {
+    String text = info != null ? info.name ?? '' : '';
+    if (text.isEmpty || text == 'Global') {
       text = Language.get.global;
     }
 
@@ -289,9 +340,11 @@ class _MainViewState extends State<_MainView> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: <Widget>[
-                _renderStatisticItem(TypeEnum.TOTAL, info.cases),
+                _renderStatisticItem(
+                    TypeEnum.TOTAL, info != null ? info.cases ?? 0 : 0),
                 SizedBox(width: 20),
-                _renderStatisticItem(TypeEnum.ACTIVE, info.active),
+                _renderStatisticItem(
+                    TypeEnum.ACTIVE, info != null ? info.active ?? 0 : 0),
               ],
             ),
           ),
@@ -300,9 +353,11 @@ class _MainViewState extends State<_MainView> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: <Widget>[
-                _renderStatisticItem(TypeEnum.RECOVERED, info.recovered),
+                _renderStatisticItem(
+                    TypeEnum.RECOVERED, info != null ? info.recovered ?? 0 : 0),
                 SizedBox(width: 20),
-                _renderStatisticItem(TypeEnum.DEATH, info.deaths),
+                _renderStatisticItem(
+                    TypeEnum.DEATH, info != null ? info.deaths ?? 0 : 0),
               ],
             ),
           ),
@@ -311,9 +366,12 @@ class _MainViewState extends State<_MainView> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
               children: <Widget>[
-                _renderBoxInfo(TypeEnum.CASE_TODAY, info.todayCases),
-                _renderBoxInfo(TypeEnum.DEATH_TODAY, info.todayDeaths),
-                _renderBoxInfo(TypeEnum.CRITICAL, info.critical),
+                _renderBoxInfo(TypeEnum.CASE_TODAY,
+                    info != null ? info.todayCases ?? 0 : 0),
+                _renderBoxInfo(TypeEnum.DEATH_TODAY,
+                    info != null ? info.todayDeaths ?? 0 : 0),
+                _renderBoxInfo(
+                    TypeEnum.CRITICAL, info != null ? info.critical ?? 0 : 0),
               ],
             ),
           ),
@@ -345,11 +403,7 @@ class _MainViewState extends State<_MainView> {
                         borderRadius: BorderRadius.circular(5),
                         side: BorderSide(color: Cl.grey300),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => createMap()),
-                        );
-                      },
+                      onPressed: _mapClick,
                       icon: Icon(Icons.map),
                       label: Text(Language.get.map, style: Style.ts_16_black),
                     ),
@@ -365,7 +419,7 @@ class _MainViewState extends State<_MainView> {
                 text: TextSpan(
                   children: [
                     TextSpan(text: Language.get.update, style: Style.ts_19),
-                    info.updated != null
+                    info != null && info.updated != null
                         ? TextSpan(
                             text: ' ' +
                                 TTString.shared().formatDate(info.updated),
@@ -429,9 +483,9 @@ class _MainViewState extends State<_MainView> {
                     show: false,
                 },
                 data: [
-                    {value: ${info.active}, name: '${Language.get.active}'},
-                    {value: ${info.recovered}, name: '${Language.get.recovered}'},
-                    {value: ${info.deaths}, name: '${Language.get.death}'},
+                    {value: ${info != null ? info.active ?? 0 : 0}, name: '${Language.get.active}'},
+                    {value: ${info != null ? info.recovered ?? 0 : 0}, name: '${Language.get.recovered}'},
+                    {value: ${info != null ? info.deaths ?? 0 : 0}, name: '${Language.get.death}'},
                 ],
                 emphasis: {
                     itemStyle: {
@@ -529,9 +583,15 @@ class _MainViewState extends State<_MainView> {
   Future<void> _newsRefresh() async {
     final model = Provider.of<MainModel>(context, listen: false);
     final root = Provider.of<RootModel>(context, listen: false);
-    root.logic.showLoading(this.toString());
-    model.logic.reloadNews(() {
-      root.logic.hideLoading(this.toString());
+    root.logic.showLoading();
+    model.logic.reloadNews((isOK) {
+      if (!isOK) {
+        TTDialog.shared().showAlert(
+          context,
+          message: Language.get.please_check_your_network_connection,
+        );
+      }
+      root.logic.hideLoading();
     });
     return Future.value();
   }
@@ -1032,17 +1092,17 @@ class _MainViewState extends State<_MainView> {
           ),
           SizedBox(height: 32),
           Container(width: double.infinity, height: 1, color: Cl.grey300),
-          _renderSettingItem(Icons.help, Language.get.support, () {
+          _renderSettingItem(Icons.help, Language.get.infomation, () {
             final root = Provider.of<RootModel>(context, listen: false);
             String langCode = root.currentLocale.toString().split('_')[0];
             String url = 'https://' + langCode + '.' + CS.ABOUT_VIRUS;
             LaunchURL.launch(url);
           }),
-          _renderSettingItem(Icons.language, Language.get.change_language, () {
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => createChangeLanguage()),
-            );
-          }),
+          _renderSettingItem(
+            Icons.language,
+            Language.get.change_language,
+            _selectLanguageClick,
+          ),
           _renderSettingItem(Icons.feedback, Language.get.send_feedback, () {
             LaunchURL.launch(CS.FORM_FEEDBACK);
           }),

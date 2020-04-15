@@ -125,10 +125,10 @@ class LocalizationIntl {
     );
   }
 
-  String get support {
+  String get infomation {
     return Intl.message(
-      "Support",
-      name: 'support',
+      "Infomation",
+      name: 'infomation',
     );
   }
 
@@ -199,6 +199,27 @@ class LocalizationIntl {
     return Intl.message(
       "Author",
       name: 'author',
+    );
+  }
+
+  String get ok {
+    return Intl.message(
+      "OK",
+      name: 'ok',
+    );
+  }
+
+  String get cancel {
+    return Intl.message(
+      "Cancel",
+      name: 'cancel',
+    );
+  }
+
+  String get please_check_your_network_connection {
+    return Intl.message(
+      "Please check your network connection",
+      name: 'please_check_your_network_connection',
     );
   }
 

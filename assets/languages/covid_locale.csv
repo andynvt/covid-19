@@ -3,19 +3,19 @@ select_language,Select Language,Chọn ngôn ngữ,选择语言,भाषा क
 chart,Chart,Đồ thị,图表,चार्ट,Gráfico,Graphique,Диаграмма,Gráfico
 list,List,Danh sách,名单,सूची,Lista,liste,Список,Lista
 news,News,Tin tức,新闻,समाचार,Noticias,Nouvelles,Новости,Notícia
-home,Home,Trang Chủ,家,घर,Hogar,Accueil,Дома,Casa
+home,Home,Trang Chủ,家,घर,Hogar,Accueil,Дом,Casa
 setting,Setting,Cài đặt,设置,स्थापना,Ajuste,Réglage,настройка,Configuração
 global,Global,Toàn cầu,全球,वैश्विक,Global,Global,Глобальный,Global
 map,Map,Bản đồ,地图,नक्शा,Mapa,Carte,карта,Mapa
-update,Update: ,Cập nhật:,更新：,अपडेट करें:,Actualizar:,Mise à jour:,Обновить:,Atualizar:
+update,Update: ,Cập nhật:,更新：,अपडेट करें:,Actualizar:,Mettre à jour:,Обновить:,Atualizar:
 active,Active,Đang nhiễm,活性,सक्रिय,Activo,actif,активный,Ativo
 recovered,Recovered,Bình phục,回收,बरामद,Recuperado,Rétabli,Восстановленные,Recuperado
-death,Death,Tử vong,死亡,मौत,Muerte,Décès,Смерть,Morte
+death,Death,Tử vong,死亡,मौत,Muerte,Mort,Смерть,Morte
 search_country,Search country,Tìm kiếm,搜索国家,खोजें देश,Buscar país,Choisir un pays,Поиск страны,pesquisa país
 sort,Sort,Lọc,分类,तरह,Ordenar,Trier,Сортировать,Ordenar
-total,Total,Ca nhiễm,总,संपूर्ण,Total,Total,Всего,Total
+total,Total,Ca nhiễm,总,संपूर्ण,Total,Total,Общее,Total
 version,Version:,Phiên bản:,版：,संस्करण:,Versión:,Version:,Версия:,Versão:
-support,Support,Hỗ trợ,支持,सहयोग,Apoyo,Soutien,Поддержка,"Apoio, suporte"
+infomation,Infomation,Thông tin,信息来源,जानकारी,infomación,infomation,детали,infomation
 change_language,Change Language,Thay đổi ngôn ngữ,改变语言,भाषा बदलो,Cambiar idioma,Changer de langue,Изменить язык,Mudar idioma
 send_feedback,Send Feedback,Gửi thông tin phản hồi,发送反馈,प्रतिक्रिया भेजें,Enviar Comentarios,Envoyer des commentaires,Отправить отзыв,Enviar comentários
 data_source,"Data source: WHO, JHU","Nguồn số liệu: WHO, JHU",数据来源：WHO，JHU,"डेटा स्रोत: WHO, JHU","Fuente de datos: WHO, JHU","Source des données: WHO, JHU","Источник данных: WHO, JHU","Fonte de dados: WHO, JHU"
@@ -26,3 +26,6 @@ critical,Critical,Nguy kịch,危急,नाजुक,Crítico,Critique,крит�
 case_today,Case today,Ca hôm nay,今天情况,मामला आज,caso hoy en día,cas aujourd'hui,Дело сегодня,caso hoje
 death_today,Death today,Tử vong hôm nay,今天死亡,मौत आज,hoy la muerte,mort aujourd'hui,Смерть сегодня,morte hoje
 author,Author,Tác giả,作者,लेखक,Autor,Auteur,автор,Autor
+ok,OK,OK,好,ठीक,Okay,D'accord,хорошо,Está bem
+cancel,Cancel,Huỷ,取消,रद्द करना,Cancelar,Annuler,Отмена,Cancelar
+please_check_your_network_connection,Please check your network connection,Vui lòng kiểm tra kết nối mạng của bạn,请检查您的网络连接,अपने नेटवर्क कनेक्शन की जांच करें,"Por favor, compruebe su conexión a la red",S'il vous plaît vérifier votre connexion réseau,"Пожалуйста, проверьте подключение к сети","Por favor, verifique sua conexão de rede"
