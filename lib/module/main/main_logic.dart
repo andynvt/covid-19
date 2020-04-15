@@ -17,7 +17,7 @@ class MainLogic {
     _getGlobal((isOK) {
       AdsService.shared().createBannerAd()
         ..load()
-        ..show(anchorType: AnchorType.bottom, anchorOffset: 58);
+        ..show(anchorType: AnchorType.bottom, anchorOffset: 56);
       callback(isOK);
     });
     _getListCountry(() {
@@ -29,7 +29,7 @@ class MainLogic {
 
   void _getGlobal(Function(bool) callback) {
     CountryService.shared().getGlobal((info) {
-      if(info == null) {
+      if (info == null) {
         callback(false);
         return;
       }
@@ -77,7 +77,7 @@ class MainLogic {
   }
 
   void reloadData(Function(bool) callback) {
-    if(_model.globalInfo.updated == null) {
+    if (_model.globalInfo.updated == null) {
       callback(false);
       return;
     }
