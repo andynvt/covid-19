@@ -75,4 +75,4 @@
 Podfile.lock
 Flutter.podspec
 pubspec.lock
-**/build/
+build/
